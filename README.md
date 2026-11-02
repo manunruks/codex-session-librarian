@@ -201,6 +201,8 @@ separately with `index --sessions-dir`; export/share also locate them directly.
 
 ```bash
 csl native-clone SESSION_UUID --name "Independent continuation"
+csl native-clone SESSION_UUID --visibility agent --name "Agent investigation"
+csl native-clone SESSION_UUID --visibility archived --name "Archived snapshot"
 csl native-sanitize SESSION_UUID --name "Portable local copy"
 csl timeline SESSION_UUID --width 180
 csl native-cut SESSION_UUID --before-text "Later topic starts here" --name "Earlier discussion"
@@ -212,6 +214,14 @@ reasoning. For a Markdown context handoff instead:
 ```bash
 csl cut SESSION_UUID --to 12 --name earlier-discussion
 ```
+
+Agent forks persist but use Codex's non-interactive `exec` source, so normal
+`codex resume --all` does not list them. Continue with the printed
+`codex exec resume --all NEW_UUID 'YOUR_TASK'` command; explicitly list them with
+`codex resume --all --include-non-interactive`. Archived forks are stored outside
+active history; create an active copy with `csl native-clone ARCHIVED_UUID
+--visibility interactive`. These are organizational filters, not access control.
+See [visibility and lifecycle limits](docs/COMMANDS.md#native-clone).
 
 ## What Moves And What Does Not
 

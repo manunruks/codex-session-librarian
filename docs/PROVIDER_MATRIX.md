@@ -58,6 +58,14 @@ translator. `doctor` reports structural/static/native evidence separately and
 does not call a live model. Native import preflight runs by default; isolated
 native replay is opt-in with `doctor --native`.
 
+Codex-only `native-clone --visibility interactive|agent|archived` controls the
+new clone's presentation. Default `interactive` uses source `cli`; `agent` uses
+native source `exec` and stays outside the default resume picker; `archived`
+stores the clone in `archived_sessions`. Agent continuations/restarts were
+checked offline on Codex 0.166.0. This is not access control or a permanent hidden
+flag, and is not integrated for Claude, import/receive, cut or sanitize.
+See [commands and lifecycle limits](COMMANDS.md#native-clone).
+
 `sessions --provider claude` scans main project transcripts and filters UUID/title
 with `--query`; it is not full-history semantic search. Codex listing uses its
 existing index, refreshed with `csl index`. Inbox and team commands manage a

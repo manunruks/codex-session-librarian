@@ -31,3 +31,5 @@ class CapabilityTests(unittest.TestCase):
         self.assertEqual(report["commands"]["recall"]["claude"], "not-integrated")
         self.assertEqual(report["routes"]["codex->claude"], "experimental-multimodal")
         self.assertEqual(report["source_lookup"]["default"], "auto")
+        self.assertEqual(report["native_clone_visibility"]["default"], "interactive")
+        self.assertEqual(report["native_clone_visibility"]["provider"], "codex")

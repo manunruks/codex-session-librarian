@@ -30,6 +30,10 @@ def coverage():
             "continuity_checks": {"default_import": "structural-and-static-context",
                                   "doctor_native": "isolated-localhost-request-no-generation",
                                   "live_continuation": "opt-in-bounded-synthetic-suite"},
+            "native_clone_visibility": {"provider": "codex", "default": "interactive",
+                                        "agent": "persistent-exec-source-excluded-from-default-resume-picker",
+                                        "archived": "new-clone-in-archived_sessions",
+                                        "scope": "experimental; presentation filter, not access control"},
             "authentication": "Recipient CLI owns authentication; CSL never copies credentials or selects billing accounts.",
             "continuation": "Native file transfer is not a guarantee of model availability, context fit, or universal CLI-version compatibility."}
 

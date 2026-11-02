@@ -2148,9 +2148,8 @@ def validate_new_session_id(new_id: str) -> None:
 def session_id_exists(session_id: str) -> bool:
     if session_id in load_thread_names(DEFAULT_SESSION_INDEX):
         return True
-    if not DEFAULT_SESSIONS_DIR.exists():
-        return False
-    return any(DEFAULT_SESSIONS_DIR.rglob(f"*{session_id}.jsonl"))
+    return any(next(root.rglob(f"*{session_id}.jsonl"), None) is not None
+               for root in (DEFAULT_SESSIONS_DIR, DEFAULT_CODEX_HOME / "archived_sessions"))
 
 
 def target_session_path(new_id: str, now_dt: dt.datetime) -> Path:
@@ -2228,6 +2227,15 @@ def native_cut_session(args: argparse.Namespace) -> None:
 def native_clone_session(args: argparse.Namespace) -> None:
     conn = init_db(args.db.expanduser())
     row = find_session(conn, args.session)
+    if not row or not Path(row["path"]).is_file():
+        row = None
+        from csl_transfer import codex_candidates
+        candidates = codex_candidates(args.session, sys.modules[__name__], conn)
+        if len(candidates) > 1:
+            print("Multiple sessions matched; use a more specific UUID.", file=sys.stderr)
+            raise SystemExit(2)
+        if candidates:
+            row = parse_session(candidates[0], load_thread_names(DEFAULT_SESSION_INDEX))
     if not row:
         print(f"No session matched: {args.session}", file=sys.stderr)
         raise SystemExit(1)
@@ -2247,22 +2255,56 @@ def native_clone_session(args: argparse.Namespace) -> None:
 
     now_dt = dt.datetime.now(dt.UTC)
     now = now_dt.isoformat(timespec="milliseconds").replace("+00:00", "Z")
-    target_path = target_session_path(new_id, now_dt)
+    visibility = getattr(args, "visibility", "interactive")
+    if visibility == "archived":
+        target_dir = DEFAULT_CODEX_HOME / "archived_sessions"
+        target_dir.mkdir(parents=True, exist_ok=True)
+        target_path = target_dir / f"rollout-{now_dt:%Y-%m-%dT%H-%M-%S}-{new_id}.jsonl"
+    else:
+        target_path = target_session_path(new_id, now_dt)
     if target_path.exists():
         print(f"Refusing to overwrite existing file: {target_path}", file=sys.stderr)
         raise SystemExit(1)
 
     thread_name = args.name or f"{row['thread_name'] or source_id} clone"
     output_lines = [rewrite_session_meta(line, new_id, source_id, now) for line in original_lines]
-    target_path.write_text("".join(output_lines), encoding="utf-8")
+    metadata_found = False
+    for index, line in enumerate(output_lines):
+        try:
+            record = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if record.get("type") == "session_meta" and isinstance(record.get("payload"), dict):
+            metadata_found = True
+            payload = record["payload"]
+            payload["source"] = "exec" if visibility == "agent" else "cli"
+            if "session_id" in payload:
+                payload["session_id"] = new_id
+            if visibility == "agent":
+                payload["originator"] = "csl_agent_fork"
+            output_lines[index] = json.dumps(record, ensure_ascii=False) + "\n"
+    if not metadata_found:
+        print("Source has no session metadata; refusing to create an unusable clone.", file=sys.stderr)
+        raise SystemExit(2)
+    descriptor = os.open(target_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    with os.fdopen(descriptor, "w", encoding="utf-8") as output:
+        output.write("".join(output_lines))
     register_native_session(conn, target_path, new_id, thread_name, now)
 
     print(f"created native clone session: {new_id}")
     print(f"path: {target_path}")
     print(f"source: {source_id}")
     print(f"source path: {source_path}")
+    print(f"visibility: {visibility}")
     print("try opening with:")
-    print(f"codex resume --all {new_id}")
+    if visibility == "agent":
+        print(f"codex exec resume --all {new_id} 'YOUR_TASK'")
+        print("Hidden from the default resume picker; use --include-non-interactive to list agent sessions.")
+    elif visibility == "archived":
+        print(f"csl native-clone {new_id} --visibility interactive")
+        print("Stored in archived_sessions; this command creates an active copy without changing the archive.")
+    else:
+        print(f"codex resume --all {new_id}")
 
 
 def strip_encrypted_reasoning(value: Any) -> tuple[Any, int]:
@@ -2973,6 +3015,8 @@ def build_parser() -> argparse.ArgumentParser:
     p_native_clone.add_argument("session", help="Session id, path fragment, or thread name fragment.")
     p_native_clone.add_argument("--name", help="Thread name for the cloned session. Defaults to '<source name> clone'.")
     p_native_clone.add_argument("--new-id", help="Optional UUID for the new session. Defaults to a generated UUID.")
+    p_native_clone.add_argument("--visibility", choices=("interactive", "agent", "archived"), default="interactive",
+                                help="interactive: normal picker; agent: persistent exec session excluded by default; archived: store outside active history.")
     p_native_clone.set_defaults(func=native_clone_session)
 
     p_native_sanitize = sub.add_parser(

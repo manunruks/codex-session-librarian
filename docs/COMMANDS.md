@@ -371,6 +371,8 @@ Flags:
 - `--before-text`: cut before the first user message containing this text
 - `--name`: thread name for the synthetic cloned session
 - `--new-id`: optional UUID override for the new cloned session
+- `--visibility interactive|agent|archived`: default `interactive`; applies only
+  to this new clone, never the source or an existing session
 
 Behavior:
 
@@ -378,7 +380,50 @@ Behavior:
 - Rewrites session metadata with a new id and `forked_from_id`
 - Appends a new entry to `~/.codex/session_index.jsonl`
 - Reindexes the new session into the librarian DB
-- Prints a `codex resume --all <new-session-id>` command
+- Creates the new file exclusively with permissions `0600`; does not overwrite
+  active or archived UUIDs
+- Prints a continuation/recovery command appropriate to the selected visibility
+
+Visibility modes (Codex only, experimental):
+
+| Mode | Native storage/source | Expected default picker behavior |
+| --- | --- | --- |
+| `interactive` | `sessions/`, source `cli` | Listed as a normal interactive session |
+| `agent` | `sessions/`, source `exec`, originator `csl_agent_fork` | Excluded unless non-interactive sessions are requested |
+| `archived` | `archived_sessions/`, source `cli` | Excluded from active listings |
+
+```bash
+csl native-clone SOURCE_UUID --visibility agent --name "Agent analysis"
+codex exec resume --all NEW_UUID 'Investigate the requested topic'
+codex resume --all --include-non-interactive
+csl native-clone SOURCE_UUID --visibility archived --name "Archived snapshot"
+csl native-clone ARCHIVED_UUID --visibility interactive --name "Active copy"
+```
+
+`--all` removes cwd filtering; it does not itself include non-interactive sessions.
+UUIDs remain explicitly addressable, CSL can list/search indexed agent forks,
+and export/share still find archived UUIDs. The default CSL index covers active
+history: `index --prune` can remove an archive's DB row, but `native-clone` can
+still recover its UUID directly from disk. To browse archives in CSL, index that
+directory explicitly. Archive recovery above creates a new active UUID and
+leaves the archived snapshot unchanged; unarchiving through another client can
+make that existing session visible again.
+
+The agent mode is a native source classification, not an invented `hidden` bit
+or security boundary. Use non-interactive continuation for agent work. Explicit
+interactive access is allowed; different clients/versions can change source or
+archive state. No promise of permanent invisibility applies after another tool
+rewrites metadata. No ephemeral mode or automatic archive-after-execution is
+implemented. No auth files or settings are copied, no tools/inference run during
+cloning, and existing approvals/sandbox defaults are not bypassed.
+
+Offline native regression tests on Codex 0.166.0 checked default and explicit
+source listings, UUID resume with retained history, a complete continuation via
+a localhost simulated Responses server, and restart/reload. The agent fork
+remained excluded; archived records remained separately discoverable. This is
+not a paid-provider test or a guarantee for every historical/future CLI version.
+Run them with `CSL_RUN_CODEX_NATIVE_TESTS=1 python3 -m unittest discover -s tests
+-p test_clone_visibility.py -v`.
 
 ### `export` And `import`
 
