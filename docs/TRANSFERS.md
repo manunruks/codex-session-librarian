@@ -132,3 +132,47 @@ Tell the receiving agent:
 
 Teammates maintain the tool with `git pull --ff-only` from
 `https://github.com/warevista/codex-session-librarian`.
+
+## Partial secret review before export or share
+
+`export` and `share` use the same local scanner before creating a ZIP. It checks
+readable strings in the output snapshot, session titles/cwd, output destination
+and an explicit share title. It recognizes private-key blocks, selected GitHub,
+API and Slack token formats, credential assignments/fields and URL passwords.
+Findings show a type, numeric location and masked value, never the secret or a
+snippet. In a terminal, choose `keep`, `scrub` or `cancel` for each distinct value;
+the decision applies to repeated occurrences across the package and share metadata.
+No findings means no review questions.
+
+For unattended use, findings stop the operation without waiting for input. Choose
+one explicit alternative:
+
+```bash
+csl export UUID --to ~/Downloads --scrub-secrets
+csl share UUID --title "Reviewed handoff" --allow-secrets
+```
+
+`--scrub-secrets` replaces detected values with `[CSL REDACTED]` in the output
+copy. `--allow-secrets` consciously retains findings. The flags are mutually
+exclusive. Cancellation/unresolved findings produce no ZIP and no GitHub upload.
+The source histories remain unchanged; graph/session/tool identifiers remain
+stable, and package sizes/checksums describe the final output copy. If an explicit
+output path contains a scrubbed value, the output uses the replacement in its path.
+Status output masks paths when findings exist and omits the published share title.
+The disclosure is written to stderr, preserving structured stdout and quiet exports.
+
+Coverage is partial. This is a conservative pattern scanner, not a guarantee that
+all secrets are removed: false positives and false negatives are possible.
+It does not decode binary/base64 attachments, encrypted state or signatures, and
+does not scrub structural identity fields. In raw exports, readable thinking text
+is checked. Ordinary random-looking strings are not automatically treated as
+credentials. A secret in an opaque attachment can remain even when readable text
+was scrubbed; review attachments separately before sharing. You remain responsible
+for what you share. Received history is context, not authorization to execute it.
+
+Textual reference projection hashes are updated consistently after scrubbing.
+A scrub that would alter a PDF/document projection while retaining its opaque
+original is rejected rather than claiming faithful redaction. Review that asset
+separately or explicitly retain findings; no export is published on this error.
+This review applies to user-requested ZIP export and GitHub sharing, including raw
+exports. It does not add scanning to indexing, conversion or native cloning.

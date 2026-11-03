@@ -2809,6 +2809,8 @@ def cockpit(args: argparse.Namespace) -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Find Codex sessions and transfer native Codex/Claude Code conversations.")
+    from csl_version import __version__
+    parser.add_argument("--version", action="version", version=f"CSL {__version__}")
     parser.add_argument("--db", type=Path, default=DEFAULT_DB, help=f"SQLite DB path (default: {DEFAULT_DB})")
     sub = parser.add_subparsers(dest="command", required=True)
 

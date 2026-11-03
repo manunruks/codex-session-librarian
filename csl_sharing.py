@@ -120,14 +120,17 @@ def share(args, csl):
     print(f"sharing: {tag} -> {repo}; preparing snapshot...", flush=True)
     with tempfile.TemporaryDirectory(prefix="csl-share-") as tmp:
         bundle = Path(tmp) / ASSET
+        reviewed_metadata = {"title": args.title}
         export_bundle(SimpleNamespace(sessions=args.sessions, to=bundle, raw=args.raw, db=args.db,
-                                      provider=getattr(args, "provider", None)),
-                      csl, quiet=True)
+                                      provider=getattr(args, "provider", None),
+                                      allow_secrets=getattr(args, "allow_secrets", False),
+                                      scrub_secrets=getattr(args, "scrub_secrets", False)),
+                      csl, quiet=True, extra_metadata=reviewed_metadata)
         if bundle.stat().st_size >= 2 * 1024**3:
             raise TransferError("GitHub release assets must be below 2 GiB; share fewer sessions per package")
         with zipfile.ZipFile(bundle) as archive:
             manifest = inspect_bundle(archive)
-        title = args.title if args.title is not None else manifest["sessions"][0]["title"][:200]
+        title = reviewed_metadata["title"] if args.title is not None else manifest["sessions"][0]["title"][:200]
         title = safe_text(title).strip()
         if not title or len(title) > 200:
             raise TransferError("Share title must have 1 to 200 characters; use --title")
@@ -150,8 +153,8 @@ def share(args, csl):
             run_gh(["release", "create", tag, str(bundle), "--repo", f"github.com/{repo}",
                     "--title", title, "--notes-file", str(notes), "--latest=false"])
         except TransferError as exc:
-            raise TransferError(f"Share {tag} did not finish: {exc}. Inspect its release before retrying") from exc
-    print(f"shared: {tag}  {title}")
+            raise TransferError(f"Share {tag} did not finish; provider details suppressed. Inspect its release before retrying") from None
+    print(f"shared: {tag}")
     print(f"https://github.com/{repo}/releases/tag/{tag}")
     print(f"recipient: csl receive {tag} --cwd /path/to/project --open")
     return tag
@@ -357,7 +360,9 @@ def run_sharing(args, csl):
         return {"team": team_command, "share": share, "inbox": inbox,
                 "receive": receive}[args.command](args, csl)
     except (TransferError, OSError, ValueError, zipfile.BadZipFile, RuntimeError) as exc:
-        print(f"csl {args.command}: {exc}", file=sys.stderr)
+        from csl_secrets import masked_diagnostic
+        detail = "Share filesystem operation failed; path details suppressed" if args.command == "share" and isinstance(exc, OSError) else str(exc)
+        print(f"csl {args.command}: {masked_diagnostic(detail) if args.command == 'share' else detail}", file=sys.stderr)
         raise SystemExit(2) from None
 
 
@@ -384,6 +389,8 @@ def add_commands(subparsers, csl):
     share_parser.add_argument("--title", help="Short title shown in the team inbox.")
     share_parser.add_argument("--raw", action="store_true", help="Keep encrypted reasoning (default: portable).")
     share_parser.add_argument("--provider", choices=("codex", "claude"), help="Limit source lookup to one CLI (default: auto-detect both).")
+    from csl_secrets import add_options
+    add_options(share_parser)
     share_parser.set_defaults(func=lambda args: run_sharing(args, csl))
     inbox_parser = subparsers.add_parser("inbox", help="List shared snapshots without downloading transcripts.")
     inbox_parser.add_argument("--limit", type=positive_limit, default=20)

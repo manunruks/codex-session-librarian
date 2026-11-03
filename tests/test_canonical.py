@@ -48,6 +48,29 @@ class BridgeTests(unittest.TestCase):
         data["events"][2]["blocks"][0]["is_error"] = True
         self.roundtrip(data)
 
+    def test_tool_phases_survive_claude_codex_roundtrip(self):
+        for fmt, arguments in (("json", {"file_path": "fixture.txt"}),
+                               ("text", "read fixture.txt")):
+            with self.subTest(argument_format=fmt):
+                data = sample()
+                call = data["events"][1]
+                call["phase"] = "commentary"
+                call["blocks"][0].update(argument_format=fmt, arguments=arguments)
+                # A native Claude assistant message can contain both text and a
+                # tool use; Codex stores these as separate response items.
+                call["blocks"].insert(0, {"type": "text", "text": "Checking fixture"})
+                call["blocks"].append({"type": "text", "text": "Awaiting result"})
+                expected = [(event["role"], event.get("phase"), block)
+                            for event in data["events"] for block in event["blocks"]]
+                for index, provider in enumerate(("claude", "codex", "claude")):
+                    path = self.root / f"{fmt}-{index}-{provider}.jsonl"
+                    writer = bridge.restore_codex if provider == "codex" else bridge.restore_claude
+                    writer(data, path, self.root)
+                    data = bridge.normalize(provider, path)
+                    actual = [(event["role"], event.get("phase"), block)
+                              for event in data["events"] for block in event["blocks"]]
+                    self.assertEqual(actual, expected)
+
     def test_policies_not_replayed(self):
         data = sample()
         data["source_context"] = [{"role": "developer", "blocks": [{"type": "text", "text": "UNTRUSTED_POLICY"}]}]

@@ -254,7 +254,8 @@ def resolve_sources(needles, csl, db, provider=None):
             if not rows:
                 raise TransferError("No indexed sessions. Run csl index first")
             for i, row in enumerate(rows, 1):
-                print(f"{i:2}. [codex] {row['session_id']}  {row['thread_name']}")
+                from csl_secrets import masked_diagnostic
+                print(f"{i:2}. [codex] {row['session_id']}  {masked_diagnostic(safe_text(row['thread_name']))}")
             try:
                 picks = [int(n) for n in input("Sessions (numbers separated by spaces): ").split()]
                 if not picks or any(n < 1 or n > len(rows) for n in picks):
@@ -284,88 +285,126 @@ def resolve_sources(needles, csl, db, provider=None):
         conn.close()
 
 
-def export_bundle(args, csl, *, quiet=False):
+def export_bundle(args, csl, *, quiet=False, scan_secrets=True, extra_metadata=None):
+    from csl_secrets import SecretReview
+    review = SecretReview(args) if scan_secrets else None
     sources = resolve_sources(args.sessions, csl, args.db, getattr(args, "provider", None))
     provider = selected_provider([header for _, header in sources])
-    destination = args.to.expanduser()
-    if not destination.name.lower().endswith(".zip"):
-        if len(sources) == 1:
-            title = re.sub(r"[^A-Za-z0-9_.-]+", "-", sources[0][1]["title"]).strip("-.")[:70]
-            filename = f"{title or 'session'}-{sources[0][1]['id'][:8]}.csl.zip"
-        else:
-            filename = f"sessions-{dt.datetime.now(dt.UTC):%Y%m%d-%H%M%S}-{uuid.uuid4().hex[:8]}.csl.zip"
-        destination = destination / filename
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    if destination.exists():
-        raise TransferError(f"Refusing to overwrite {destination}")
     manifest = {"format": FORMAT, "version": 2 if provider == "claude" else VERSION, "created_at": csl.utc_now(),
                 "mode": "raw" if args.raw else "portable", "sessions": []}
     total = 0
-    with tempfile.TemporaryDirectory(prefix=".csl-export-", dir=destination.parent) as tmp:
-        staged = Path(tmp) / "bundle.zip"
-        with zipfile.ZipFile(staged, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as archive:
-            for path, header in sources:
-                if provider == "claude":
-                    csl_claude.validate(path, read_records)
-                member = f"sessions/{header['id']}.jsonl"
-                digest = hashlib.sha256()
-                size = removed = messages = records = metadata = 0
-                compaction_state_removed = False
-                # Bound the snapshot at the original file length; a partial final append is omitted.
-                with path.open("rb") as source, archive.open(member, "w", force_zip64=True) as target:
-                    remaining = os.fstat(source.fileno()).st_size
+    # Snapshot into a private directory. No ZIP exists until every finding has a decision.
+    with tempfile.TemporaryDirectory(prefix="csl-export-review-") as tmp:
+        snapshots = []
+        if review:
+            review.scan(str(args.to), "output destination")
+            review.scan(extra_metadata or {}, "share metadata")
+        for session_number, (path, header) in enumerate(sources, 1):
+            if provider == "claude":
+                csl_claude.validate(path, read_records)
+            if review:
+                review.scan(header, f"session[{session_number}].metadata")
+            snapshot_path = Path(tmp) / f"{session_number}.jsonl"
+            removed = messages = metadata = 0
+            compaction_state_removed = False
+            with path.open("rb") as source, snapshot_path.open("xb") as snapshot_file:
+                os.chmod(snapshot_path, 0o600)
+                remaining = os.fstat(source.fileno()).st_size
 
-                    def snapshot():
-                        nonlocal remaining
-                        while remaining > 0:
-                            line = source.readline(remaining)
-                            remaining -= len(line)
-                            if not line:
+                def snapshot():
+                    nonlocal remaining
+                    while remaining > 0:
+                        line = source.readline(remaining)
+                        remaining -= len(line)
+                        if not line:
+                            break
+                        if remaining == 0 and not line.endswith(b"\n"):
+                            try:
+                                json.loads(line)
+                            except (ValueError, UnicodeError):
                                 break
-                            if remaining == 0 and not line.endswith(b"\n"):
-                                try:
-                                    json.loads(line)
-                                except (ValueError, UnicodeError):
-                                    break
-                            yield line
+                        yield line
 
-                    for record in read_records(snapshot()):
-                        payload = record.get("payload", {})
-                        metadata += record.get("type") == "session_meta" or provider == "claude"
-                        if isinstance(payload, dict):
-                            messages += (payload.get("type") == "message" and payload.get("role")
-                                         in ("user", "assistant")) or payload.get("type") in ("user_message", "agent_message")
-                        if provider == "claude":
-                            messages += record.get("type") in ("user", "assistant")
-                        if not args.raw:
-                            compaction_state_removed |= provider == "codex" and has_opaque_compaction(record)
-                            record, count = (csl_claude.portable_record(record) if provider == "claude" else portable_record(record))
-                            removed += count
-                            if record is None:
-                                continue
-                        data = json_line(record)
-                        size += len(data)
-                        total += len(data)
-                        if size > MAX_SESSION or total > MAX_TOTAL:
-                            raise TransferError("Bundle exceeds the 2 GiB/session or 4 GiB total limit")
-                        target.write(data)
-                        digest.update(data)
-                        records += 1
-                if not metadata or not messages:
-                    raise TransferError(f"Session {header['id']} has no local conversation history; metadata alone cannot be exported")
-                manifest["sessions"].append({**header, "file": member, "bytes": size,
-                                             "sha256": digest.hexdigest(), "records": records,
-                                             "encrypted_items_removed": removed,
-                                             **({"compaction_state_removed": True} if compaction_state_removed else {})})
-            archive.writestr("manifest.json", json.dumps(manifest, ensure_ascii=False, indent=2))
-        os.chmod(staged, 0o600)
-        # Atomic, exclusive publication: even concurrent exports cannot overwrite a package.
-        os.link(staged, destination)
+                for number, record in enumerate(read_records(snapshot()), 1):
+                    payload = record.get("payload", {})
+                    metadata += record.get("type") == "session_meta" or provider == "claude"
+                    if isinstance(payload, dict):
+                        messages += (payload.get("type") == "message" and payload.get("role")
+                                     in ("user", "assistant")) or payload.get("type") in ("user_message", "agent_message")
+                    if provider == "claude":
+                        messages += record.get("type") in ("user", "assistant")
+                    if not args.raw:
+                        compaction_state_removed |= provider == "codex" and has_opaque_compaction(record)
+                        record, count = (csl_claude.portable_record(record) if provider == "claude" else portable_record(record))
+                        removed += count
+                        if record is None:
+                            continue
+                    if review:
+                        review.scan(record, f"session[{session_number}].record[{number}]")
+                    data = json_line(record)
+                    total += len(data)
+                    if snapshot_file.tell() + len(data) > MAX_SESSION or total > MAX_TOTAL:
+                        raise TransferError("Bundle exceeds the 2 GiB/session or 4 GiB total limit")
+                    snapshot_file.write(data)
+            if not metadata or not messages:
+                raise TransferError("Selected session has no local conversation history; metadata alone cannot be exported")
+            snapshots.append((snapshot_path, header, removed, compaction_state_removed))
+        if review:
+            review.resolve()
+            if extra_metadata is not None:
+                cleaned = review.cleaned(extra_metadata)
+                extra_metadata.clear()
+                extra_metadata.update(cleaned)
+        destination = Path(review.cleaned(str(args.to)) if review else args.to).expanduser()
+        if not destination.name.lower().endswith(".zip"):
+            if len(sources) == 1:
+                header = review.cleaned(sources[0][1]) if review else sources[0][1]
+                title = re.sub(r"[^A-Za-z0-9_.-]+", "-", header["title"]).strip("-.")[:70]
+                destination = destination / f"{title or 'session'}-{header['id'][:8]}.csl.zip"
+            else:
+                destination = destination / f"sessions-{dt.datetime.now(dt.UTC):%Y%m%d-%H%M%S}-{uuid.uuid4().hex[:8]}.csl.zip"
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        if destination.exists():
+            raise TransferError("Refusing to overwrite an existing export destination")
+        # Stage on the destination filesystem for atomic exclusive publication.
+        with tempfile.TemporaryDirectory(prefix=".csl-export-", dir=destination.parent) as publishing:
+            staged = Path(publishing) / "bundle.zip"
+            with zipfile.ZipFile(staged, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as archive:
+                total = 0
+                for snapshot_path, header, removed, compaction_state_removed in snapshots:
+                    header = review.cleaned(header) if review else header
+                    member = f"sessions/{header['id']}.jsonl"
+                    digest = hashlib.sha256()
+                    size = records = 0
+                    with snapshot_path.open("rb") as source, archive.open(member, "w", force_zip64=True) as target:
+                        for record in read_records(source):
+                            original = record
+                            record = review.cleaned(record) if review else record
+                            if review and review.scrubbed:
+                                try:
+                                    review.rebind_projections(original, record)
+                                except (KeyError, TypeError, IndexError, AttributeError):
+                                    raise TransferError("Invalid portable content metadata; cannot safely scrub") from None
+                            data = json_line(record)
+                            size += len(data)
+                            total += len(data)
+                            if size > MAX_SESSION or total > MAX_TOTAL:
+                                raise TransferError("Bundle exceeds the 2 GiB/session or 4 GiB total limit")
+                            target.write(data)
+                            digest.update(data)
+                            records += 1
+                    manifest["sessions"].append({**header, "file": member, "bytes": size,
+                        "sha256": digest.hexdigest(), "records": records, "encrypted_items_removed": removed,
+                        **({"compaction_state_removed": True} if compaction_state_removed else {})})
+                archive.writestr("manifest.json", json.dumps(manifest, ensure_ascii=False, indent=2))
+            os.chmod(staged, 0o600)
+            os.link(staged, destination)
     if not quiet:
-        print(f"exported: {destination.resolve()}")
+        # Explicitly allowed secrets still never appear in status output or paths.
+        print("exported: " + ("[path masked after secret review]" if review and review.findings else str(destination.resolve())))
         print(f"sessions: {len(sources)}; mode: {manifest['mode']}")
-        print("Contains conversation/tool history, which may include sensitive text; no auth files or project assets are included.")
-        print(f"recipient: csl import {shlex.quote(destination.name)} --cwd /path/to/project --open")
+        print("Contains conversation/tool history; no auth files or project assets are collected.")
+        print("recipient: csl import PACKAGE.csl.zip --cwd /path/to/project --open")
     return destination.resolve()
 
 
@@ -578,7 +617,9 @@ def run_transfer(args, csl):
     try:
         (export_bundle if args.command == "export" else import_bundle)(args, csl)
     except (TransferError, OSError, ValueError, zipfile.BadZipFile, RuntimeError) as exc:
-        print(f"csl {args.command}: {exc}", file=sys.stderr)
+        from csl_secrets import masked_diagnostic
+        detail = "Export filesystem operation failed; path details suppressed" if args.command == "export" and isinstance(exc, OSError) else str(exc)
+        print(f"csl {args.command}: {masked_diagnostic(detail) if args.command == 'export' else detail}", file=sys.stderr)
         raise SystemExit(2) from None
 
 
@@ -588,6 +629,8 @@ def add_commands(subparsers, csl):
     export.add_argument("--to", type=Path, default=Path.home() / "Downloads", help="Output directory or .zip path.")
     export.add_argument("--raw", action="store_true", help="Preserve encrypted reasoning instead of portable cleanup.")
     export.add_argument("--provider", choices=("codex", "claude"), help="Limit source lookup to one CLI (default: auto-detect both).")
+    from csl_secrets import add_options
+    add_options(export)
     export.set_defaults(func=lambda args: run_transfer(args, csl))
     imp = subparsers.add_parser("import", help="Validate and install a session bundle with fresh local UUIDs.")
     imp.add_argument("bundle", type=Path)
