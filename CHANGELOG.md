@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Clarify batch-upload completion: suppress per-session recipient instructions
+  and print one whole-migration restore command with the completed session count
+  and current-folder guidance, without a placeholder project path.
+
 - Explicit `--repair-legacy-compaction` recovery for old Codex portable copies
   with one orphaned final summary annotation. Pending migration exports can
   recover without resending completed shares; source files and readable turns

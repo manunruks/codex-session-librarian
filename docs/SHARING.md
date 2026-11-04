@@ -39,6 +39,14 @@ source UUID/share-ID pairs, not local paths or authentication. No new transcript
 format, Git history of messages, synchronization or merge system is introduced.
 The normal inbox continues to list the individual shares, not this index.
 
+During upload, individual share IDs are progress records, not instructions to
+restore sessions one by one. Migration suppresses each share's `receive --open`
+instructions. Completion explicitly reports the uploaded count and prints a
+single whole-migration download command for the NEW computer, preceded by the
+actual private-exchange connection command. Run those from the intended local
+working folder; no literal `/path/to/project` placeholder is needed. Standalone
+`csl share` retains its individual recipient instructions.
+
 Interrupted uploads retain local progress under `$CODEX_HOME/csl-migrations`:
 `csl migrate upload --resume MIGRATION_ID` skips completed shares. Repeat `--raw`
 if originally used and repeat any desired secret-review option. Stop on failure;

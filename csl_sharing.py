@@ -156,8 +156,9 @@ def share(args, csl):
         except TransferError as exc:
             raise TransferError(f"Share {tag} did not finish; provider details suppressed. Inspect its release before retrying") from None
     print(f"shared: {tag}")
-    print(f"https://github.com/{repo}/releases/tag/{tag}")
-    print(f"recipient: csl receive {tag} --cwd /path/to/project --open")
+    if not getattr(args, "migration_batch", False):
+        print(f"https://github.com/{repo}/releases/tag/{tag}")
+        print(f"recipient: csl receive {tag} --cwd /path/to/project --open")
     return tag
 
 
