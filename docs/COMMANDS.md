@@ -25,6 +25,26 @@ This project has two layers:
 
 ## Librarian Commands
 
+### `migrate`
+
+Batch migration of the normal interactive Codex resume list using the existing
+share/receive operations and a small index:
+
+```bash
+csl migrate upload --dry-run
+csl migrate upload
+csl migrate upload --resume MIGRATION_ID
+csl migrate download MIGRATION_ID --cwd ~/projects
+csl migrate cleanup MIGRATION_ID
+csl migrate cleanup MIGRATION_ID --confirm-restored
+```
+
+Connect both computers to the same private exchange first. Upload supports the
+existing `--raw` and secret-review options. Download is safe to repeat. Cleanup
+archives unchanged originals, never deletes them, and requires manual confirmation
+that restoration works; native Codex may also archive spawned descendants.
+See [migration scope and recovery](SHARING.md#computer-migration).
+
 ### `index`
 
 Parse session files into `~/.codex/session_librarian.sqlite`.
