@@ -61,7 +61,7 @@ def convert_bundle(args, csl, archive, manifest):
             convert_native(source, provider, target, converted, args.cwd, args)
             paths.append(str(converted))
         bundle = export_bundle(SimpleNamespace(sessions=paths, provider=target, raw=False,
-                                               to=Path(temp) / "converted.zip", db=args.db), csl, quiet=True)
+                                               to=Path(temp) / "converted.zip", db=args.db), csl, quiet=True, scan_secrets=False)
         options = dict(vars(args), bundle=bundle, provider=target, target=None,
                        leaf=None, history_policy="active", repair_interrupted=False)
         return import_bundle(SimpleNamespace(**options), csl)
@@ -121,7 +121,7 @@ def convert(args, csl):
         source = Path(temp) / "converted.jsonl"
         restore(data, args.to, source, cwd)
         bundle = export_bundle(SimpleNamespace(sessions=[str(source)], provider=args.to, raw=False,
-                                               to=Path(temp) / "converted.zip", db=args.db), csl, quiet=True)
+                                               to=Path(temp) / "converted.zip", db=args.db), csl, quiet=True, scan_secrets=False)
         return import_bundle(SimpleNamespace(bundle=bundle, cwd=cwd, name=args.name, list=False,
             open=args.open, open_args=args.open_args, provider=args.to, db=args.db,
             max_context_chars=args.max_context_chars), csl)

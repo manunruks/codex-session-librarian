@@ -46,6 +46,8 @@ and historical citation/reference metadata are preserved. References render as
 explicit historical text without opening URLs; hashed projection spans retain
 their original metadata and reject stale/edited projections on another conversion.
 Tool names and arguments remain historical evidence, not instructions to retry.
+When Codex splits a phased assistant message into text and tool-call records,
+CSL portability metadata retains the tool-call phase for later conversion.
 
 Codex structured compactions select replacement history before normalization;
 Claude selects its parent-linked active branch and stops at readable compaction

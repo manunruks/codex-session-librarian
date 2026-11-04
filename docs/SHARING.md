@@ -139,7 +139,10 @@ conversation. Continue normally, then publish another snapshot when useful.
   does not implement per-person delivery permissions or send notifications.
 - Only github.com is supported by this first version.
 - Private access and checksums do not redact secrets in conversation/tool text.
-  Review the content before sharing. Never upload it to the public code repo.
+  Before upload, the [partial local secret review](TRANSFERS.md#partial-secret-review-before-export-or-share)
+  asks `keep` / `scrub` / `cancel` for findings; unattended runs must choose
+  `--allow-secrets` or `--scrub-secrets`. Review content and opaque attachments
+  yourself; scanning has partial coverage. Never upload histories to the public code repo.
 - The exchange is not a replacement for the project checkout, attachments or
   the recipient's Codex account/model access.
 - Native replay remains dependent on Codex's local session format.

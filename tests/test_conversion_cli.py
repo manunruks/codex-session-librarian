@@ -114,6 +114,23 @@ class ConversionCliTests(unittest.TestCase):
         self.assertEqual(canonical.semantic_events(canonical.from_claude(path)), canonical.semantic_events(canonical.from_codex(self.source)))
         self.assertEqual(bundle.read_bytes(), before)
 
+    def test_tool_phase_survives_native_conversion_installation(self):
+        data = canonical.from_codex(self.source)
+        for event in data["events"]:
+            if any(block["type"] == "tool_call" for block in event["blocks"]):
+                event["phase"] = "commentary"
+        document = self.root / "phased-conversation.json"
+        canonical.write_json(document, data)
+        for target in ("codex", "claude"):
+            result = self.cli("convert", document, "--to", target, "--cwd", self.cwd)
+            installed = self.installed(result.stdout, target)
+            data = canonical.normalize(target, installed)
+            calls = [event for event in data["events"]
+                     if any(block["type"] == "tool_call" for block in event["blocks"])]
+            self.assertEqual([event.get("phase") for event in calls], ["commentary"])
+            # Continue from the installed copy, including native transfer rewriting.
+            document = installed
+
     def test_context_character_limit_rejects_before_install(self):
         before = list(self.claude.rglob("*.jsonl"))
         result = self.cli("convert", self.sid, "--to", "claude", "--cwd", self.cwd, "--max-context-chars", "10", ok=False)

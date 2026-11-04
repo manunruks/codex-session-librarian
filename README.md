@@ -1,5 +1,7 @@
 # Codex Session Librarian
 
+**A Vitral project · Apache-2.0 · [csl.vitral.ai](https://csl.vitral.ai)**
+
 Find, reopen, clone, and share native Codex conversations, and transfer native
 Claude Code conversations, from your terminal or coding agent. CSL works with
 the actual JSONL history, not just a summary. See the maintained
@@ -21,8 +23,25 @@ cd codex-session-librarian
 Make sure `~/.local/bin` is on `PATH`. No virtualenv or pip install is needed.
 An optional prefix is supported: `./install.sh /usr/local`.
 
+Run `csl --version` to identify your installed checkout. Release notes and bounded
+compatibility evidence for 0.1.0 are in [CHANGELOG.md](CHANGELOG.md).
+
 Update this checkout with `git pull --ff-only`. The installed launcher follows
 the checkout, so no reinstall is needed.
+
+## Try A Synthetic Handoff
+
+For an isolated demonstration before using your own history, run from this checkout:
+
+```bash
+python3 demo/demo.py --repo . --out /tmp/csl-demo.json
+```
+
+This creates synthetic fixtures, exports and inspects a ZIP, imports a new native
+session, and checks experimental Claude → Codex conversion. It needs no model
+login or paid inference and does not read personal histories. See
+[the demo and recorded live evidence](demo/README.md). The result is an executed
+synthetic example, not a promise about every private session.
 
 ## Share With The Team
 
@@ -165,6 +184,11 @@ Export accepts UUIDs, unambiguous prefixes, indexed names, or JSONL paths.
 Archived and newly created sessions can be found by UUID without reindexing.
 Metadata-only histories are rejected because they do not contain messages.
 `--list` validates without importing.
+
+Export/share also perform a partial local secret scan before creating the ZIP.
+Findings require a per-value terminal decision, or explicit `--allow-secrets` /
+`--scrub-secrets` for unattended use. Binary/opaque attachments are not scanned;
+review remains your responsibility. See [review and limits](docs/TRANSFERS.md#partial-secret-review-before-export-or-share).
 
 Default export/share removes encrypted reasoning and opaque encrypted state
 for portability. `--raw` retains it, but may fail under a different account.

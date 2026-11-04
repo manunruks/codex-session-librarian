@@ -141,7 +141,7 @@ def from_codex(path, repair_interrupted=False, history_policy="active"):
             continue
         ptype = payload.get("type")
         event = {"id": payload.get("id") or f"codex-{index}", "time": record.get("timestamp"),
-                 "blocks": [], "role": "assistant"}
+                 "blocks": [], "role": "assistant", "phase": record.get("portability_phase")}
         if ptype == "message":
             role = payload["role"]
             blocks = text_blocks(codec.restore_spans(payload.get("content", []), transport.get("message")))
@@ -545,6 +545,10 @@ def restore_codex(data, path, cwd, sid=None):
                 payload = {"type": result_type, "call_id": block["call_id"],
                            "output": output, "csl_is_error": block["is_error"]}
             records.append({"type": "response_item", "timestamp": event.get("time") or timestamp,
+                            # Tool payloads have no native assistant phase field.
+                            # Retain the canonical phase outside the native item,
+                            # as for Claude portability metadata.
+                            "portability_phase": event.get("phase"),
                             "portability_content": transport,
                             "payload": payload})
         flush()

@@ -1,0 +1,189 @@
+{
+  "schema_version": 1,
+  "kind": "synthetic",
+  "generated_at": "2026-11-03T00:54:54+00:00",
+  "label": "Synthetic demo fixture — not a real user or testimonial",
+  "language": "en",
+  "offline": {
+    "status": "passed",
+    "source_hashes_unchanged": true,
+    "fixtures_deterministic": true,
+    "native_import_identity_is_fresh": true,
+    "source_sha256": "fd6c5c618f110e832211151171cabdf12fae5fd6d51012636932e1d47ae0c4cc",
+    "claude_source_sha256": "26c404c827b615493039ba3a9497ef759e51b8caeda7c75e2dacc56cd62da8b2",
+    "native_cli_required": false,
+    "inference_performed": false,
+    "temporary_homes": true
+  },
+  "steps": [
+    {
+      "id": "export",
+      "command": "csl export \"$WORK/source.jsonl\" --to \"$WORK/handoff.csl.zip\"",
+      "result": "ZIP created from a synthetic native Codex session",
+      "passed": true,
+      "evidence": {
+        "manifest_checksum_valid": true,
+        "sessions": 1,
+        "original_source_unchanged": true
+      },
+      "title": "Export a synthetic Codex conversation",
+      "verified": true,
+      "output": [
+        "ZIP created from a synthetic native Codex session"
+      ]
+    },
+    {
+      "id": "inspect",
+      "command": "csl import \"$WORK/handoff.csl.zip\" --list",
+      "result": "Package validated; no sessions installed",
+      "passed": true,
+      "title": "Inspect before installing",
+      "verified": true,
+      "output": [
+        "Package validated; no sessions installed"
+      ]
+    },
+    {
+      "id": "import",
+      "command": "csl import \"$WORK/handoff.csl.zip\" --cwd \"$WORK/project\"",
+      "result": "New native session identity; original historical messages and tool result retained",
+      "passed": true,
+      "evidence": {
+        "new_identity": true,
+        "normalized_history_equal": true,
+        "expected_historical_facts": {
+          "release": "amber42",
+          "database": "SQLite",
+          "fixture_serial": "DEMO-617"
+        }
+      },
+      "title": "Continue from a new native identity",
+      "verified": true,
+      "output": [
+        "New native session identity; original historical messages and tool result retained"
+      ]
+    },
+    {
+      "id": "convert",
+      "command": "csl convert \"$WORK/claude-source.jsonl\" --to codex --cwd \"$WORK/project\"",
+      "result": "Experimental Claude → Codex conversion retained the selected synthetic history and tool phase",
+      "passed": true,
+      "evidence": {
+        "new_identity": true,
+        "normalized_history_equal": true,
+        "tool_phase_retained": true
+      },
+      "title": "Bring supported Claude history into Codex",
+      "verified": true,
+      "output": [
+        "Experimental Claude → Codex conversion retained the selected synthetic history and tool phase"
+      ]
+    }
+  ],
+  "fixture": {
+    "initial_decision": "cobalt with Postgres",
+    "corrected_decision": "amber42 with SQLite",
+    "tool_only_fact": "DEMO-617",
+    "contains_real_user_data": false
+  },
+  "provenance": {
+    "runner_sha256": "94fcc3adf7f822470756364f29ecd1a0b717235f0fb54150cc106f113387fc78",
+    "adapter_sha256": {
+      "csl_transfer.py": "5b446bf1eb009221d29c0162057c815f44f7dd916e45d67a2158ba6d9f9654bd",
+      "csl_canonical.py": "3c14491a497df9fde87b8e80009d83c707c47e4ee4f110a46224d416d94e02d6",
+      "csl_conversion.py": "e10a5a7c13cf7f779c74e0feb066d5b8160595c97da63c5aee122ea59c67bf61",
+      "csl_secrets.py": "294b9ce79cfc2155bb2ebe5898687880ce84272d1f1cfe1ef889fb826e83f20e"
+    }
+  },
+  "live": {
+    "status": "passed",
+    "calls_attempted": 2,
+    "cli_version": "codex-cli 0.166.0",
+    "model_requested": "gpt-6.1-sol",
+    "cost_basis": "Existing ChatGPT plan usage; no invented dollar price",
+    "results": [
+      {
+        "case": "native-zip-handoff",
+        "passed": true,
+        "fields_checked": [
+          "release",
+          "database",
+          "fixture_serial"
+        ],
+        "failed_fields": [],
+        "tools_executed": 0,
+        "answer": {
+          "release": "amber42",
+          "database": "SQLite",
+          "fixture_serial": "DEMO-617"
+        },
+        "usage": {
+          "input_tokens": 8409,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 22,
+          "reasoning_output_tokens": 0
+        },
+        "observed_models": [
+          "gpt-6.1-sol"
+        ]
+      },
+      {
+        "case": "claude-to-codex-handoff",
+        "passed": true,
+        "fields_checked": [
+          "release",
+          "database",
+          "fixture_serial"
+        ],
+        "failed_fields": [],
+        "tools_executed": 0,
+        "answer": {
+          "release": "amber42",
+          "database": "SQLite",
+          "fixture_serial": "DEMO-617"
+        },
+        "usage": {
+          "input_tokens": 8420,
+          "cached_input_tokens": 0,
+          "cache_write_input_tokens": 0,
+          "output_tokens": 22,
+          "reasoning_output_tokens": 0
+        },
+        "observed_models": [
+          "gpt-6.1-sol"
+        ]
+      }
+    ],
+    "model": "gpt-6.1-sol",
+    "routes": [
+      "native-zip-handoff",
+      "claude-to-codex-handoff"
+    ],
+    "input_tokens": 16829,
+    "output_tokens": 44,
+    "answer": {
+      "release": "amber42",
+      "database": "SQLite",
+      "fixture_serial": "DEMO-617"
+    }
+  },
+  "limits": [
+    "Synthetic bounded fixture; not universal compatibility.",
+    "Offline import/conversion verifies structure and historical content, not model recall.",
+    "A package does not include repositories, credentials or unembedded external attachments.",
+    "Imported history is context, not authorization to execute prior tasks.",
+    "Secret scanning is partial; opaque attachments remain outside its coverage."
+  ],
+  "checks": {
+    "source_unchanged": true,
+    "zip_checksum_valid": true,
+    "inspection_did_not_install": true,
+    "new_identity": true,
+    "historical_facts_preserved": true,
+    "claude_to_codex_history_preserved": true,
+    "tool_phase_retained": true,
+    "isolated_homes": true,
+    "synthetic_only": true
+  }
+}
