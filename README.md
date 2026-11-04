@@ -255,6 +255,18 @@ Tests used separate Python environments/homes, real CSL/Codex binaries and a
 simulated GitHub exchange with networking blocked. See the
 [validation report and reproduction commands](docs/MIGRATION_VALIDATION.md).
 
+If an old portable copy blocks migration with a compaction history/metadata
+mismatch, explicitly enable the narrow legacy recovery on pending exports:
+
+```bash
+csl migrate upload --resume MIGRATION_ID --scrub-secrets --repair-legacy-compaction
+```
+
+Recognized orphaned summary metadata is repaired only in the export copy; readable
+turns and originals stay intact. Already uploaded shares are reused. Missing
+encrypted summaries are not reconstructed, recovery is labeled, and unrecognized
+damage still stops the migration. See [legacy recovery](docs/SHARING.md#legacy-compaction-recovery).
+
 ## Clone Or Trim
 
 ```bash

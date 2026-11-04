@@ -1,5 +1,10 @@
 # Portable Session Transfers
 
+Old portable Codex copies with a recognized orphaned compaction-summary annotation
+can be exported with `--repair-legacy-compaction`. Recovery is explicit and
+portable-only, edits only the output copy, and does not reconstruct missing hidden
+context. See [recovery scope](SHARING.md#legacy-compaction-recovery).
+
 ## Send
 
 ```bash

@@ -45,6 +45,12 @@ archives unchanged originals, never deletes them, and requires manual confirmati
 that restoration works; native Codex may also archive spawned descendants.
 See [migration scope and recovery](SHARING.md#computer-migration).
 
+For recognized old portable Codex copies blocked by orphaned compaction metadata,
+add `--repair-legacy-compaction` to upload/resume, export or share. This edits only
+the export copy, preserves readable turns, labels missing hidden context and
+refuses other damage. It cannot be combined with `--raw`.
+See [the exact recovery scope](SHARING.md#legacy-compaction-recovery).
+
 ### `index`
 
 Parse session files into `~/.codex/session_librarian.sqlite`.

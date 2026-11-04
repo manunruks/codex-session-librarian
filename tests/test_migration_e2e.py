@@ -301,3 +301,45 @@ class MigrationE2ETests(unittest.TestCase):
         self.assertEqual(remote.read_bytes(), before)
         self.assertFalse(json.loads(local.read_text())["complete"])
         self.assert_sources_unchanged()
+
+    def test_resume_after_seven_shares_recovers_old_compaction_copy_and_keeps_later_work(self):
+        from test_legacy_compaction_recovery import damaged_checkpoint
+        self.seed(10)
+        result = self.cli("old", "migrate", "upload", ok=False, extra={"CSL_FAKE_FAIL_AFTER": "7"})
+        tag = re.search(r"migration: (csl-migration-[0-9a-f]+)", result.stdout).group(1)
+        local = self.machines["old"]["home"] / "csl-migrations" / f"{tag}.json"
+        state = json.loads(local.read_text())
+        self.assertEqual(sum(bool(e.get("share_id")) for e in state["sessions"]), 7)
+        source = Path(state["sessions"][7]["path"])
+        records = [json.loads(line) for line in source.read_text().splitlines()]
+        headers = []
+        for version in ("0.160.0", "0.159.1", "0.153.4", "0.147.0", "0.139.0", "0.123.0", "0.123.0", "0.121.0", "0.121.0"):
+            header = json.loads(json.dumps(records[0]))
+            header["payload"]["cli_version"] = version
+            headers.append(header)
+        records = headers + records[1:] + [damaged_checkpoint(),
+            {"type": "response_item", "timestamp": "2026-11-04T00:00:00Z", "payload": {
+                "type": "message", "role": "user", "content": [{"type": "input_text", "text": "LATER-WORK-KEEP"}]}},
+            {"type": "event_msg", "timestamp": "2026-11-04T00:00:00Z", "payload": {
+                "type": "user_message", "message": "LATER-WORK-KEEP", "images": [], "local_images": [], "text_elements": []}}]
+        source.write_text("".join(json.dumps(record) + "\n" for record in records))
+        self.hashes[source] = hashlib.sha256(source.read_bytes()).hexdigest()
+        self.cli("old", "migrate", "upload", "--resume", tag, "--scrub-secrets", ok=False)
+        self.assertFalse((self.exchange / tag).exists())
+        before = set(json.loads((self.exchange / "releases.json").read_text()))
+        result = self.cli("old", "migrate", "upload", "--resume", tag, "--scrub-secrets", "--repair-legacy-compaction")
+        self.assertIn("source unchanged", result.stderr)
+        self.assertEqual(len(self.manifest(tag)["sessions"]), 10)
+        after = set(json.loads((self.exchange / "releases.json").read_text()))
+        self.assertTrue(before.issubset(after))
+        self.assertEqual(len(after), 11)
+        self.download(tag)
+        self.assertEqual(len(self.restored()), 10)
+        recovered = [p for p in self.restored() if "LATER-WORK-KEEP" in p.read_text()]
+        self.assertEqual(len(recovered), 1)
+        text = recovered[0].read_text()
+        self.assertIn("KEPT-USER-FACT", text)
+        self.assertIn("KEPT-ASSISTANT-FACT", text)
+        self.assertIn('"compaction_state_removed": true', text)
+        self.assertIn("legacy-orphaned-summary-metadata-v1", text)
+        self.assert_sources_unchanged()

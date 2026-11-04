@@ -35,6 +35,9 @@ def coverage():
                                         "agent": "persistent-exec-source-excluded-from-default-resume-picker",
                                         "archived": "new-clone-in-archived_sessions",
                                         "scope": "experimental; presentation filter, not access control"},
+            "legacy_compaction_recovery": {"provider": "codex", "default_enabled": False,
+                "commands": ["export", "share", "migrate upload"], "mode": "portable-only",
+                "scope": "explicit recognized orphaned-summary-metadata recovery; exact hidden context not restored"},
             "authentication": "Recipient CLI owns authentication; CSL never copies credentials or selects billing accounts.",
             "continuation": "Native file transfer is not a guarantee of model availability, context fit, or universal CLI-version compatibility."}
 

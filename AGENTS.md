@@ -19,6 +19,9 @@ workflow under `docs/` before changing it.
   repair silently. Source policy stays quarantined in canonical conversions.
 - Native imports print continuity preflight. `doctor --native` measures isolated
   localhost request reconstruction only, never live recall or guaranteed context fit.
+- `--repair-legacy-compaction` on portable Codex export/share/migrate is explicit
+  recovery, not exact hidden-state repair. It recognizes only one orphaned final
+  summary annotation; never truncate arbitrary metadata or edit the source file.
 - All arguments after `--open` go literally to the native CLI. Put CSL options first;
   never add sandbox/approval bypass flags unless the user explicitly requests them.
 - Repeat receives reuse the latest local copy; add `--new` only when requested.

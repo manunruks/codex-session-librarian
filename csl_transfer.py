@@ -108,7 +108,9 @@ def validate_compaction(record):
         if not isinstance(item, dict) or not isinstance(item.get("type"), str):
             raise TransferError("Malformed compaction replacement item")
     if isinstance(history, list) and isinstance(metadata, list) and metadata and len(history) != len(metadata):
-        raise TransferError("Compaction history/metadata lengths differ; re-export the original session with updated CSL. This package cannot safely restore its active context.")
+        raise TransferError(f"Compaction history/metadata lengths differ (history={len(history)}, metadata={len(metadata)}); "
+                            "re-export the original session or explicitly use --repair-legacy-compaction for a recognized old portable copy. "
+                            "This package cannot safely restore its exact active context.")
 
 
 def has_opaque_compaction(record):
@@ -128,6 +130,36 @@ def has_opaque_compaction(record):
         if isinstance(item, dict) and item.get("type") in ("compaction", "compaction_summary", "context_compaction") and "encrypted_content" in item:
             return True
     return False
+
+
+def recover_legacy_compaction(record):
+    """Recognize only the orphaned final summary annotation of an old portable copy."""
+    if record.get("type") != "compacted" or not isinstance(record.get("payload"), dict):
+        return record, False
+    payload = record["payload"]
+    history = payload.get("replacement_history")
+    metadata = payload.get("replacement_history_metadata")
+    if not (isinstance(history, list) and isinstance(metadata, list) and metadata and len(history) != len(metadata)):
+        return record, False
+    items = [item.get("item", item) if isinstance(item, dict) else None for item in history]
+    marker_positions = [i for i, item in enumerate(metadata)
+                        if isinstance(item, dict) and "compaction_model_hash" in item]
+    if (not history or len(metadata) != len(history) + 1 or marker_positions != [len(history)]
+            or not isinstance(metadata[-1].get("compaction_model_hash"), str)
+            or not metadata[-1]["compaction_model_hash"]
+            or any(not isinstance(item, dict) for item in metadata)
+            or any(not isinstance(item, dict) or not isinstance(item.get("type"), str)
+                   or item["type"] in ("compaction", "compaction_summary", "context_compaction") for item in items)
+            or has_opaque_compaction(record)):
+        raise TransferError("Unrecognized compaction mismatch; legacy recovery refused without changing the source")
+    previous = record.get("csl_portable_compaction", {})
+    if not isinstance(previous, dict):
+        raise TransferError("Invalid compaction recovery metadata")
+    recovered = {**record, "payload": {**payload, "replacement_history_metadata": metadata[:-1]},
+                 "csl_portable_compaction": {**previous, "opaque_summary_removed": True,
+                    "recovery": "legacy-orphaned-summary-metadata-v1"}}
+    validate_compaction(recovered)
+    return recovered, True
 
 
 def portable_record(record):
@@ -290,6 +322,9 @@ def export_bundle(args, csl, *, quiet=False, scan_secrets=True, extra_metadata=N
     review = SecretReview(args) if scan_secrets else None
     sources = resolve_sources(args.sessions, csl, args.db, getattr(args, "provider", None))
     provider = selected_provider([header for _, header in sources])
+    recovery = getattr(args, "repair_legacy_compaction", False)
+    if recovery and (args.raw or provider != "codex"):
+        raise TransferError("Legacy compaction recovery requires portable Codex export; do not use --raw")
     manifest = {"format": FORMAT, "version": 2 if provider == "claude" else VERSION, "created_at": csl.utc_now(),
                 "mode": "raw" if args.raw else "portable", "sessions": []}
     total = 0
@@ -305,7 +340,7 @@ def export_bundle(args, csl, *, quiet=False, scan_secrets=True, extra_metadata=N
             if review:
                 review.scan(header, f"session[{session_number}].metadata")
             snapshot_path = Path(tmp) / f"{session_number}.jsonl"
-            removed = messages = metadata = 0
+            removed = messages = metadata = recovered_checkpoints = 0
             compaction_state_removed = False
             with path.open("rb") as source, snapshot_path.open("xb") as snapshot_file:
                 os.chmod(snapshot_path, 0o600)
@@ -326,6 +361,9 @@ def export_bundle(args, csl, *, quiet=False, scan_secrets=True, extra_metadata=N
                         yield line
 
                 for number, record in enumerate(read_records(snapshot()), 1):
+                    if recovery:
+                        record, recovered = recover_legacy_compaction(record)
+                        recovered_checkpoints += int(recovered)
                     payload = record.get("payload", {})
                     metadata += record.get("type") == "session_meta" or provider == "claude"
                     if isinstance(payload, dict):
@@ -334,7 +372,11 @@ def export_bundle(args, csl, *, quiet=False, scan_secrets=True, extra_metadata=N
                     if provider == "claude":
                         messages += record.get("type") in ("user", "assistant")
                     if not args.raw:
-                        compaction_state_removed |= provider == "codex" and has_opaque_compaction(record)
+                        if provider == "codex":
+                            marker = record.get("csl_portable_compaction", {})
+                            if not isinstance(marker, dict):
+                                raise TransferError("Invalid compaction portability marker")
+                            compaction_state_removed |= has_opaque_compaction(record) or bool(marker.get("opaque_summary_removed"))
                         record, count = (csl_claude.portable_record(record) if provider == "claude" else portable_record(record))
                         removed += count
                         if record is None:
@@ -348,7 +390,10 @@ def export_bundle(args, csl, *, quiet=False, scan_secrets=True, extra_metadata=N
                     snapshot_file.write(data)
             if not metadata or not messages:
                 raise TransferError("Selected session has no local conversation history; metadata alone cannot be exported")
-            snapshots.append((snapshot_path, header, removed, compaction_state_removed))
+            if recovered_checkpoints:
+                print(f"recovery warning: repaired {recovered_checkpoints} orphaned compaction annotations in the export copy; "
+                      "encrypted summary was already missing; no readable turns dropped; source unchanged", file=sys.stderr)
+            snapshots.append((snapshot_path, header, removed, compaction_state_removed, recovered_checkpoints))
         if review:
             review.resolve()
             if extra_metadata is not None:
@@ -371,7 +416,7 @@ def export_bundle(args, csl, *, quiet=False, scan_secrets=True, extra_metadata=N
             staged = Path(publishing) / "bundle.zip"
             with zipfile.ZipFile(staged, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=6) as archive:
                 total = 0
-                for snapshot_path, header, removed, compaction_state_removed in snapshots:
+                for snapshot_path, header, removed, compaction_state_removed, recovered_checkpoints in snapshots:
                     header = review.cleaned(header) if review else header
                     member = f"sessions/{header['id']}.jsonl"
                     digest = hashlib.sha256()
@@ -395,7 +440,8 @@ def export_bundle(args, csl, *, quiet=False, scan_secrets=True, extra_metadata=N
                             records += 1
                     manifest["sessions"].append({**header, "file": member, "bytes": size,
                         "sha256": digest.hexdigest(), "records": records, "encrypted_items_removed": removed,
-                        **({"compaction_state_removed": True} if compaction_state_removed else {})})
+                        **({"compaction_state_removed": True} if compaction_state_removed else {}),
+                        **({"legacy_compaction_checkpoints_recovered": recovered_checkpoints} if recovered_checkpoints else {})})
                 archive.writestr("manifest.json", json.dumps(manifest, ensure_ascii=False, indent=2))
             os.chmod(staged, 0o600)
             os.link(staged, destination)
@@ -628,6 +674,8 @@ def add_commands(subparsers, csl):
     export.add_argument("sessions", nargs="*", help="UUIDs, unambiguous names, or JSONL paths; omit for a picker.")
     export.add_argument("--to", type=Path, default=Path.home() / "Downloads", help="Output directory or .zip path.")
     export.add_argument("--raw", action="store_true", help="Preserve encrypted reasoning instead of portable cleanup.")
+    export.add_argument("--repair-legacy-compaction", action="store_true",
+                        help="Explicit recovery of recognized orphaned summary metadata in old portable Codex copies; originals unchanged.")
     export.add_argument("--provider", choices=("codex", "claude"), help="Limit source lookup to one CLI (default: auto-detect both).")
     from csl_secrets import add_options
     add_options(export)

@@ -124,7 +124,8 @@ def share(args, csl):
         export_bundle(SimpleNamespace(sessions=args.sessions, to=bundle, raw=args.raw, db=args.db,
                                       provider=getattr(args, "provider", None),
                                       allow_secrets=getattr(args, "allow_secrets", False),
-                                      scrub_secrets=getattr(args, "scrub_secrets", False)),
+                                      scrub_secrets=getattr(args, "scrub_secrets", False),
+                                      repair_legacy_compaction=getattr(args, "repair_legacy_compaction", False)),
                       csl, quiet=True, extra_metadata=reviewed_metadata)
         if bundle.stat().st_size >= 2 * 1024**3:
             raise TransferError("GitHub release assets must be below 2 GiB; share fewer sessions per package")
@@ -388,6 +389,8 @@ def add_commands(subparsers, csl):
     share_parser.add_argument("sessions", nargs="*", help="Session selectors; omit for a local picker.")
     share_parser.add_argument("--title", help="Short title shown in the team inbox.")
     share_parser.add_argument("--raw", action="store_true", help="Keep encrypted reasoning (default: portable).")
+    share_parser.add_argument("--repair-legacy-compaction", action="store_true",
+                              help="Recover recognized orphaned compaction metadata in the portable export copy only.")
     share_parser.add_argument("--provider", choices=("codex", "claude"), help="Limit source lookup to one CLI (default: auto-detect both).")
     from csl_secrets import add_options
     add_options(share_parser)

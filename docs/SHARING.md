@@ -76,6 +76,40 @@ See [isolated migration validation](MIGRATION_VALIDATION.md) for subprocess,
 large-batch and fault-injection tests. These use a simulated GitHub exchange,
 not live uploads to the team's inbox.
 
+## Legacy Compaction Recovery
+
+Some old portable copies removed the final encrypted compaction item but kept
+its annotation, leaving `replacement_history_metadata` one entry longer than
+`replacement_history`. Normal export/import still rejects mismatched arrays.
+Updating CSL alone does not rewrite those old source files.
+
+For that narrowly identified pattern, use explicit recovery while resuming:
+
+```bash
+csl migrate upload --resume MIGRATION_ID --scrub-secrets --repair-legacy-compaction
+# Also available for individual portable exports/shares:
+csl export UUID --to ~/Downloads --repair-legacy-compaction
+csl share UUID --repair-legacy-compaction
+```
+
+Recognition requires one extra annotation, a unique final nonempty
+`compaction_model_hash` marker, no remaining compaction item or root encrypted
+summary, nonempty structurally valid history and object metadata. The extra
+annotation is removed only from the export snapshot. No readable messages or
+later turns are cut. Other mismatches are refused, not guessed into alignment.
+Recovery is not available in `--raw` or for Claude.
+
+Recovered checkpoints and bundle provenance explicitly mark the already-missing
+encrypted summary. This repairs structure, **not exact hidden context**. Continuity
+preflight must not claim exact active-context reconstruction. Ordinary account,
+context-window and diagnostic-size limits still apply; verify important restored
+sessions on the destination before cleanup.
+
+Migration records this explicit choice for its pending exports. Repeats reuse
+completed shares without changing the source hashes or requiring a new migration.
+Secret review remains independent; use `--scrub-secrets` on each invocation when
+desired. Without explicit recovery, the default remains fail-closed.
+
 ## First Connection
 
 Install GitHub CLI and authenticate using your own account, then connect:

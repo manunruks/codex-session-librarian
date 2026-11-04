@@ -63,6 +63,11 @@ def upload(args, csl):
         if not entries:
             raise TransferError("No interactive Codex sessions to migrate")
         state = {"id": tag, "repo": repo, "raw": args.raw, "complete": False, "sessions": entries}
+    recovery = bool(getattr(args, "repair_legacy_compaction", False) or state.get("repair_legacy_compaction"))
+    if recovery and args.raw:
+        raise TransferError("Legacy compaction recovery requires portable mode; omit --raw")
+    if recovery:
+        state["repair_legacy_compaction"] = True
     print(f"migration: {tag}; {len(state['sessions'])} sessions -> {repo}")
     if args.dry_run:
         for entry in state["sessions"]:
@@ -78,13 +83,15 @@ def upload(args, csl):
         try:
             entry["share_id"] = sharing.share(SimpleNamespace(sessions=[str(source)], title=None,
                 raw=args.raw, db=args.db, provider="codex", allow_secrets=args.allow_secrets,
-                scrub_secrets=args.scrub_secrets), csl)
+                scrub_secrets=args.scrub_secrets, repair_legacy_compaction=recovery), csl)
             entry["sha256"] = digest
             sharing.save_json(local, state)
             if sharing.file_sha256(source) != digest:
                 raise TransferError("A source changed during upload; keep sessions idle and start a new migration")
         except (TransferError, OSError):
-            print(f"Resume completed uploads with: csl migrate upload --resume {tag}" + (" --raw" if args.raw else ""), file=sys.stderr)
+            options = (" --raw" if args.raw else "") + (" --repair-legacy-compaction" if recovery else "")
+            options += " --scrub-secrets" if args.scrub_secrets else " --allow-secrets" if args.allow_secrets else ""
+            print(f"Resume completed uploads with: csl migrate upload --resume {tag}" + options, file=sys.stderr)
             raise
     if not state["complete"]:
         for entry in state["sessions"]:
@@ -208,6 +215,8 @@ def add_commands(subparsers, csl):
     send.add_argument("--resume", help="Continue a partially completed upload by migration ID.")
     send.add_argument("--dry-run", action="store_true", help="List selected UUIDs without exporting or uploading.")
     send.add_argument("--raw", action="store_true", help="Use existing raw export mode (default: portable).")
+    send.add_argument("--repair-legacy-compaction", action="store_true",
+                      help="Recover recognized orphaned summary metadata in pending portable exports; remembered for this migration.")
     from csl_secrets import add_options
     add_options(send)
     get = actions.add_parser("download", help="Receive each share in a migration; safe to repeat.")

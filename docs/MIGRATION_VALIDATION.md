@@ -10,6 +10,20 @@ migration subprocess cases and 14 focused migration tests; no tests skipped in
 the full opt-in run. Runtime: 102.224 seconds. The existing optional media/native
 regressions were enabled alongside the new migration cases.
 
+Legacy-recovery follow-up: **231 tests passed**, including 13 isolated migration
+cases, in 109.917 seconds. A new end-to-end case resumes after seven completed
+shares, recovers an old copy with repeated historical session headers, preserves
+later work, and restores the complete batch without republishing completed shares.
+Focused tests cover explicit opt-in, source immutability, unknown-pattern refusal,
+raw-mode rejection and honest active-context warnings.
+
+Read-only offline reference verification additionally checked 43 paired checkpoints:
+recovering the simulated old malformed copy produced the same payloads as a
+correct portable export of the original. A recovered latest-window projection
+also reconstructed a native Codex request against rejecting localhost, without
+generation. Reference histories/content were not published or committed. These
+checks do not claim decryption or exact recovery of an already-missing summary.
+
 ## Environment
 
 - Linux; installed Codex CLI 0.166.0; Python 3.14.8 for the recorded run.
