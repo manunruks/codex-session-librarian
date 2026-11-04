@@ -5,6 +5,77 @@ There is no extra server, shared account, Git clone of conversation data, or PR
 per handoff. Each snapshot gets a new release/tag and a single asset. Publishing
 code changes to CSL remains a normal Git workflow in the separate code repo.
 
+## Computer Migration
+
+For moving one person's normal Codex resume list, not importing everybody's
+team inbox, use the migration wrapper:
+
+```bash
+# Both machines, using your own GitHub account with access to the exchange.
+csl team connect OWNER/PRIVATE-REPO
+
+# Old machine.
+csl migrate upload --dry-run
+csl migrate upload
+
+# New machine: replace the ID with the one printed by upload.
+csl migrate download csl-migration-xxxxxxxxxxxx --cwd ~/projects
+
+# Old machine, after manually checking the new one.
+csl migrate cleanup csl-migration-xxxxxxxxxxxx
+csl migrate cleanup csl-migration-xxxxxxxxxxxx --confirm-restored
+```
+
+`upload` asks native Codex for all local non-archived interactive (`cli`/`vscode`)
+sessions across directories/providers, then calls existing `share` once per
+session. Hidden agent forks and archives are deliberately excluded. Codex must
+be installed on the source computer. Each share retains its own checksum, secret
+review and portable/raw behavior. `--raw`, `--scrub-secrets` and
+`--allow-secrets` have the existing export semantics; private access alone does
+not make all conversation content safe to share.
+
+One additional release (`csl-migration-...`) holds a small JSON index containing
+source UUID/share-ID pairs, not local paths or authentication. No new transcript
+format, Git history of messages, synchronization or merge system is introduced.
+The normal inbox continues to list the individual shares, not this index.
+
+Interrupted uploads retain local progress under `$CODEX_HOME/csl-migrations`:
+`csl migrate upload --resume MIGRATION_ID` skips completed shares. Repeat `--raw`
+if originally used and repeat any desired secret-review option. Stop on failure;
+the final index is published only after every selected session uploads. If GitHub
+times out while publishing a release, inspect it before retrying; the underlying
+share command cannot guarantee an upload did not finish remotely.
+For the migration index itself, a failed publish/retry checks whether identical
+bytes already exist remotely and accepts that success; conflicting content is
+never overwritten.
+
+`download` simply loops over `receive` for that index, stopping on the first
+failure. Run it again to continue: receive receipts reuse completed imports with
+new local UUIDs. Use the same existing `--cwd` on repeats. All sessions are assigned
+that local directory; this does not copy source projects or recreate each old
+filesystem path. Neither CLI authentication, tools nor repositories move with
+conversation history. Context/compatibility limits remain the same as receive.
+
+`cleanup` without a flag only previews. `--confirm-restored` is your explicit
+confirmation that you checked the conversations on the new machine, not an
+automatic cross-computer certification. It requires completed upload state on
+the old machine and verifies original-file SHA-256 before archiving. New or
+changed conversations are not silently discarded; a changed original blocks
+cleanup. Keep conversations idle throughout upload and cleanup.
+
+Cleanup uses native `thread/archive`, **not deletion**. It frees no disk space,
+leaves auth/settings alone, and Codex can also archive spawned descendant threads.
+Archives remain locally recoverable; keep the old disk until important sessions
+have successfully continued on the new computer. Cleanup is resumable after
+completed archive steps; a crash during an archive or external file moves may
+require inspecting the archive before retrying. There is no secure erase command.
+This initial migration wrapper is Codex-only; native Claude sharing still works
+through the existing per-session commands.
+
+See [isolated migration validation](MIGRATION_VALIDATION.md) for subprocess,
+large-batch and fault-injection tests. These use a simulated GitHub exchange,
+not live uploads to the team's inbox.
+
 ## First Connection
 
 Install GitHub CLI and authenticate using your own account, then connect:

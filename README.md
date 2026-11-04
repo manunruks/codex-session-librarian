@@ -221,6 +221,40 @@ csl annotate SESSION_UUID --summary "Publishing workspaces and visitor conversat
 The default index covers active local sessions. Archived files can be indexed
 separately with `index --sessions-dir`; export/share also locate them directly.
 
+## Move All Codex Conversations To Another Computer
+
+Connect both computers to the same **private** session exchange with
+`csl team connect OWNER/PRIVATE-REPO`. Stop writing to the old conversations
+during migration. This is a loop over existing `share` and `receive`, not a new
+conversation format.
+
+```bash
+# Old computer: optionally preview, then upload everything in the normal resume list.
+csl migrate upload --dry-run
+csl migrate upload
+
+# New computer: use the migration ID printed above and an existing local directory.
+csl migrate download csl-migration-xxxxxxxxxxxx --cwd ~/projects
+
+# Old computer, only after checking the restored conversations on the new one.
+csl migrate cleanup csl-migration-xxxxxxxxxxxx
+csl migrate cleanup csl-migration-xxxxxxxxxxxx --confirm-restored
+```
+
+Upload excludes archives and non-interactive agent sessions, matching the normal
+`codex resume --all` scope. Download can be repeated without creating duplicate
+imports; partial uploads continue with `csl migrate upload --resume MIGRATION_ID`.
+Cleanup **archives, never deletes**, the unchanged originals; native Codex may
+also archive their spawned descendants. It does not free disk space or remove
+your login. Project files, installed tools and credentials are not transferred;
+all restored sessions use the chosen `--cwd`. See [migration details](docs/SHARING.md#computer-migration).
+
+Migration validation: **223 tests passed**, including 12 isolated end-to-end
+migration cases, a complete 125-session migration and a 257-session listing.
+Tests used separate Python environments/homes, real CSL/Codex binaries and a
+simulated GitHub exchange with networking blocked. See the
+[validation report and reproduction commands](docs/MIGRATION_VALIDATION.md).
+
 ## Clone Or Trim
 
 ```bash

@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+- Codex batch migration: `migrate upload`, `download` and confirmation-gated
+  archival cleanup, reusing the existing private share/receive exchange.
+- Resumable uploads, idempotent downloads and source checksum guards; normal
+  interactive sessions are selected without including archives or agent forks.
+- Stable recency pagination prevents timestamp-tied sessions being skipped;
+  identical already-published migration indexes recover from lost responses.
+- Added 12 isolated subprocess migration scenarios, including 125-session
+  restore/cleanup and a cold 257-session listing. See
+  [migration validation](docs/MIGRATION_VALIDATION.md).
+
 ## 0.1.0 — Initial licensed release
 
 Prepared 2026-11-02. Publication and tag are pending until the release commit is

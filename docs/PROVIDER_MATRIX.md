@@ -32,6 +32,7 @@ registry. Update implementation, tests and this document in the same change.
 | `import` | supported | supported |
 | `inbox` | supported | supported |
 | `index` | supported | not-integrated |
+| `migrate` | experimental | not-integrated |
 | `native-clone` | experimental | not-integrated |
 | `native-cut` | experimental | not-integrated |
 | `native-sanitize` | experimental | not-integrated |
@@ -57,6 +58,12 @@ registry. Update implementation, tests and this document in the same change.
 translator. `doctor` reports structural/static/native evidence separately and
 does not call a live model. Native import preflight runs by default; isolated
 native replay is opt-in with `doctor --native`.
+
+`migrate upload/download` loops over existing Codex share/receive operations for
+the normal interactive resume list, with a small migration index. It excludes
+archives/non-interactive sources and does not migrate project files or accounts.
+`migrate cleanup` previews by default and archives unchanged originals only with
+`--confirm-restored`; it never deletes files. See [migration](SHARING.md#computer-migration).
 
 Codex-only `native-clone --visibility interactive|agent|archived` controls the
 new clone's presentation. Default `interactive` uses source `cli`; `agent` uses

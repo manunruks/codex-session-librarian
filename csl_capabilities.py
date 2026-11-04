@@ -17,6 +17,7 @@ def coverage():
     commands.update({name: {"codex": "supported", "claude": "supported"} for name in SHARED})
     commands["convert"] = {"codex": "experimental", "claude": "experimental"}
     commands["verify-live"] = {"codex": "experimental", "claude": "experimental"}
+    commands["migrate"] = {"codex": "experimental", "claude": "not-integrated"}
     for name in ("native-cut", "native-clone", "native-sanitize"):
         commands[name]["codex"] = "experimental"
     return {"schema_version": 1, "providers": ["codex", "claude"], "commands": commands,
