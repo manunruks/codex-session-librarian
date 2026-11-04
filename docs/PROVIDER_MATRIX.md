@@ -65,6 +65,12 @@ archives/non-interactive sources and does not migrate project files or accounts.
 `migrate cleanup` previews by default and archives unchanged originals only with
 `--confirm-restored`; it never deletes files. See [migration](SHARING.md#computer-migration).
 
+Codex portable export/share and migration upload support explicit
+`--repair-legacy-compaction` for the recognized orphaned final summary annotation
+of old portable copies. Defaults remain strict; readable turns and source files
+are preserved, missing encrypted context is labeled, and other damage is rejected.
+See [legacy recovery](SHARING.md#legacy-compaction-recovery).
+
 Codex-only `native-clone --visibility interactive|agent|archived` controls the
 new clone's presentation. Default `interactive` uses source `cli`; `agent` uses
 native source `exec` and stays outside the default resume picker; `archived`

@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Explicit `--repair-legacy-compaction` recovery for old Codex portable copies
+  with one orphaned final summary annotation. Pending migration exports can
+  recover without resending completed shares; source files and readable turns
+  remain intact, and missing hidden context is explicitly labeled.
+
 - Codex batch migration: `migrate upload`, `download` and confirmation-gated
   archival cleanup, reusing the existing private share/receive exchange.
 - Resumable uploads, idempotent downloads and source checksum guards; normal
