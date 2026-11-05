@@ -58,6 +58,7 @@ Parse session files into `~/.codex/session_librarian.sqlite`.
 ```bash
 csl index --prune
 csl index --force
+csl index --native
 ```
 
 Flags:
@@ -66,6 +67,15 @@ Flags:
 - `--session-index`: override the native Codex session index file
 - `--force`: re-parse all sessions even if unchanged
 - `--prune`: remove DB rows for deleted session files
+- `--native`: also refresh Codex's resume-picker metadata index using its native
+  scan-and-repair API; requires Codex installed, without model calls or UUID changes
+
+CSL's SQLite index and Codex's native picker index are separate. Imported files
+can be addressable by UUID before a running Codex picker discovers them. Use
+`index --native` on the destination to refresh both; close/reopen the picker
+afterward. It does not delete or rewrite history, auth, settings or native DB
+files directly. A failed native refresh exits with an error so it is not mistaken
+for a successful repair.
 
 ### `search`
 

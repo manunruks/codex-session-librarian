@@ -338,6 +338,7 @@ def receive(args, csl):
                                                     leaf=getattr(args, "leaf", None),
                                                     history_policy=getattr(args, "history_policy", "active"),
                                                     repair_interrupted=getattr(args, "repair_interrupted", False),
+                                                    refresh_native_index=False,
                                                     max_context_chars=getattr(args, "max_context_chars", None)), csl)
                 paths = [str(installed_path(sid, cwd, destination_provider, csl)) for sid in ids]
                 receipts[key] = {"snapshot": fingerprint, "ids": ids, "paths": paths,
@@ -351,6 +352,9 @@ def receive(args, csl):
             for sid in ids:
                 command = shlex.join(resume_command(sid, cwd, getattr(args, 'open_args', ()), destination_provider))
                 print(f"open: {'cd ' + shlex.quote(str(cwd)) + ' && ' if destination_provider == 'claude' else ''}{command}")
+    if destination_provider == "codex" and getattr(args, "refresh_native_index", True):
+        from csl_transfer import refresh_native_picker
+        refresh_native_picker(csl)
     if args.open:
         open_sessions(ids, cwd, getattr(args, "open_args", ()), destination_provider)
     return ids

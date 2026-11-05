@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- Refresh Codex's native resume-picker metadata after import/receive and once per
+  migration restore attempt. Add `csl index --native` for already-imported sessions
+  that open by UUID but are absent from a running picker's database-only view.
+  No history rewrite, UUID changes, direct native DB edits or inference.
+
 - Explicit `--repair-legacy-compaction` recovery for old Codex portable copies
   with one orphaned final summary annotation. Pending migration exports can
   recover without resending completed shares; source files and readable turns

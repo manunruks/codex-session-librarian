@@ -69,6 +69,28 @@ IDs and changed sources before completing a resumed upload.
 
 ## Findings Corrected
 
+### Warm Native Picker
+
+A loaded Codex picker may query only its native state DB. Installing JSONL files
+and updating CSL's own index does not necessarily add rows to that already-warm
+native index. A separate regression starts Codex before import, confirms a
+database-only list is empty, imports via CSL, and checks that same running
+database-only client immediately lists the new UUID after automatic discovery.
+Another test copies an old installed file and verifies `index --native` repairs
+visibility without changing UUIDs or conversation bytes.
+
+Native discovery uses the documented `thread/list` scan-and-repair mode
+(`useStateDbOnly: false`), never SQL writes from CSL. A manual isolated TUI check
+also displayed all six audited conversations in `codex resume --all`; no session
+was resumed and network access was disabled. Private packages/content are not
+test fixtures and remain outside Git. This does not establish that every missing
+picker entry has the same cause: provider/source/archive filters still apply.
+
+Picker-index follow-up on 2026-11-05: all 239 tests passed with the optional
+media/native/subprocess suites enabled (123.136 seconds). Batch tests also check
+one refresh per restore attempt and refresh after partial success; receive tests
+cover both new and cached imports. No paid inference was performed.
+
 The larger subprocess runs exposed behavior not caught by two-session tests:
 
 1. The installed Codex default creation-time pagination cursor omitted records

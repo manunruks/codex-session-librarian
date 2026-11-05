@@ -535,6 +535,21 @@ def rewrite_import_record(record, sid, entry, cwd, now):
     return record
 
 
+def refresh_native_picker(csl):
+    """Best-effort discovery after install, without making a CLI a hard import dependency."""
+    if not shutil.which("codex"):
+        print("native picker index: not refreshed (Codex unavailable); run csl index --native after installing Codex")
+        return False
+    try:
+        from csl_codex_rpc import refresh_picker_index
+        count = refresh_picker_index(csl.DEFAULT_CODEX_HOME)
+    except (OSError, ValueError, RuntimeError, KeyError, TypeError):
+        print("native picker index: refresh failed; installed histories are intact; retry csl index --native", file=sys.stderr)
+        return False
+    print(f"native picker index: refreshed ({count} interactive sessions listed)")
+    return True
+
+
 def import_bundle(args, csl):
     cwd = args.cwd.expanduser().resolve()
     if not args.list and not cwd.is_dir():
@@ -637,6 +652,8 @@ def import_bundle(args, csl):
         finally:
             if conn is not None:
                 conn.close()
+    if provider == "codex" and getattr(args, "refresh_native_index", True):
+        refresh_native_picker(csl)
     if args.open:
         open_sessions(imported, cwd, getattr(args, "open_args", ()), provider)
     return imported

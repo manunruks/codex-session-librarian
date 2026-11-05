@@ -200,6 +200,14 @@ belongs in this public repository.
 
 ## Verification And Maintenance
 
+Codex import/receive attempts native picker metadata discovery after installing
+files; migration defers this to one refresh per batch attempt, including partial
+success. `index --native` refreshes previously installed histories explicitly.
+This uses native scan-and-repair rather than editing the native DB, keeps source
+classification/UUIDs unchanged, and performs no inference. Codex remains optional
+for file-only import; a missing/failing binary leaves a retry warning. Claude
+does not use this native index path. See [picker troubleshooting](SHARING.md#imported-but-missing-from-resume).
+
 Native checks are opt-in, isolated and model-free. The Codex check reads loaded
 turns through app-server; the Claude check captures a reconstructed message request
 on localhost and stops before generation. They establish loader behavior, not

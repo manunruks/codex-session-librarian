@@ -157,6 +157,31 @@ class MigrationTests(unittest.TestCase):
             self.assertEqual(len(self.command("download", tag, "--cwd", str(self.h.cwd))), 2)
             self.assertEqual(len(list((home / "sessions").rglob("*.jsonl"))), 2)
 
+    def test_batch_refreshes_native_picker_once_not_once_per_session(self):
+        import csl_transfer
+        tag = self.command("upload")
+        with self.new_computer(), patch.object(migration, "refresh_native_picker", return_value=True) as batch, \
+             patch.object(csl_transfer, "refresh_native_picker", return_value=True) as individual:
+            self.command("download", tag, "--cwd", str(self.h.cwd))
+            batch.assert_called_once_with(csl)
+            individual.assert_not_called()
+
+    def test_partial_batch_also_refreshes_the_completed_imports(self):
+        tag = self.command("upload")
+        original = sharing.receive
+        count = 0
+        def flaky(args, csl):
+            nonlocal count
+            count += 1
+            if count == 2:
+                raise TransferError("Synthetic interrupted download")
+            return original(args, csl)
+        with self.new_computer(), patch.object(sharing, "receive", side_effect=flaky), \
+             patch.object(migration, "refresh_native_picker", return_value=True) as refresh:
+            with self.assertRaises(SystemExit):
+                self.command("download", tag, "--cwd", str(self.h.cwd))
+            refresh.assert_called_once_with(csl)
+
     def test_changed_previously_uploaded_source_blocks_resume_publication(self):
         original = sharing.share
         count = 0

@@ -1131,6 +1131,14 @@ def index_sessions(args: argparse.Namespace) -> None:
     conn.commit()
     total = conn.execute("SELECT COUNT(*) AS count FROM sessions").fetchone()["count"]
     print(f"indexed={changed} skipped={skipped} errors={errors} total={total} db={args.db.expanduser()}")
+    if getattr(args, "native", False):
+        from csl_codex_rpc import refresh_picker_index
+        try:
+            count = refresh_picker_index(DEFAULT_CODEX_HOME)
+        except (OSError, ValueError, RuntimeError, KeyError, TypeError) as exc:
+            print(f"csl index: native picker refresh failed: {exc}", file=sys.stderr)
+            raise SystemExit(2) from None
+        print(f"native picker index: refreshed ({count} interactive sessions listed)")
 
 
 def query_sessions(args: argparse.Namespace) -> list[sqlite3.Row]:
@@ -2832,6 +2840,8 @@ def build_parser() -> argparse.ArgumentParser:
     p_index.add_argument("--session-index", type=Path, default=DEFAULT_SESSION_INDEX)
     p_index.add_argument("--force", action="store_true", help="Re-parse all session files.")
     p_index.add_argument("--prune", action="store_true", help="Remove DB rows for deleted session files.")
+    p_index.add_argument("--native", action="store_true",
+                         help="Also refresh Codex's native resume-picker metadata index; no model calls.")
     p_index.set_defaults(func=index_sessions)
 
     for name, help_text in [("search", "Search indexed sessions."), ("recent", "Show recent sessions.")]:

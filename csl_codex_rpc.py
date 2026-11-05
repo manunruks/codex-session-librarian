@@ -75,3 +75,20 @@ class CodexRPC:
                 self.process.wait(timeout=5)
         self.reader.join(timeout=5)
         self.process.stdout.close()
+
+
+def refresh_picker_index(home):
+    """Ask Codex to repair its own metadata index; never edit the native SQLite DB."""
+    cursor, cursors, ids = None, set(), set()
+    with CodexRPC(home) as rpc:
+        while True:
+            page = rpc.call("thread/list", {"limit": 100, "cursor": cursor,
+                "modelProviders": [], "sourceKinds": ["cli", "vscode"], "archived": False,
+                "sortKey": "recency_at", "useStateDbOnly": False})
+            ids.update(thread["id"] for thread in page["data"])
+            cursor = page.get("nextCursor")
+            if not cursor:
+                return len(ids)
+            if cursor in cursors:
+                raise TransferError("Codex returned a repeated picker-index cursor")
+            cursors.add(cursor)

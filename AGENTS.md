@@ -19,6 +19,10 @@ workflow under `docs/` before changing it.
   repair silently. Source policy stays quarantined in canonical conversions.
 - Native imports print continuity preflight. `doctor --native` measures isolated
   localhost request reconstruction only, never live recall or guaranteed context fit.
+- CSL's library index is not Codex's native picker index. If an imported UUID
+  opens directly but is missing from resume, use `csl index --native`; never delete
+  or hand-edit native databases as a first response. Import/receive attempt native
+  discovery automatically; batch restores do it once, including partial success.
 - `--repair-legacy-compaction` on portable Codex export/share/migrate is explicit
   recovery, not exact hidden-state repair. It recognizes only one orphaned final
   summary annotation; never truncate arbitrary metadata or edit the source file.
