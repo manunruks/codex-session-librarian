@@ -11,7 +11,7 @@ the actual JSONL history, not just a summary. See the maintained
 
 PR #6 was merged into upstream main on November 5. The consolidation fixes are
 included in the verified upstream snapshot below. CLI version 0.1.0, a main commit
-and a published release are distinct: [GitHub Releases](https://github.com/warevista/codex-session-librarian/releases)
+and a published release are distinct: [GitHub Releases](https://github.com/vitral-ai/codex-session-librarian/releases)
 is the source of truth for published tags and dates.
 
 Requirements: Linux and Python 3.11+. Opening a session also requires its native
@@ -23,7 +23,7 @@ For an official version, first confirm that its Release/tag exists. Only after
 `v0.1.0` appears there, install that tag with:
 
 ```bash
-git clone --branch v0.1.0 https://github.com/warevista/codex-session-librarian.git
+git clone --branch v0.1.0 https://github.com/vitral-ai/codex-session-librarian.git
 cd codex-session-librarian
 ./install.sh
 ```
@@ -32,7 +32,7 @@ For repeatable verification before publication, or to reproduce the integrated
 development snapshot, use this exact commit instead (not a release tag):
 
 ```bash
-git clone https://github.com/warevista/codex-session-librarian.git
+git clone https://github.com/vitral-ai/codex-session-librarian.git
 cd codex-session-librarian
 git checkout --detach 4c7dee029a4525491307030998b79baa0b25a7e0
 ./install.sh
@@ -48,7 +48,7 @@ Keep the checkout: the installed launcher points to it. A pinned snapshot does
 not update with `git pull`. To follow ongoing upstream development instead:
 
 ```bash
-git clone https://github.com/warevista/codex-session-librarian.git csl-development
+git clone https://github.com/vitral-ai/codex-session-librarian.git csl-development
 cd csl-development
 ./install.sh
 git pull --ff-only
