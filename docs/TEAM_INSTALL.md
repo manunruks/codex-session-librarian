@@ -20,7 +20,7 @@ not require an invitation.
 Clone the shared repository, then run:
 
 ```bash
-git clone https://github.com/warevista/codex-session-librarian.git
+git clone https://github.com/vitral-ai/codex-session-librarian.git
 cd codex-session-librarian
 ./install.sh
 ```

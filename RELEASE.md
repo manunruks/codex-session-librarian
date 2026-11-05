@@ -1,13 +1,13 @@
 # Release operation
 
 Prepared version: **0.1.0**. Publication status is recorded in
-[GitHub Releases](https://github.com/warevista/codex-session-librarian/releases);
+[GitHub Releases](https://github.com/vitral-ai/codex-session-librarian/releases);
 this preparation document does not establish that a tag or Release exists. PR #6 is merged at
 `4c7dee029a4525491307030998b79baa0b25a7e0`, including migration, picker discovery
 and focused audit fixes. The five runtime modules match the reviewed corrections;
 253 tests, isolated installation and offline demo passed on this upstream commit.
 Publisher: an upstream maintainer with permission to
-`warevista/codex-session-librarian`. Manunruks prepares and verifies the candidate;
+`vitral-ai/codex-session-librarian`. Manunruks prepares and verifies the candidate;
 read-only upstream access does not authorize impersonating the repository owner.
 
 1. Select and record the exact upstream SHA to publish; do not silently use a later
