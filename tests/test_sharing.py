@@ -140,6 +140,13 @@ class SharingTests(unittest.TestCase):
         self.assertEqual(len(self.imports()), 1)
         self.assertEqual(sum(c[:2] == ["release", "download"] for c in self.calls), downloads)
 
+    def test_receive_refreshes_native_picker_for_new_and_reused_imports(self):
+        tag = self.publish()
+        with patch("csl_transfer.refresh_native_picker", return_value=True) as refresh:
+            first = self.receive(tag)
+            self.assertEqual(self.receive(tag), first)
+            self.assertEqual(refresh.call_count, 2)
+
     def test_new_flag_creates_independent_copy(self):
         tag = self.publish()
         first = self.receive(tag)

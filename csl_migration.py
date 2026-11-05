@@ -11,7 +11,7 @@ import zipfile
 
 from csl_codex_rpc import CodexRPC
 import csl_sharing as sharing
-from csl_transfer import TransferError
+from csl_transfer import TransferError, refresh_native_picker
 
 
 TAG = re.compile(r"csl-migration-[0-9a-f]{12}")
@@ -159,11 +159,15 @@ def download(args, csl):
             raise TransferError("Migration index exceeds 8 MiB")
         entries = validate_manifest(json.loads(asset.read_text()), args.migration_id, repo)
     restored = []
-    for index, entry in enumerate(entries, 1):
-        print(f"[{index}/{len(entries)}] receiving {entry['share_id']}", flush=True)
-        # receive already validates checksums, preflights and records reusable imports.
-        restored.extend(sharing.receive(SimpleNamespace(share_id=entry["share_id"], cwd=cwd,
-            open=False, new=False, provider="codex", db=args.db), csl))
+    try:
+        for index, entry in enumerate(entries, 1):
+            print(f"[{index}/{len(entries)}] receiving {entry['share_id']}", flush=True)
+            # Defer native discovery until the batch ends, including partial success.
+            restored.extend(sharing.receive(SimpleNamespace(share_id=entry["share_id"], cwd=cwd,
+                open=False, new=False, provider="codex", db=args.db, refresh_native_index=False), csl))
+    finally:
+        if restored:
+            refresh_native_picker(csl)
     print(f"Restored {len(restored)} sessions. Repeating this command reuses them.")
     print("Check codex resume --all and continue important sessions before cleaning the old computer.")
     return restored

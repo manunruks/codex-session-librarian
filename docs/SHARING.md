@@ -110,6 +110,31 @@ completed shares without changing the source hashes or requiring a new migration
 Secret review remains independent; use `--scrub-secrets` on each invocation when
 desired. Without explicit recovery, the default remains fail-closed.
 
+## Imported But Missing From Resume
+
+If `csl sessions --query TITLE` finds a restored UUID and `codex resume UUID`
+opens it, but `codex resume --all` does not list it, the files can be installed
+while Codex's existing native metadata index has not discovered them yet.
+
+On the destination computer, in the same `CODEX_HOME` used for receive:
+
+```bash
+csl index --native
+codex resume --all
+```
+
+No re-export, `--new`, deletion of native databases or manual JSONL editing is
+needed. Native refresh asks `thread/list` to scan/repair metadata rather than
+querying only existing DB rows. It preserves conversation bytes and UUIDs, uses
+no model, and does not copy authentication. Provider/source/archive filters still
+apply in Codex; refresh does not change those classifications.
+
+New Codex imports and receives attempt this automatically when Codex is installed.
+Migration refreshes once after its loop, also after partial completion, rather
+than launching Codex for each conversation. Refresh failures warn without undoing
+installed history; retry explicitly with `csl index --native`. Import without a
+Codex binary remains supported.
+
 ## First Connection
 
 Install GitHub CLI and authenticate using your own account, then connect:

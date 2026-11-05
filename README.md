@@ -206,6 +206,19 @@ csl show SESSION_UUID --messages 20 --include-assistant
 codex resume --all SESSION_UUID
 ```
 
+If an imported conversation opens by UUID but is missing from Codex's resume
+picker, refresh both indexes without reimporting or changing its UUID:
+
+```bash
+csl index --native
+codex resume --all
+```
+
+Codex imports/receives now request this native metadata refresh automatically;
+batch migration refreshes once at the end, including partial restores. Codex
+must be installed for native refresh, but remains optional for importing files.
+This uses Codex's own scan-and-repair API, not direct SQLite edits or model calls.
+
 Search uses a local SQLite index and lexical ranking, not embeddings.
 `recall` helps with fuzzy remembered discussions; `find-work`, `patches`,
 and `pinpoint` help locate actual implementation work. Match snippets must
