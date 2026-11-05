@@ -11,6 +11,7 @@ import tempfile
 import uuid
 
 import csl_content as codec
+from csl_display import historical_tool_event
 from csl_history import codex_effective
 
 FORMAT = "csl-conversation"
@@ -494,7 +495,7 @@ def restore_codex(data, path, cwd, sid=None):
     records = [{"type": "session_meta", "timestamp": timestamp, "payload": {
         "id": sid, "timestamp": timestamp, "cwd": str(Path(cwd).resolve()), "originator": "csl-canonical",
         "cli_version": "0.166.0", "source": "cli", "model_provider": "openai", "history_mode": "legacy"}}]
-    call_formats = {}
+    call_formats, calls = {}, {}
     turn = None
     for event in data["events"]:
         pending = []
@@ -537,6 +538,7 @@ def restore_codex(data, path, cwd, sid=None):
             flush()
             if kind == "tool_call":
                 transport = {}
+                calls[block["call_id"]] = block
                 call_formats[block["call_id"]] = block["argument_format"]
                 if block["argument_format"] == "text":
                     payload = {"type": "custom_tool_call", "call_id": block["call_id"], "name": block["name"],
@@ -557,6 +559,8 @@ def restore_codex(data, path, cwd, sid=None):
                             "portability_phase": event.get("phase"),
                             "portability_content": transport,
                             "payload": payload})
+            records.append(historical_tool_event(block, calls[block["call_id"]], turn,
+                                                 event.get("time") or timestamp))
         flush()
     if turn:
         records.append({"type": "event_msg", "timestamp": timestamp,

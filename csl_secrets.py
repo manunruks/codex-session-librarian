@@ -51,7 +51,9 @@ class SecretReview:
                 continue
             child_scope = scope
             if native:
-                if kind == "function_call" and key == "arguments":
+                if kind in ("mcp_tool_call_begin", "mcp_tool_call_end") and key == "invocation":
+                    child_scope = "data"
+                elif kind == "function_call" and key == "arguments":
                     child_scope = "json-arguments" if isinstance(child, str) else "data"
                 elif ((kind in ("function_call_output", "custom_tool_call_output") and key == "output") or
                       key == "content" and (kind in ("message", "tool_result") or value.get("role") in ("user", "assistant"))):
