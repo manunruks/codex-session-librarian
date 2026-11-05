@@ -67,6 +67,17 @@ def selected_provider(entries, requested=None):
     return provider
 
 
+def validate_expected_sources(entries, expected):
+    if expected is None:
+        return
+    try:
+        identities = sorted(str(uuid.UUID(identity)) for identity in expected)
+    except (ValueError, TypeError, AttributeError):
+        raise TransferError("Invalid expected migration source identity") from None
+    if sorted(entry["id"] for entry in entries) != identities:
+        raise TransferError("Migration source identity differs from the expected session; restore refused")
+
+
 def installed_path(sid, cwd, provider, csl):
     if provider == "claude":
         return csl_claude.target_path(sid, cwd)
@@ -550,6 +561,20 @@ def refresh_native_picker(csl):
     return True
 
 
+def publish_session_file(source_path, target):
+    """Publish complete bytes exclusively on the destination filesystem."""
+    target.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+    with tempfile.TemporaryDirectory(prefix=".csl-import-", dir=target.parent) as directory:
+        staged = Path(directory) / "history"
+        with staged.open("xb") as output, source_path.open("rb") as source:
+            os.chmod(staged, 0o600)
+            shutil.copyfileobj(source, output)
+            output.flush()
+            os.fsync(output.fileno())
+        # Atomic publication; concurrent writers and symlinks are never replaced.
+        os.link(staged, target, follow_symlinks=False)
+
+
 def import_bundle(args, csl):
     cwd = args.cwd.expanduser().resolve()
     if not args.list and not cwd.is_dir():
@@ -558,6 +583,7 @@ def import_bundle(args, csl):
     with zipfile.ZipFile(args.bundle.expanduser()) as archive, tempfile.TemporaryDirectory(prefix="csl-import-") as tmp:
         manifest = inspect_bundle(archive)
         entries = manifest["sessions"]
+        validate_expected_sources(entries, getattr(args, "expected_source_ids", None))
         provider = selected_provider(entries, getattr(args, "provider", None))
         if getattr(args, "target", None):
             from csl_conversion import convert_bundle
@@ -638,17 +664,21 @@ def import_bundle(args, csl):
             for local, sid, entry, now in staged:
                 target = (csl_claude.target_path(sid, cwd) if provider == "claude"
                           else csl.target_session_path(sid, dt.datetime.now(dt.UTC)))
-                target.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
-                with target.open("xb") as output, local.open("rb") as source:
-                    os.chmod(target, 0o600)
-                    shutil.copyfileobj(source, output)
+                publish_session_file(local, target)
+                imported.append(sid)
                 title = safe_text(args.name or entry["title"])
                 if provider == "codex":
                     csl.register_native_session(conn, target, sid, title, now)
-                imported.append(sid)
                 print(f"imported: {sid} (source: {entry['id']})")
                 command = shlex.join(resume_command(sid, cwd, getattr(args, 'open_args', ()), provider))
                 print(f"open: {'cd ' + shlex.quote(str(cwd)) + ' && ' if provider == 'claude' else ''}{command}")
+        except BaseException:
+            if imported:
+                print(f"Import interrupted after {len(imported)} complete sessions; these histories were retained. "
+                      "Retrying this bundle may create new copies; inspect the completed imports first.", file=sys.stderr)
+                if provider == "codex":
+                    print("For native picker discovery after interruption: csl index --native", file=sys.stderr)
+            raise
         finally:
             if conn is not None:
                 conn.close()

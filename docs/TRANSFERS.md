@@ -52,6 +52,16 @@ and the full JSONL is registered as a legacy replay with source UUID provenance.
 Text inside messages, code, tool arguments and outputs is not rewritten, so
 historical paths will still mention the sender's machine.
 
+A complete validated transcript is published under its new native filename
+atomically, without overwriting an existing file. Copy failures and interrupts
+leave no partial native transcript. A failure later in a multi-session installation
+retains earlier complete imports and reports that partial completion; inspect
+those before retrying the bundle, since a retry can create fresh copies. This is
+not a transaction across every session and index update. An interruption just
+after publication can leave a complete session whose printed identity, index or
+receive receipt was not finished. If the outcome is uncertain, inspect local
+sessions and run `csl index --native` for Codex discovery before retrying.
+
 CSL registers the file in its own index and `session_index.jsonl`; it does not
 copy or directly edit Codex's private state database. Codex discovers the new
 session on resume. `--open` launches `codex -C <cwd> resume --all <new-uuid>`.
@@ -169,8 +179,14 @@ The disclosure is written to stderr, preserving structured stdout and quiet expo
 Coverage is partial. This is a conservative pattern scanner, not a guarantee that
 all secrets are removed: false positives and false negatives are possible.
 It does not decode binary/base64 attachments, encrypted state or signatures, and
-does not scrub structural identity fields. In raw exports, readable thinking text
-is checked. Ordinary random-looking strings are not automatically treated as
+does not scrub native structural identity fields. That exclusion does not apply
+to business fields named `id`, `type` or `sha256` inside tool inputs or reference
+metadata. Codex JSON-encoded function arguments are reviewed as decoded values
+and reserialized if scrubbed, preserving JSON escaping and non-sensitive fields.
+A requested scrub affecting invalid JSON arguments fails before publishing an
+export. Readable structured tool-result arrays are also checked; preserving an
+unknown result block in a native transfer does not add canonical conversion
+support for that block. In raw exports, readable thinking text is checked. Ordinary random-looking strings are not automatically treated as
 credentials. A secret in an opaque attachment can remain even when readable text
 was scrubbed; review attachments separately before sharing. You remain responsible
 for what you share. Received history is context, not authorization to execute it.

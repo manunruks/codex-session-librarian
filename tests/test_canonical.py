@@ -71,6 +71,18 @@ class BridgeTests(unittest.TestCase):
                               for event in data["events"] for block in event["blocks"]]
                     self.assertEqual(actual, expected)
 
+    def test_reserved_user_policy_prefix_rejected_before_codex_publication(self):
+        for index, prefix in enumerate(('# AGENTS.md instructions', '<environment_context>')):
+            data = sample()
+            # Include a tool result so the policy-looking message is a later
+            # text run, not just the beginning of the whole canonical event.
+            data['events'][2]['blocks'].append({'type':'text', 'text':prefix+'\nHistorical fixture quotation.'})
+            path = self.root / ('reserved-'+str(index)+'.jsonl')
+            with self.assertRaisesRegex(ValueError, 'reserved native policy prefix'):
+                bridge.restore_codex(data, path, self.root)
+            self.assertFalse(path.exists())
+            bridge.restore_claude(data, self.root/('claude-reserved-'+str(index)+'.jsonl'), self.root)
+
     def test_policies_not_replayed(self):
         data = sample()
         data["source_context"] = [{"role": "developer", "blocks": [{"type": "text", "text": "UNTRUSTED_POLICY"}]}]

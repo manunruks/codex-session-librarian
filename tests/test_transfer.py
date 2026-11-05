@@ -109,6 +109,14 @@ class TransferTests(unittest.TestCase):
         self.assertEqual(target.stat().st_mode & 0o777, 0o600)
         self.run_cli("show", meta["id"])
 
+    def test_expected_migration_source_is_checked_against_package_before_install(self):
+        self.export()
+        args = SimpleNamespace(cwd=self.cwd, bundle=self.bundle, list=False,
+                               expected_source_ids=['11111111-1111-4111-8111-111111111111'])
+        with self.assertRaisesRegex(transfer.TransferError, 'Migration source identity'):
+            transfer.import_bundle(args, csl)
+        self.assertEqual(self.imported(), [])
+
     def test_raw_preserves_encrypted_reasoning(self):
         self.export("--raw")
         with zipfile.ZipFile(self.bundle) as archive:

@@ -55,6 +55,9 @@ new local UUIDs. Use the same existing `--cwd` on repeats. All sessions are assi
 that local directory; this does not copy source projects or recreate each old
 filesystem path. Neither CLI authentication, tools nor repositories move with
 conversation history. Context/compatibility limits remain the same as receive.
+The source UUID declared by the migration index must match the share metadata
+and the downloaded package manifest. A mismatch stops before installing that
+entry or reusing its cached copy; previously completed receipts remain reusable.
 
 `cleanup` without a flag only previews. `--confirm-restored` is your explicit
 confirmation that you checked the conversations on the new machine, not an
