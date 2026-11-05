@@ -17,7 +17,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: sudo apt-get update && sudo apt-get install -y bubblewrap
+      - run: sudo apt-get update && sudo apt-get install -y bubblewrap python3-venv
       - name: Verify required namespace support on the disposable runner
         run: |
           if ! bwrap --unshare-net --ro-bind / / -- /usr/bin/true; then
@@ -50,6 +50,11 @@ jobs:
               output.write(str(directory) + '\n')
           PY
           python -m pip install -r media-test-requirements.txt
+          # Keep the optional decoder on the runner's system Python. The hosted
+          # setup-python runtime is not relocatable into the restricted mount set.
+          /usr/bin/python3 -m venv "$RUNNER_TEMP/csl-media"
+          "$RUNNER_TEMP/csl-media/bin/python" -m pip install -r media-test-requirements.txt
+          echo "CSL_MEDIA_PYTHON=$RUNNER_TEMP/csl-media/bin/python" >> "$GITHUB_ENV"
       - name: Execute synthetic native and migration checks without model generation
         env:
           CSL_RUN_CODEX_NATIVE_TESTS: '1'
