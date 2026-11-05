@@ -283,6 +283,8 @@ def receive(args, csl):
         raise TransferError(f"Working directory does not exist: {cwd}")
     release = gh_json(["api", "--hostname", "github.com", f"repos/{repo}/releases/tags/{tag}"])
     meta, asset = release_metadata(release)
+    from csl_transfer import validate_expected_sources
+    validate_expected_sources(meta["sessions"], getattr(args, "expected_source_ids", None))
     provider = selected_provider(meta["sessions"], getattr(args, "provider", None))
     destination_provider = getattr(args, "target", None) or provider
     if not getattr(args, "target", None) and (getattr(args, "leaf", None) or getattr(args, "repair_interrupted", False) or getattr(args, "history_policy", "active") != "active"):
@@ -339,6 +341,7 @@ def receive(args, csl):
                                                     history_policy=getattr(args, "history_policy", "active"),
                                                     repair_interrupted=getattr(args, "repair_interrupted", False),
                                                     refresh_native_index=False,
+                                                    expected_source_ids=getattr(args, "expected_source_ids", None),
                                                     max_context_chars=getattr(args, "max_context_chars", None)), csl)
                 paths = [str(installed_path(sid, cwd, destination_provider, csl)) for sid in ids]
                 receipts[key] = {"snapshot": fingerprint, "ids": ids, "paths": paths,

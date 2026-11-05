@@ -1,0 +1,3199 @@
+{
+  "conditions": "10 short conversions per tool, 5 per direction; warmed OS cache; full CLI+bwrap startup included; no concurrent paid/native/performance runs",
+  "summary": [
+    {
+      "tool": "csl",
+      "runs": 10,
+      "seconds_median": 0.117382,
+      "seconds_min": 0.112977,
+      "seconds_max": 0.123805,
+      "rss_kb_median": 34716.0
+    },
+    {
+      "tool": "session-porter",
+      "runs": 10,
+      "seconds_median": 0.099117,
+      "seconds_min": 0.091685,
+      "seconds_max": 0.114617,
+      "rss_kb_median": 58554.0
+    },
+    {
+      "tool": "sessionport",
+      "runs": 10,
+      "seconds_median": 0.1225605,
+      "seconds_min": 0.116804,
+      "seconds_max": 0.134181,
+      "rss_kb_median": 79964.0
+    },
+    {
+      "tool": "claude-session-teleporter",
+      "runs": 10,
+      "seconds_median": 0.083651,
+      "seconds_min": 0.077195,
+      "seconds_max": 0.09125,
+      "rss_kb_median": 32890.0
+    }
+  ],
+  "raw": [
+    {
+      "case_id": "csl__short__claude-codex",
+      "tool": "csl",
+      "case": "short",
+      "source_provider": "claude",
+      "target_provider": "codex",
+      "layer": "structural_semantic",
+      "command": [
+        "python3",
+        "codex_sessions.py",
+        "convert",
+        "/mnt/home/.claude/projects/-mnt-project/53ba7eca-b9c9-5026-9c88-f3b49e06c7a0.jsonl",
+        "--provider",
+        "claude",
+        "--to",
+        "codex",
+        "--cwd",
+        "/mnt/project"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.116248,
+      "peak_rss_kb": 34760,
+      "fixture_sha256": "6458b3845fdc91aef24335d0de668670100c3dc4d95178d6b458875ce0534a87",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "python3",
+          "codex_sessions.py",
+          "convert",
+          "/mnt/home/.codex/sessions/2026/11/05/rollout-2026-11-05T18-31-32-7f8894e8-de88-466a-a5c0-94de34418b87.jsonl",
+          "--provider",
+          "codex",
+          "--to",
+          "claude",
+          "--cwd",
+          "/mnt/project"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 0
+    },
+    {
+      "case_id": "csl__short__codex-claude",
+      "tool": "csl",
+      "case": "short",
+      "source_provider": "codex",
+      "target_provider": "claude",
+      "layer": "structural_semantic",
+      "command": [
+        "python3",
+        "codex_sessions.py",
+        "convert",
+        "/mnt/home/.codex/sessions/2026/11/05/rollout-2026-11-05T00-00-00-c9f7a1c7-712c-51e0-8157-ccb9bde5b5e4.jsonl",
+        "--provider",
+        "codex",
+        "--to",
+        "claude",
+        "--cwd",
+        "/mnt/project"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.122198,
+      "peak_rss_kb": 34712,
+      "fixture_sha256": "07fbd35a48925d1d418847c24f62061c5c3529d7375555df97c925d5c93c484c",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "python3",
+          "codex_sessions.py",
+          "convert",
+          "/mnt/home/.claude/projects/-mnt-project/baf50c0a-5201-4aac-9b54-e81cc87a0a35.jsonl",
+          "--provider",
+          "claude",
+          "--to",
+          "codex",
+          "--cwd",
+          "/mnt/project"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 0
+    },
+    {
+      "case_id": "session-porter__short__claude-codex",
+      "tool": "session-porter",
+      "case": "short",
+      "source_provider": "claude",
+      "target_provider": "codex",
+      "layer": "structural_semantic",
+      "command": [
+        "node",
+        "dist/index.js",
+        "transfer",
+        "53ba7eca-b9c9-5026-9c88-f3b49e06c7a0",
+        "--from",
+        "claude",
+        "--to",
+        "codex",
+        "--mode",
+        "raw"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.099613,
+      "peak_rss_kb": 59184,
+      "fixture_sha256": "6458b3845fdc91aef24335d0de668670100c3dc4d95178d6b458875ce0534a87",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": false,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "node",
+          "dist/index.js",
+          "transfer",
+          "53ba7eca-b9c9-5026-9c88-f3b49e06c7a0",
+          "--from",
+          "codex",
+          "--to",
+          "claude",
+          "--mode",
+          "raw"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 0
+    },
+    {
+      "case_id": "session-porter__short__codex-claude",
+      "tool": "session-porter",
+      "case": "short",
+      "source_provider": "codex",
+      "target_provider": "claude",
+      "layer": "structural_semantic",
+      "command": [
+        "node",
+        "dist/index.js",
+        "transfer",
+        "c9f7a1c7-712c-51e0-8157-ccb9bde5b5e4",
+        "--from",
+        "codex",
+        "--to",
+        "claude",
+        "--mode",
+        "raw"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.096804,
+      "peak_rss_kb": 57796,
+      "fixture_sha256": "07fbd35a48925d1d418847c24f62061c5c3529d7375555df97c925d5c93c484c",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "node",
+          "dist/index.js",
+          "transfer",
+          "b45374c0-5924-4565-a861-4e5c3c261709",
+          "--from",
+          "claude",
+          "--to",
+          "codex",
+          "--mode",
+          "raw"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 0
+    },
+    {
+      "case_id": "sessionport__short__claude-codex",
+      "tool": "sessionport",
+      "case": "short",
+      "source_provider": "claude",
+      "target_provider": "codex",
+      "layer": "structural_semantic",
+      "command": [
+        "node",
+        "dist/cli/index.js",
+        "import",
+        "claude",
+        "53ba7eca-b9c9-5026-9c88-f3b49e06c7a0",
+        "codex",
+        "--mode",
+        "as-is"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.12141,
+      "peak_rss_kb": 81596,
+      "fixture_sha256": "6458b3845fdc91aef24335d0de668670100c3dc4d95178d6b458875ce0534a87",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "node",
+          "dist/cli/index.js",
+          "import",
+          "codex",
+          "01900mw3vtlya-afb8-b36e-72bb-691943f9ecb9",
+          "claude",
+          "--mode",
+          "as-is"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 0
+    },
+    {
+      "case_id": "sessionport__short__codex-claude",
+      "tool": "sessionport",
+      "case": "short",
+      "source_provider": "codex",
+      "target_provider": "claude",
+      "layer": "structural_semantic",
+      "command": [
+        "node",
+        "dist/cli/index.js",
+        "import",
+        "codex",
+        "c9f7a1c7-712c-51e0-8157-ccb9bde5b5e4",
+        "claude",
+        "--mode",
+        "as-is"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.120996,
+      "peak_rss_kb": 77860,
+      "fixture_sha256": "07fbd35a48925d1d418847c24f62061c5c3529d7375555df97c925d5c93c484c",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "node",
+          "dist/cli/index.js",
+          "import",
+          "claude",
+          "b065dbe1-f301-4e76-af70-bf63d7057cf9",
+          "codex",
+          "--mode",
+          "as-is"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 0
+    },
+    {
+      "case_id": "claude-session-teleporter__short__claude-codex",
+      "tool": "claude-session-teleporter",
+      "case": "short",
+      "source_provider": "claude",
+      "target_provider": "codex",
+      "layer": "structural_semantic",
+      "command": [
+        "python3",
+        "claude_sessions.py",
+        "teleport",
+        "/mnt/home/.claude/projects/-mnt-project/53ba7eca-b9c9-5026-9c88-f3b49e06c7a0.jsonl",
+        "--to",
+        "codex",
+        "--cwd",
+        "/mnt/project",
+        "--codex-project",
+        "none",
+        "--apply"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.077195,
+      "peak_rss_kb": 33028,
+      "fixture_sha256": "6458b3845fdc91aef24335d0de668670100c3dc4d95178d6b458875ce0534a87",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "python3",
+          "claude_sessions.py",
+          "teleport",
+          "/mnt/home/.codex/sessions/2026/11/05/rollout-2026-11-05T00-00-00-3aca67cc-50c8-516a-83bc-30be806a9336.jsonl",
+          "--to",
+          "claude",
+          "--cwd",
+          "/mnt/project",
+          "--apply"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 0
+    },
+    {
+      "case_id": "claude-session-teleporter__short__codex-claude",
+      "tool": "claude-session-teleporter",
+      "case": "short",
+      "source_provider": "codex",
+      "target_provider": "claude",
+      "layer": "structural_semantic",
+      "command": [
+        "python3",
+        "claude_sessions.py",
+        "teleport",
+        "/mnt/home/.codex/sessions/2026/11/05/rollout-2026-11-05T00-00-00-c9f7a1c7-712c-51e0-8157-ccb9bde5b5e4.jsonl",
+        "--to",
+        "claude",
+        "--cwd",
+        "/mnt/project",
+        "--apply"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.090823,
+      "peak_rss_kb": 33068,
+      "fixture_sha256": "07fbd35a48925d1d418847c24f62061c5c3529d7375555df97c925d5c93c484c",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "python3",
+          "claude_sessions.py",
+          "teleport",
+          "/mnt/home/.claude/projects/-mnt-project/145866fe-5433-551e-9af0-95d3a9ec8fc8.jsonl",
+          "--to",
+          "codex",
+          "--cwd",
+          "/mnt/project",
+          "--codex-project",
+          "none",
+          "--apply"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 0
+    },
+    {
+      "case_id": "csl__short__claude-codex",
+      "tool": "csl",
+      "case": "short",
+      "source_provider": "claude",
+      "target_provider": "codex",
+      "layer": "structural_semantic",
+      "command": [
+        "python3",
+        "codex_sessions.py",
+        "convert",
+        "/mnt/home/.claude/projects/-mnt-project/53ba7eca-b9c9-5026-9c88-f3b49e06c7a0.jsonl",
+        "--provider",
+        "claude",
+        "--to",
+        "codex",
+        "--cwd",
+        "/mnt/project"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.117119,
+      "peak_rss_kb": 35084,
+      "fixture_sha256": "6458b3845fdc91aef24335d0de668670100c3dc4d95178d6b458875ce0534a87",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "python3",
+          "codex_sessions.py",
+          "convert",
+          "/mnt/home/.codex/sessions/2026/11/05/rollout-2026-11-05T18-31-33-999bdf03-f71b-454e-aee5-6f0321dadde8.jsonl",
+          "--provider",
+          "codex",
+          "--to",
+          "claude",
+          "--cwd",
+          "/mnt/project"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 1
+    },
+    {
+      "case_id": "csl__short__codex-claude",
+      "tool": "csl",
+      "case": "short",
+      "source_provider": "codex",
+      "target_provider": "claude",
+      "layer": "structural_semantic",
+      "command": [
+        "python3",
+        "codex_sessions.py",
+        "convert",
+        "/mnt/home/.codex/sessions/2026/11/05/rollout-2026-11-05T00-00-00-c9f7a1c7-712c-51e0-8157-ccb9bde5b5e4.jsonl",
+        "--provider",
+        "codex",
+        "--to",
+        "claude",
+        "--cwd",
+        "/mnt/project"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.123805,
+      "peak_rss_kb": 34612,
+      "fixture_sha256": "07fbd35a48925d1d418847c24f62061c5c3529d7375555df97c925d5c93c484c",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "python3",
+          "codex_sessions.py",
+          "convert",
+          "/mnt/home/.claude/projects/-mnt-project/cf400f5c-d2af-4e7a-9915-bb778c244936.jsonl",
+          "--provider",
+          "claude",
+          "--to",
+          "codex",
+          "--cwd",
+          "/mnt/project"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 1
+    },
+    {
+      "case_id": "session-porter__short__claude-codex",
+      "tool": "session-porter",
+      "case": "short",
+      "source_provider": "claude",
+      "target_provider": "codex",
+      "layer": "structural_semantic",
+      "command": [
+        "node",
+        "dist/index.js",
+        "transfer",
+        "53ba7eca-b9c9-5026-9c88-f3b49e06c7a0",
+        "--from",
+        "claude",
+        "--to",
+        "codex",
+        "--mode",
+        "raw"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.100735,
+      "peak_rss_kb": 59216,
+      "fixture_sha256": "6458b3845fdc91aef24335d0de668670100c3dc4d95178d6b458875ce0534a87",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": false,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "node",
+          "dist/index.js",
+          "transfer",
+          "53ba7eca-b9c9-5026-9c88-f3b49e06c7a0",
+          "--from",
+          "codex",
+          "--to",
+          "claude",
+          "--mode",
+          "raw"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 1
+    },
+    {
+      "case_id": "session-porter__short__codex-claude",
+      "tool": "session-porter",
+      "case": "short",
+      "source_provider": "codex",
+      "target_provider": "claude",
+      "layer": "structural_semantic",
+      "command": [
+        "node",
+        "dist/index.js",
+        "transfer",
+        "c9f7a1c7-712c-51e0-8157-ccb9bde5b5e4",
+        "--from",
+        "codex",
+        "--to",
+        "claude",
+        "--mode",
+        "raw"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.092812,
+      "peak_rss_kb": 58188,
+      "fixture_sha256": "07fbd35a48925d1d418847c24f62061c5c3529d7375555df97c925d5c93c484c",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "node",
+          "dist/index.js",
+          "transfer",
+          "5bd9bab1-8e66-4fa3-8344-d1a71f36fdea",
+          "--from",
+          "claude",
+          "--to",
+          "codex",
+          "--mode",
+          "raw"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 1
+    },
+    {
+      "case_id": "sessionport__short__claude-codex",
+      "tool": "sessionport",
+      "case": "short",
+      "source_provider": "claude",
+      "target_provider": "codex",
+      "layer": "structural_semantic",
+      "command": [
+        "node",
+        "dist/cli/index.js",
+        "import",
+        "claude",
+        "53ba7eca-b9c9-5026-9c88-f3b49e06c7a0",
+        "codex",
+        "--mode",
+        "as-is"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.134181,
+      "peak_rss_kb": 81312,
+      "fixture_sha256": "6458b3845fdc91aef24335d0de668670100c3dc4d95178d6b458875ce0534a87",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "node",
+          "dist/cli/index.js",
+          "import",
+          "codex",
+          "01900mw3vtna7-701e-8620-0862-38ee218d7bd7",
+          "claude",
+          "--mode",
+          "as-is"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 1
+    },
+    {
+      "case_id": "sessionport__short__codex-claude",
+      "tool": "sessionport",
+      "case": "short",
+      "source_provider": "codex",
+      "target_provider": "claude",
+      "layer": "structural_semantic",
+      "command": [
+        "node",
+        "dist/cli/index.js",
+        "import",
+        "codex",
+        "c9f7a1c7-712c-51e0-8157-ccb9bde5b5e4",
+        "claude",
+        "--mode",
+        "as-is"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.117713,
+      "peak_rss_kb": 78328,
+      "fixture_sha256": "07fbd35a48925d1d418847c24f62061c5c3529d7375555df97c925d5c93c484c",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "node",
+          "dist/cli/index.js",
+          "import",
+          "claude",
+          "14302c5d-304a-4e9a-8cc1-0263b19f5c64",
+          "codex",
+          "--mode",
+          "as-is"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 1
+    },
+    {
+      "case_id": "claude-session-teleporter__short__claude-codex",
+      "tool": "claude-session-teleporter",
+      "case": "short",
+      "source_provider": "claude",
+      "target_provider": "codex",
+      "layer": "structural_semantic",
+      "command": [
+        "python3",
+        "claude_sessions.py",
+        "teleport",
+        "/mnt/home/.claude/projects/-mnt-project/53ba7eca-b9c9-5026-9c88-f3b49e06c7a0.jsonl",
+        "--to",
+        "codex",
+        "--cwd",
+        "/mnt/project",
+        "--codex-project",
+        "none",
+        "--apply"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.085051,
+      "peak_rss_kb": 32808,
+      "fixture_sha256": "6458b3845fdc91aef24335d0de668670100c3dc4d95178d6b458875ce0534a87",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "python3",
+          "claude_sessions.py",
+          "teleport",
+          "/mnt/home/.codex/sessions/2026/11/05/rollout-2026-11-05T00-00-00-3aca67cc-50c8-516a-83bc-30be806a9336.jsonl",
+          "--to",
+          "claude",
+          "--cwd",
+          "/mnt/project",
+          "--apply"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 1
+    },
+    {
+      "case_id": "claude-session-teleporter__short__codex-claude",
+      "tool": "claude-session-teleporter",
+      "case": "short",
+      "source_provider": "codex",
+      "target_provider": "claude",
+      "layer": "structural_semantic",
+      "command": [
+        "python3",
+        "claude_sessions.py",
+        "teleport",
+        "/mnt/home/.codex/sessions/2026/11/05/rollout-2026-11-05T00-00-00-c9f7a1c7-712c-51e0-8157-ccb9bde5b5e4.jsonl",
+        "--to",
+        "claude",
+        "--cwd",
+        "/mnt/project",
+        "--apply"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.085944,
+      "peak_rss_kb": 32880,
+      "fixture_sha256": "07fbd35a48925d1d418847c24f62061c5c3529d7375555df97c925d5c93c484c",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "python3",
+          "claude_sessions.py",
+          "teleport",
+          "/mnt/home/.claude/projects/-mnt-project/145866fe-5433-551e-9af0-95d3a9ec8fc8.jsonl",
+          "--to",
+          "codex",
+          "--cwd",
+          "/mnt/project",
+          "--codex-project",
+          "none",
+          "--apply"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 1
+    },
+    {
+      "case_id": "csl__short__claude-codex",
+      "tool": "csl",
+      "case": "short",
+      "source_provider": "claude",
+      "target_provider": "codex",
+      "layer": "structural_semantic",
+      "command": [
+        "python3",
+        "codex_sessions.py",
+        "convert",
+        "/mnt/home/.claude/projects/-mnt-project/53ba7eca-b9c9-5026-9c88-f3b49e06c7a0.jsonl",
+        "--provider",
+        "claude",
+        "--to",
+        "codex",
+        "--cwd",
+        "/mnt/project"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.121727,
+      "peak_rss_kb": 34688,
+      "fixture_sha256": "6458b3845fdc91aef24335d0de668670100c3dc4d95178d6b458875ce0534a87",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "python3",
+          "codex_sessions.py",
+          "convert",
+          "/mnt/home/.codex/sessions/2026/11/05/rollout-2026-11-05T18-31-35-e9d309fd-f14c-4313-aade-384eb80bdb41.jsonl",
+          "--provider",
+          "codex",
+          "--to",
+          "claude",
+          "--cwd",
+          "/mnt/project"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 2
+    },
+    {
+      "case_id": "csl__short__codex-claude",
+      "tool": "csl",
+      "case": "short",
+      "source_provider": "codex",
+      "target_provider": "claude",
+      "layer": "structural_semantic",
+      "command": [
+        "python3",
+        "codex_sessions.py",
+        "convert",
+        "/mnt/home/.codex/sessions/2026/11/05/rollout-2026-11-05T00-00-00-c9f7a1c7-712c-51e0-8157-ccb9bde5b5e4.jsonl",
+        "--provider",
+        "codex",
+        "--to",
+        "claude",
+        "--cwd",
+        "/mnt/project"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.118536,
+      "peak_rss_kb": 34784,
+      "fixture_sha256": "07fbd35a48925d1d418847c24f62061c5c3529d7375555df97c925d5c93c484c",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "python3",
+          "codex_sessions.py",
+          "convert",
+          "/mnt/home/.claude/projects/-mnt-project/e174eb40-2602-4e0d-9a81-a4a604ff3853.jsonl",
+          "--provider",
+          "claude",
+          "--to",
+          "codex",
+          "--cwd",
+          "/mnt/project"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 2
+    },
+    {
+      "case_id": "session-porter__short__claude-codex",
+      "tool": "session-porter",
+      "case": "short",
+      "source_provider": "claude",
+      "target_provider": "codex",
+      "layer": "structural_semantic",
+      "command": [
+        "node",
+        "dist/index.js",
+        "transfer",
+        "53ba7eca-b9c9-5026-9c88-f3b49e06c7a0",
+        "--from",
+        "claude",
+        "--to",
+        "codex",
+        "--mode",
+        "raw"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.1016,
+      "peak_rss_kb": 58920,
+      "fixture_sha256": "6458b3845fdc91aef24335d0de668670100c3dc4d95178d6b458875ce0534a87",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": false,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "node",
+          "dist/index.js",
+          "transfer",
+          "53ba7eca-b9c9-5026-9c88-f3b49e06c7a0",
+          "--from",
+          "codex",
+          "--to",
+          "claude",
+          "--mode",
+          "raw"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 2
+    },
+    {
+      "case_id": "session-porter__short__codex-claude",
+      "tool": "session-porter",
+      "case": "short",
+      "source_provider": "codex",
+      "target_provider": "claude",
+      "layer": "structural_semantic",
+      "command": [
+        "node",
+        "dist/index.js",
+        "transfer",
+        "c9f7a1c7-712c-51e0-8157-ccb9bde5b5e4",
+        "--from",
+        "codex",
+        "--to",
+        "claude",
+        "--mode",
+        "raw"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.091685,
+      "peak_rss_kb": 57592,
+      "fixture_sha256": "07fbd35a48925d1d418847c24f62061c5c3529d7375555df97c925d5c93c484c",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "node",
+          "dist/index.js",
+          "transfer",
+          "e9287707-4c11-4452-81af-49f3d9fb640c",
+          "--from",
+          "claude",
+          "--to",
+          "codex",
+          "--mode",
+          "raw"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 2
+    },
+    {
+      "case_id": "sessionport__short__claude-codex",
+      "tool": "sessionport",
+      "case": "short",
+      "source_provider": "claude",
+      "target_provider": "codex",
+      "layer": "structural_semantic",
+      "command": [
+        "node",
+        "dist/cli/index.js",
+        "import",
+        "claude",
+        "53ba7eca-b9c9-5026-9c88-f3b49e06c7a0",
+        "codex",
+        "--mode",
+        "as-is"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.124335,
+      "peak_rss_kb": 85636,
+      "fixture_sha256": "6458b3845fdc91aef24335d0de668670100c3dc4d95178d6b458875ce0534a87",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "node",
+          "dist/cli/index.js",
+          "import",
+          "codex",
+          "01900mw3vtoml-ad3d-5666-23c2-658219569383",
+          "claude",
+          "--mode",
+          "as-is"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 2
+    },
+    {
+      "case_id": "sessionport__short__codex-claude",
+      "tool": "sessionport",
+      "case": "short",
+      "source_provider": "codex",
+      "target_provider": "claude",
+      "layer": "structural_semantic",
+      "command": [
+        "node",
+        "dist/cli/index.js",
+        "import",
+        "codex",
+        "c9f7a1c7-712c-51e0-8157-ccb9bde5b5e4",
+        "claude",
+        "--mode",
+        "as-is"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.120117,
+      "peak_rss_kb": 78056,
+      "fixture_sha256": "07fbd35a48925d1d418847c24f62061c5c3529d7375555df97c925d5c93c484c",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "node",
+          "dist/cli/index.js",
+          "import",
+          "claude",
+          "8f24a0ea-74cf-4c66-9f76-95862c0699ab",
+          "codex",
+          "--mode",
+          "as-is"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 2
+    },
+    {
+      "case_id": "claude-session-teleporter__short__claude-codex",
+      "tool": "claude-session-teleporter",
+      "case": "short",
+      "source_provider": "claude",
+      "target_provider": "codex",
+      "layer": "structural_semantic",
+      "command": [
+        "python3",
+        "claude_sessions.py",
+        "teleport",
+        "/mnt/home/.claude/projects/-mnt-project/53ba7eca-b9c9-5026-9c88-f3b49e06c7a0.jsonl",
+        "--to",
+        "codex",
+        "--cwd",
+        "/mnt/project",
+        "--codex-project",
+        "none",
+        "--apply"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.077876,
+      "peak_rss_kb": 32808,
+      "fixture_sha256": "6458b3845fdc91aef24335d0de668670100c3dc4d95178d6b458875ce0534a87",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "python3",
+          "claude_sessions.py",
+          "teleport",
+          "/mnt/home/.codex/sessions/2026/11/05/rollout-2026-11-05T00-00-00-3aca67cc-50c8-516a-83bc-30be806a9336.jsonl",
+          "--to",
+          "claude",
+          "--cwd",
+          "/mnt/project",
+          "--apply"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 2
+    },
+    {
+      "case_id": "claude-session-teleporter__short__codex-claude",
+      "tool": "claude-session-teleporter",
+      "case": "short",
+      "source_provider": "codex",
+      "target_provider": "claude",
+      "layer": "structural_semantic",
+      "command": [
+        "python3",
+        "claude_sessions.py",
+        "teleport",
+        "/mnt/home/.codex/sessions/2026/11/05/rollout-2026-11-05T00-00-00-c9f7a1c7-712c-51e0-8157-ccb9bde5b5e4.jsonl",
+        "--to",
+        "claude",
+        "--cwd",
+        "/mnt/project",
+        "--apply"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.077332,
+      "peak_rss_kb": 32892,
+      "fixture_sha256": "07fbd35a48925d1d418847c24f62061c5c3529d7375555df97c925d5c93c484c",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "python3",
+          "claude_sessions.py",
+          "teleport",
+          "/mnt/home/.claude/projects/-mnt-project/145866fe-5433-551e-9af0-95d3a9ec8fc8.jsonl",
+          "--to",
+          "codex",
+          "--cwd",
+          "/mnt/project",
+          "--codex-project",
+          "none",
+          "--apply"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 2
+    },
+    {
+      "case_id": "csl__short__claude-codex",
+      "tool": "csl",
+      "case": "short",
+      "source_provider": "claude",
+      "target_provider": "codex",
+      "layer": "structural_semantic",
+      "command": [
+        "python3",
+        "codex_sessions.py",
+        "convert",
+        "/mnt/home/.claude/projects/-mnt-project/53ba7eca-b9c9-5026-9c88-f3b49e06c7a0.jsonl",
+        "--provider",
+        "claude",
+        "--to",
+        "codex",
+        "--cwd",
+        "/mnt/project"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.112977,
+      "peak_rss_kb": 35012,
+      "fixture_sha256": "6458b3845fdc91aef24335d0de668670100c3dc4d95178d6b458875ce0534a87",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "python3",
+          "codex_sessions.py",
+          "convert",
+          "/mnt/home/.codex/sessions/2026/11/05/rollout-2026-11-05T18-31-37-4bc91d03-257b-4cbd-9234-5dcb037023c5.jsonl",
+          "--provider",
+          "codex",
+          "--to",
+          "claude",
+          "--cwd",
+          "/mnt/project"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 3
+    },
+    {
+      "case_id": "csl__short__codex-claude",
+      "tool": "csl",
+      "case": "short",
+      "source_provider": "codex",
+      "target_provider": "claude",
+      "layer": "structural_semantic",
+      "command": [
+        "python3",
+        "codex_sessions.py",
+        "convert",
+        "/mnt/home/.codex/sessions/2026/11/05/rollout-2026-11-05T00-00-00-c9f7a1c7-712c-51e0-8157-ccb9bde5b5e4.jsonl",
+        "--provider",
+        "codex",
+        "--to",
+        "claude",
+        "--cwd",
+        "/mnt/project"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.116241,
+      "peak_rss_kb": 34496,
+      "fixture_sha256": "07fbd35a48925d1d418847c24f62061c5c3529d7375555df97c925d5c93c484c",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "python3",
+          "codex_sessions.py",
+          "convert",
+          "/mnt/home/.claude/projects/-mnt-project/45e56f16-e228-475e-8c5b-4b36f83206ac.jsonl",
+          "--provider",
+          "claude",
+          "--to",
+          "codex",
+          "--cwd",
+          "/mnt/project"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 3
+    },
+    {
+      "case_id": "session-porter__short__claude-codex",
+      "tool": "session-porter",
+      "case": "short",
+      "source_provider": "claude",
+      "target_provider": "codex",
+      "layer": "structural_semantic",
+      "command": [
+        "node",
+        "dist/index.js",
+        "transfer",
+        "53ba7eca-b9c9-5026-9c88-f3b49e06c7a0",
+        "--from",
+        "claude",
+        "--to",
+        "codex",
+        "--mode",
+        "raw"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.114617,
+      "peak_rss_kb": 59348,
+      "fixture_sha256": "6458b3845fdc91aef24335d0de668670100c3dc4d95178d6b458875ce0534a87",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": false,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "node",
+          "dist/index.js",
+          "transfer",
+          "53ba7eca-b9c9-5026-9c88-f3b49e06c7a0",
+          "--from",
+          "codex",
+          "--to",
+          "claude",
+          "--mode",
+          "raw"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 3
+    },
+    {
+      "case_id": "session-porter__short__codex-claude",
+      "tool": "session-porter",
+      "case": "short",
+      "source_provider": "codex",
+      "target_provider": "claude",
+      "layer": "structural_semantic",
+      "command": [
+        "node",
+        "dist/index.js",
+        "transfer",
+        "c9f7a1c7-712c-51e0-8157-ccb9bde5b5e4",
+        "--from",
+        "codex",
+        "--to",
+        "claude",
+        "--mode",
+        "raw"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.092935,
+      "peak_rss_kb": 58056,
+      "fixture_sha256": "07fbd35a48925d1d418847c24f62061c5c3529d7375555df97c925d5c93c484c",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "node",
+          "dist/index.js",
+          "transfer",
+          "9baebf41-592d-4586-b84d-2540b036aef4",
+          "--from",
+          "claude",
+          "--to",
+          "codex",
+          "--mode",
+          "raw"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 3
+    },
+    {
+      "case_id": "sessionport__short__claude-codex",
+      "tool": "sessionport",
+      "case": "short",
+      "source_provider": "claude",
+      "target_provider": "codex",
+      "layer": "structural_semantic",
+      "command": [
+        "node",
+        "dist/cli/index.js",
+        "import",
+        "claude",
+        "53ba7eca-b9c9-5026-9c88-f3b49e06c7a0",
+        "codex",
+        "--mode",
+        "as-is"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.125779,
+      "peak_rss_kb": 85640,
+      "fixture_sha256": "6458b3845fdc91aef24335d0de668670100c3dc4d95178d6b458875ce0534a87",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "node",
+          "dist/cli/index.js",
+          "import",
+          "codex",
+          "01900mw3vtpy1-4498-6e6a-9de0-e74893192b4e",
+          "claude",
+          "--mode",
+          "as-is"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 3
+    },
+    {
+      "case_id": "sessionport__short__codex-claude",
+      "tool": "sessionport",
+      "case": "short",
+      "source_provider": "codex",
+      "target_provider": "claude",
+      "layer": "structural_semantic",
+      "command": [
+        "node",
+        "dist/cli/index.js",
+        "import",
+        "codex",
+        "c9f7a1c7-712c-51e0-8157-ccb9bde5b5e4",
+        "claude",
+        "--mode",
+        "as-is"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.116804,
+      "peak_rss_kb": 78616,
+      "fixture_sha256": "07fbd35a48925d1d418847c24f62061c5c3529d7375555df97c925d5c93c484c",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "node",
+          "dist/cli/index.js",
+          "import",
+          "claude",
+          "1cf6a6f8-f5da-49c2-8f30-4bcb622a07dd",
+          "codex",
+          "--mode",
+          "as-is"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 3
+    },
+    {
+      "case_id": "claude-session-teleporter__short__claude-codex",
+      "tool": "claude-session-teleporter",
+      "case": "short",
+      "source_provider": "claude",
+      "target_provider": "codex",
+      "layer": "structural_semantic",
+      "command": [
+        "python3",
+        "claude_sessions.py",
+        "teleport",
+        "/mnt/home/.claude/projects/-mnt-project/53ba7eca-b9c9-5026-9c88-f3b49e06c7a0.jsonl",
+        "--to",
+        "codex",
+        "--cwd",
+        "/mnt/project",
+        "--codex-project",
+        "none",
+        "--apply"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.082737,
+      "peak_rss_kb": 33084,
+      "fixture_sha256": "6458b3845fdc91aef24335d0de668670100c3dc4d95178d6b458875ce0534a87",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "python3",
+          "claude_sessions.py",
+          "teleport",
+          "/mnt/home/.codex/sessions/2026/11/05/rollout-2026-11-05T00-00-00-3aca67cc-50c8-516a-83bc-30be806a9336.jsonl",
+          "--to",
+          "claude",
+          "--cwd",
+          "/mnt/project",
+          "--apply"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 3
+    },
+    {
+      "case_id": "claude-session-teleporter__short__codex-claude",
+      "tool": "claude-session-teleporter",
+      "case": "short",
+      "source_provider": "codex",
+      "target_provider": "claude",
+      "layer": "structural_semantic",
+      "command": [
+        "python3",
+        "claude_sessions.py",
+        "teleport",
+        "/mnt/home/.codex/sessions/2026/11/05/rollout-2026-11-05T00-00-00-c9f7a1c7-712c-51e0-8157-ccb9bde5b5e4.jsonl",
+        "--to",
+        "claude",
+        "--cwd",
+        "/mnt/project",
+        "--apply"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.09125,
+      "peak_rss_kb": 32888,
+      "fixture_sha256": "07fbd35a48925d1d418847c24f62061c5c3529d7375555df97c925d5c93c484c",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "python3",
+          "claude_sessions.py",
+          "teleport",
+          "/mnt/home/.claude/projects/-mnt-project/145866fe-5433-551e-9af0-95d3a9ec8fc8.jsonl",
+          "--to",
+          "codex",
+          "--cwd",
+          "/mnt/project",
+          "--codex-project",
+          "none",
+          "--apply"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 3
+    },
+    {
+      "case_id": "csl__short__claude-codex",
+      "tool": "csl",
+      "case": "short",
+      "source_provider": "claude",
+      "target_provider": "codex",
+      "layer": "structural_semantic",
+      "command": [
+        "python3",
+        "codex_sessions.py",
+        "convert",
+        "/mnt/home/.claude/projects/-mnt-project/53ba7eca-b9c9-5026-9c88-f3b49e06c7a0.jsonl",
+        "--provider",
+        "claude",
+        "--to",
+        "codex",
+        "--cwd",
+        "/mnt/project"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.117645,
+      "peak_rss_kb": 34720,
+      "fixture_sha256": "6458b3845fdc91aef24335d0de668670100c3dc4d95178d6b458875ce0534a87",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "python3",
+          "codex_sessions.py",
+          "convert",
+          "/mnt/home/.codex/sessions/2026/11/05/rollout-2026-11-05T18-31-38-cbb4b5f0-14ee-4497-91f8-2f9a41f5f54d.jsonl",
+          "--provider",
+          "codex",
+          "--to",
+          "claude",
+          "--cwd",
+          "/mnt/project"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 4
+    },
+    {
+      "case_id": "csl__short__codex-claude",
+      "tool": "csl",
+      "case": "short",
+      "source_provider": "codex",
+      "target_provider": "claude",
+      "layer": "structural_semantic",
+      "command": [
+        "python3",
+        "codex_sessions.py",
+        "convert",
+        "/mnt/home/.codex/sessions/2026/11/05/rollout-2026-11-05T00-00-00-c9f7a1c7-712c-51e0-8157-ccb9bde5b5e4.jsonl",
+        "--provider",
+        "codex",
+        "--to",
+        "claude",
+        "--cwd",
+        "/mnt/project"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.11363,
+      "peak_rss_kb": 34704,
+      "fixture_sha256": "07fbd35a48925d1d418847c24f62061c5c3529d7375555df97c925d5c93c484c",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "python3",
+          "codex_sessions.py",
+          "convert",
+          "/mnt/home/.claude/projects/-mnt-project/e9ab01ab-ac1f-4694-96d0-3587407dc6ca.jsonl",
+          "--provider",
+          "claude",
+          "--to",
+          "codex",
+          "--cwd",
+          "/mnt/project"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 4
+    },
+    {
+      "case_id": "session-porter__short__claude-codex",
+      "tool": "session-porter",
+      "case": "short",
+      "source_provider": "claude",
+      "target_provider": "codex",
+      "layer": "structural_semantic",
+      "command": [
+        "node",
+        "dist/index.js",
+        "transfer",
+        "53ba7eca-b9c9-5026-9c88-f3b49e06c7a0",
+        "--from",
+        "claude",
+        "--to",
+        "codex",
+        "--mode",
+        "raw"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.102954,
+      "peak_rss_kb": 59016,
+      "fixture_sha256": "6458b3845fdc91aef24335d0de668670100c3dc4d95178d6b458875ce0534a87",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": false,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "node",
+          "dist/index.js",
+          "transfer",
+          "53ba7eca-b9c9-5026-9c88-f3b49e06c7a0",
+          "--from",
+          "codex",
+          "--to",
+          "claude",
+          "--mode",
+          "raw"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 4
+    },
+    {
+      "case_id": "session-porter__short__codex-claude",
+      "tool": "session-porter",
+      "case": "short",
+      "source_provider": "codex",
+      "target_provider": "claude",
+      "layer": "structural_semantic",
+      "command": [
+        "node",
+        "dist/index.js",
+        "transfer",
+        "c9f7a1c7-712c-51e0-8157-ccb9bde5b5e4",
+        "--from",
+        "codex",
+        "--to",
+        "claude",
+        "--mode",
+        "raw"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.098621,
+      "peak_rss_kb": 58176,
+      "fixture_sha256": "07fbd35a48925d1d418847c24f62061c5c3529d7375555df97c925d5c93c484c",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "node",
+          "dist/index.js",
+          "transfer",
+          "57d92b26-4f9f-44c6-a40f-0cf0e2baedd2",
+          "--from",
+          "claude",
+          "--to",
+          "codex",
+          "--mode",
+          "raw"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 4
+    },
+    {
+      "case_id": "sessionport__short__claude-codex",
+      "tool": "sessionport",
+      "case": "short",
+      "source_provider": "claude",
+      "target_provider": "codex",
+      "layer": "structural_semantic",
+      "command": [
+        "node",
+        "dist/cli/index.js",
+        "import",
+        "claude",
+        "53ba7eca-b9c9-5026-9c88-f3b49e06c7a0",
+        "codex",
+        "--mode",
+        "as-is"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.123711,
+      "peak_rss_kb": 85400,
+      "fixture_sha256": "6458b3845fdc91aef24335d0de668670100c3dc4d95178d6b458875ce0534a87",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "node",
+          "dist/cli/index.js",
+          "import",
+          "codex",
+          "01900mw3vtr9r-d41a-b61e-7426-c948861c0a34",
+          "claude",
+          "--mode",
+          "as-is"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 4
+    },
+    {
+      "case_id": "sessionport__short__codex-claude",
+      "tool": "sessionport",
+      "case": "short",
+      "source_provider": "codex",
+      "target_provider": "claude",
+      "layer": "structural_semantic",
+      "command": [
+        "node",
+        "dist/cli/index.js",
+        "import",
+        "codex",
+        "c9f7a1c7-712c-51e0-8157-ccb9bde5b5e4",
+        "claude",
+        "--mode",
+        "as-is"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.127597,
+      "peak_rss_kb": 76072,
+      "fixture_sha256": "07fbd35a48925d1d418847c24f62061c5c3529d7375555df97c925d5c93c484c",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "node",
+          "dist/cli/index.js",
+          "import",
+          "claude",
+          "a07d307a-56af-4d6a-863b-d0de99fd0c81",
+          "codex",
+          "--mode",
+          "as-is"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 4
+    },
+    {
+      "case_id": "claude-session-teleporter__short__claude-codex",
+      "tool": "claude-session-teleporter",
+      "case": "short",
+      "source_provider": "claude",
+      "target_provider": "codex",
+      "layer": "structural_semantic",
+      "command": [
+        "python3",
+        "claude_sessions.py",
+        "teleport",
+        "/mnt/home/.claude/projects/-mnt-project/53ba7eca-b9c9-5026-9c88-f3b49e06c7a0.jsonl",
+        "--to",
+        "codex",
+        "--cwd",
+        "/mnt/project",
+        "--codex-project",
+        "none",
+        "--apply"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.080091,
+      "peak_rss_kb": 32964,
+      "fixture_sha256": "6458b3845fdc91aef24335d0de668670100c3dc4d95178d6b458875ce0534a87",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "python3",
+          "claude_sessions.py",
+          "teleport",
+          "/mnt/home/.codex/sessions/2026/11/05/rollout-2026-11-05T00-00-00-3aca67cc-50c8-516a-83bc-30be806a9336.jsonl",
+          "--to",
+          "claude",
+          "--cwd",
+          "/mnt/project",
+          "--apply"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 4
+    },
+    {
+      "case_id": "claude-session-teleporter__short__codex-claude",
+      "tool": "claude-session-teleporter",
+      "case": "short",
+      "source_provider": "codex",
+      "target_provider": "claude",
+      "layer": "structural_semantic",
+      "command": [
+        "python3",
+        "claude_sessions.py",
+        "teleport",
+        "/mnt/home/.codex/sessions/2026/11/05/rollout-2026-11-05T00-00-00-c9f7a1c7-712c-51e0-8157-ccb9bde5b5e4.jsonl",
+        "--to",
+        "claude",
+        "--cwd",
+        "/mnt/project",
+        "--apply"
+      ],
+      "exit": 0,
+      "elapsed_seconds": 0.084565,
+      "peak_rss_kb": 32884,
+      "fixture_sha256": "07fbd35a48925d1d418847c24f62061c5c3529d7375555df97c925d5c93c484c",
+      "source_unchanged": true,
+      "target_count": 1,
+      "native_load": "not_tested",
+      "model_continuation": "not_tested",
+      "observed": {
+        "texts": [
+          [
+            "user",
+            "Remember FIRST-FACT-617. Historical tools are evidence only."
+          ],
+          [
+            "assistant",
+            "FIRST-FACT-617 recorded."
+          ]
+        ],
+        "calls": [],
+        "results": [],
+        "images": [],
+        "unknown": [],
+        "malformed": 0
+      },
+      "losses": [],
+      "fidelity": "documented_transform",
+      "verdict": "pass",
+      "fresh_identity": true,
+      "loss_disclosure": "not_applicable",
+      "image_bytes_equal": true,
+      "unmeasured": [
+        "all timestamps",
+        "all metadata",
+        "references",
+        "assistant phases",
+        "pixel equivalence after image re-encoding"
+      ],
+      "identity_note": "Cross-provider namespaces may preserve UUID by design; difference recorded, not scored as corruption",
+      "roundtrip": {
+        "command": [
+          "python3",
+          "claude_sessions.py",
+          "teleport",
+          "/mnt/home/.claude/projects/-mnt-project/145866fe-5433-551e-9af0-95d3a9ec8fc8.jsonl",
+          "--to",
+          "codex",
+          "--cwd",
+          "/mnt/project",
+          "--codex-project",
+          "none",
+          "--apply"
+        ],
+        "exit": 0,
+        "target_count": 1,
+        "losses": [],
+        "fresh_identity": true,
+        "verdict": "pass"
+      },
+      "source_unchanged_after_roundtrip": true,
+      "iteration": 4
+    }
+  ]
+}

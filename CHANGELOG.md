@@ -1,6 +1,22 @@
 # Changelog
 
-## Unreleased
+## 0.1.0 — Consolidation candidate (not published)
+
+Prepared 2026-11-05. The initial license/secret-review PR was merged on November 4.
+There is no published GitHub Release at preparation time. This candidate includes
+the subsequent changes below; publication must target the final verified commit.
+
+- Scope secret-scan identity exclusions to native metadata instead of arbitrary
+  tool arguments, and parse embedded JSON arguments before sanitizing them.
+- Reject user text with reserved native policy prefixes when conversion cannot
+  preserve it without reclassifying history; keep historical policy quarantined.
+- Verify migration source identities against release metadata and package manifests,
+  including cached receives.
+- Publish imported histories through private staging and exclusive atomic links,
+  so interrupted copies cannot expose partial native JSONL. Retain and report
+  already completed imports after a later batch failure.
+- Add a manual, model-free native-validation workflow with fixed CLI versions,
+  explicit migration opt-in and required media sandboxing.
 
 - Explicit `--repair-legacy-compaction` recovery for old Codex portable copies
   with one orphaned final summary annotation. Pending migration exports can
@@ -22,10 +38,10 @@
   restore/cleanup and a cold 257-session listing. See
   [migration validation](docs/MIGRATION_VALIDATION.md).
 
-## 0.1.0 — Initial licensed release
+## Initial licensed preparation — 2026-11-02 (historical)
 
 Prepared 2026-11-02. Publication and tag are pending until the release commit is
-merged and the corresponding GitHub Release exists. This file is not proof of
+verified and the corresponding GitHub Release exists. This file is not proof of
 publication. Native transcript formats and cross-CLI conversion remain experimental.
 
 ### Included

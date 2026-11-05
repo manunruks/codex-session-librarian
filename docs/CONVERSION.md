@@ -57,6 +57,13 @@ handled only when it does not cross a compaction; uncertain native windows fail.
 System/developer policy, AGENTS/environment context and internal state are not
 reinstalled as destination authority. Canonical `source_context` archives that
 context separately; native destinations include only provenance hashes/counts.
+When a Claude/canonical user message would begin a native Codex text record
+with `# AGENTS.md instructions` or `<environment_context>`, conversion to Codex
+rejects it before writing a destination. These reserved prefixes would otherwise
+be mistaken for source policy on reconversion. This also applies to a text segment
+after a tool result. Genuine source policy remains quarantined; ordinary historical
+text is not silently removed to make a roundtrip appear faithful.
+
 Source auth, shell settings, MCP definitions and execution permissions are not
 translated. The recipient's own CLI configuration and explicit launch flags apply.
 Historical assistant model metadata uses a synthetic marker in Claude output;

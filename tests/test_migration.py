@@ -73,6 +73,46 @@ class MigrationTests(unittest.TestCase):
             self.assertEqual(len(files), 2)
             self.assertTrue(all("Cobalt 73 remembered" in p.read_text() for p in files))
 
+    def test_mismatched_index_source_is_rejected_before_new_or_cached_receive(self):
+        tag = self.command('upload')
+        original = json.loads(self.indexes[tag])
+        changed = json.loads(self.indexes[tag])
+        changed['sessions'][0]['id'] = '11111111-1111-4111-8111-111111111111'
+        self.indexes[tag] = json.dumps(changed).encode()
+        with self.new_computer() as home:
+            with self.assertRaises(SystemExit):
+                self.command('download', tag, '--cwd', str(self.h.cwd))
+            self.assertEqual(list((home/'sessions').rglob('*.jsonl')), [])
+            self.indexes[tag] = json.dumps(original).encode()
+            imported = self.command('download', tag, '--cwd', str(self.h.cwd))
+            before = {path: path.read_bytes() for path in (home/'sessions').rglob('*.jsonl')}
+            downloads = sum(call[:2]==['release','download'] for call in self.h.calls)
+            self.indexes[tag] = json.dumps(changed).encode()
+            with self.assertRaises(SystemExit):
+                self.command('download', tag, '--cwd', str(self.h.cwd))
+            self.assertEqual({path:path.read_bytes() for path in before}, before)
+            self.assertEqual(sum(call[:2]==['release','download'] for call in self.h.calls), downloads)
+            self.indexes[tag] = json.dumps(original).encode()
+            self.assertEqual(self.command('download', tag, '--cwd', str(self.h.cwd)), imported)
+
+    def test_source_mismatch_keeps_prior_batch_receipt_and_resumes_without_duplicates(self):
+        tag = self.command('upload')
+        original = json.loads(self.indexes[tag])
+        changed = json.loads(self.indexes[tag])
+        changed['sessions'][1]['id'] = '11111111-1111-4111-8111-111111111111'
+        self.indexes[tag] = json.dumps(changed).encode()
+        with self.new_computer() as home:
+            with self.assertRaises(SystemExit):
+                self.command('download', tag, '--cwd', str(self.h.cwd))
+            first = list((home/'sessions').rglob('*.jsonl'))
+            self.assertEqual(len(first), 1)
+            before = first[0].read_bytes()
+            self.indexes[tag] = json.dumps(original).encode()
+            restored = self.command('download', tag, '--cwd', str(self.h.cwd))
+            self.assertEqual(len(restored), 2)
+            self.assertEqual(len(list((home/'sessions').rglob('*.jsonl'))), 2)
+            self.assertEqual(first[0].read_bytes(), before)
+
     def test_dry_run_does_not_upload_or_create_migration_state(self):
         self.command("upload", "--dry-run")
         self.assertEqual(self.indexes, {})

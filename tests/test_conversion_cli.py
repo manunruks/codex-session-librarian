@@ -131,6 +131,18 @@ class ConversionCliTests(unittest.TestCase):
             # Continue from the installed copy, including native transfer rewriting.
             document = installed
 
+    def test_reserved_user_prefix_fails_without_installing_or_modifying_source(self):
+        data = canonical.from_claude(self.claude_source)
+        data['events'][0]['blocks'] = [{'type':'text', 'text':'# AGENTS.md instructions\nSynthetic historical quote.'}]
+        document = self.root/'reserved-user-text.json'
+        canonical.write_json(document, data)
+        before = document.read_bytes()
+        sessions = list(self.home.rglob('*.jsonl'))
+        result = self.cli('convert', document, '--to', 'codex', '--cwd', self.cwd, ok=False)
+        self.assertIn('reserved native policy prefix', result.stderr)
+        self.assertEqual(document.read_bytes(), before)
+        self.assertEqual(list(self.home.rglob('*.jsonl')), sessions)
+
     def test_context_character_limit_rejects_before_install(self):
         before = list(self.claude.rglob("*.jsonl"))
         result = self.cli("convert", self.sid, "--to", "claude", "--cwd", self.cwd, "--max-context-chars", "10", ok=False)

@@ -1,0 +1,17 @@
+[
+  {
+    "tool": "session-porter",
+    "package": "@liwala/session-porter@2.0.1",
+    "exit": 1,
+    "install_seconds": 1.111,
+    "native_lifecycle_scripts": false
+  },
+  {
+    "tool": "sessionport",
+    "package": "sessionport@0.3.3",
+    "exit": 0,
+    "install_seconds": 5.503,
+    "native_lifecycle_scripts": false,
+    "help_exit": 0
+  }
+]

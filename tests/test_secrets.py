@@ -98,6 +98,101 @@ class SecretExportTests(unittest.TestCase):
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertNotIn(TOKEN, result.stdout + result.stderr)
 
+    def test_business_fields_named_like_native_metadata_are_scanned(self):
+        for provider in ('codex', 'claude'):
+            with self.subTest(provider=provider):
+                source, header = self.fixture(provider, token='plain')
+                rows = canonical.read_jsonl(source)
+                arguments = {key: TOKEN for key in ('id', 'type', 'sha256', 'encrypted_content')}
+                for row in rows:
+                    if row.get('payload', {}).get('type') == 'function_call':
+                        row['payload']['arguments'] = json.dumps(arguments)
+                    for block in row.get('message', {}).get('content', []):
+                        if isinstance(block, dict) and block.get('type') == 'tool_use':
+                            block['input'] = arguments
+                source.write_text(''.join(json.dumps(row)+'\n' for row in rows))
+                before = source.read_bytes()
+                bundle = self.export(source, header, scrub=True)
+                manifest, native = self.contents(bundle)
+                self.assertNotIn(TOKEN.encode(), native)
+                self.assertEqual(manifest['sessions'][0]['id'], header['id'])
+                output = self.root/(provider+'-business-fields.jsonl')
+                output.write_bytes(native)
+                calls = [block for event in canonical.normalize(provider, output)['events']
+                         for block in event['blocks'] if block['type']=='tool_call']
+                self.assertEqual(calls[0]['call_id'], 'call-1')
+                self.assertEqual(calls[0]['arguments'], {key: secrets.REPLACEMENT for key in arguments})
+                self.assertEqual(source.read_bytes(), before)
+                self.assert_masked()
+                with self.assertRaisesRegex(ValueError, '--allow-secrets'):
+                    self.export(source, header)
+                self.assert_masked()
+
+    def test_readable_business_data_in_native_result_arrays_is_scanned(self):
+        for provider in ('codex', 'claude'):
+            with self.subTest(provider=provider):
+                source, header = self.fixture(provider, token='plain')
+                rows = canonical.read_jsonl(source)
+                content = [{'type':'json', 'data':{key:TOKEN for key in ('id','type','encrypted_content')}},
+                           {'id':TOKEN}]
+                for row in rows:
+                    if row.get('payload',{}).get('type') == 'function_call_output':
+                        row['payload']['output'] = content
+                    for block in row.get('message',{}).get('content',[]):
+                        if isinstance(block,dict) and block.get('type') == 'tool_result':
+                            block['content'] = content
+                source.write_text(''.join(json.dumps(row)+'\n' for row in rows))
+                before = source.read_bytes()
+                bundle = self.export(source,header,scrub=True)
+                _,native = self.contents(bundle)
+                self.assertNotIn(TOKEN.encode(),native)
+                self.assertIn(b'call-1',native)
+                self.assertEqual(source.read_bytes(),before)
+                self.assert_masked()
+                # This is native preservation of an extension, not canonical
+                # support for a previously unknown structured result block.
+
+    def test_scrub_embedded_json_arguments_preserves_escaping_and_structure(self):
+        values = ('long-password"suffix', 'long-password\\"suffix',
+                  'long-password\nnext-line', 'long-password-\u2603"suffix')
+        for provider in ('codex', 'claude'):
+            for number, password in enumerate(values):
+                with self.subTest(provider=provider, value=number):
+                    source, header = self.fixture(provider, token='plain')
+                    rows = canonical.read_jsonl(source)
+                    arguments = {'password': password, 'id': 'business-id', 'count': 17}
+                    for row in rows:
+                        if row.get('payload', {}).get('type') == 'function_call':
+                            row['payload']['arguments'] = json.dumps(arguments, ensure_ascii=True)
+                        for block in row.get('message', {}).get('content', []):
+                            if isinstance(block, dict) and block.get('type') == 'tool_use':
+                                block['input'] = arguments
+                    source.write_text(''.join(json.dumps(row)+'\n' for row in rows))
+                    before = source.read_bytes()
+                    bundle = self.export(source, header, scrub=True)
+                    _, native = self.contents(bundle)
+                    output = self.root/(provider+'-escaped-'+str(number)+'.jsonl')
+                    output.write_bytes(native)
+                    calls = [block for event in canonical.normalize(provider, output)['events']
+                             for block in event['blocks'] if block['type']=='tool_call']
+                    self.assertEqual(calls[0]['arguments'], {**arguments, 'password': secrets.REPLACEMENT})
+                    self.assertEqual(source.read_bytes(), before)
+                    self.assertNotIn(password, self.out.getvalue()+self.err.getvalue())
+
+    def test_scrub_invalid_embedded_json_refuses_publication(self):
+        source, header = self.fixture('codex', token='plain')
+        rows = canonical.read_jsonl(source)
+        for row in rows:
+            if row.get('payload', {}).get('type') == 'function_call':
+                row['payload']['arguments'] = '{"password":"synthetic-password"'
+        source.write_text(''.join(json.dumps(row)+'\n' for row in rows))
+        before = source.read_bytes()
+        with self.assertRaisesRegex(ValueError, 'invalid JSON tool arguments'):
+            self.export(source, header, scrub=True)
+        self.assertFalse(list(self.root.rglob('*.zip')))
+        self.assertEqual(source.read_bytes(), before)
+        self.assertNotIn('synthetic-password', self.out.getvalue()+self.err.getvalue())
+
     def test_allow_retains_values_without_printing_them(self):
         for provider in ('codex', 'claude'):
             source, header = self.fixture(provider, title=TOKEN)

@@ -1,0 +1,612 @@
+[
+  {
+    "case_id": "csl__tool-only__claude-codex",
+    "layer": "native_load",
+    "method": "Codex app-server thread/read",
+    "exact_transcript_bytes": true,
+    "network": "disabled by outer bubblewrap namespace",
+    "accepted": true,
+    "missing_visible_markers": [
+      "ARGUMENT-331",
+      "TOOL-ONLY-FACT-947"
+    ],
+    "error": null,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "verdict": "pass",
+    "scope": "CLI file acceptance and visible history; not model request reconstruction or recall"
+  },
+  {
+    "case_id": "csl__short__codex-claude",
+    "layer": "native_load",
+    "exact_transcript_bytes": true,
+    "cwd_override": "fresh project; native transcript metadata unchanged",
+    "capture": {
+      "request_path": "/v1/messages?beta=true",
+      "item_count": 4,
+      "missing_markers": [],
+      "native_tool_call_present": false,
+      "native_tool_result_present": false,
+      "image_present": false
+    },
+    "timed_out": false,
+    "exit": 1,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "stdout_tail": "{\"duration_api_ms\":0,\"stop_reason\":\"stop_sequence\",\"session_id\":\"937ac669-e59e-46b9-b9ab-80a3de632da4\",\"total_cost_usd\":0,\"usage\":{\"output_tokens_details\":{\"thinking_tokens\":0},\"input_tokens\":0,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"output_tokens\":0,\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":0,\"ephemeral_5m_input_tokens\":0},\"inference_geo\":\"\",\"iterations\":[],\"speed\":\"standard\",\"fallback_credit\":null},\"modelUsage\":{},\"permission_denials\":[],\"terminal_reason\":\"api_error\",\"fast_mode_state\":\"off\",\"fast_mode_disabled_reason\":\"sdk_opt_in_required\",\"subagent_stats\":{\"spawned\":0,\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"safety_stops\":0,\"is_error\":true,\"num_turns\":1,\"subtype\":\"success\",\"api_error_status\":400,\"result\":\"API Error: 400 Synthetic benchmark stops before model generation\",\"type\":\"result\",\"duration_ms\":29,\"uuid\":\"99b143f7-0859-4f84-8c89-f3be01fb1ea1\",\"queued_turn_count\":0,\"result_index\":0}\n",
+    "stderr_tail": "",
+    "verdict": "pass"
+  },
+  {
+    "case_id": "csl__tool-only__codex-claude",
+    "layer": "native_load",
+    "exact_transcript_bytes": true,
+    "cwd_override": "fresh project; native transcript metadata unchanged",
+    "capture": {
+      "request_path": "/v1/messages?beta=true",
+      "item_count": 6,
+      "missing_markers": [],
+      "native_tool_call_present": true,
+      "native_tool_result_present": true,
+      "image_present": false
+    },
+    "timed_out": false,
+    "exit": 1,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "stdout_tail": "{\"duration_api_ms\":0,\"stop_reason\":\"stop_sequence\",\"session_id\":\"7996c718-4e13-4264-9431-2ef1c475076c\",\"total_cost_usd\":0,\"usage\":{\"output_tokens_details\":{\"thinking_tokens\":0},\"input_tokens\":0,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"output_tokens\":0,\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":0,\"ephemeral_5m_input_tokens\":0},\"inference_geo\":\"\",\"iterations\":[],\"speed\":\"standard\",\"fallback_credit\":null},\"modelUsage\":{},\"permission_denials\":[],\"terminal_reason\":\"api_error\",\"fast_mode_state\":\"off\",\"fast_mode_disabled_reason\":\"sdk_opt_in_required\",\"subagent_stats\":{\"spawned\":0,\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"safety_stops\":0,\"is_error\":true,\"num_turns\":1,\"subtype\":\"success\",\"api_error_status\":400,\"result\":\"API Error: 400 Synthetic benchmark stops before model generation\",\"type\":\"result\",\"duration_ms\":26,\"uuid\":\"31b9c1fd-3d7f-49c2-a7d1-c28f8994be28\",\"queued_turn_count\":0,\"result_index\":0}\n",
+    "stderr_tail": "",
+    "verdict": "pass"
+  },
+  {
+    "case_id": "csl__tool-errors__claude-codex",
+    "layer": "native_load",
+    "method": "Codex app-server thread/read",
+    "exact_transcript_bytes": true,
+    "network": "disabled by outer bubblewrap namespace",
+    "accepted": true,
+    "missing_visible_markers": [
+      "ARGUMENT-331",
+      "TOOL-ONLY-FACT-947",
+      "ARGUMENT-ERROR-332",
+      "ERROR-EACCES-722"
+    ],
+    "error": null,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "verdict": "pass",
+    "scope": "CLI file acceptance and visible history; not model request reconstruction or recall"
+  },
+  {
+    "case_id": "csl__image__claude-codex",
+    "layer": "native_load",
+    "method": "Codex app-server thread/read",
+    "exact_transcript_bytes": true,
+    "network": "disabled by outer bubblewrap namespace",
+    "accepted": true,
+    "missing_visible_markers": [],
+    "error": null,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "verdict": "pass",
+    "scope": "CLI file acceptance and visible history; not model request reconstruction or recall"
+  },
+  {
+    "case_id": "csl__tool-errors__codex-claude",
+    "layer": "native_load",
+    "exact_transcript_bytes": true,
+    "cwd_override": "fresh project; native transcript metadata unchanged",
+    "capture": {
+      "request_path": "/v1/messages?beta=true",
+      "item_count": 8,
+      "missing_markers": [],
+      "native_tool_call_present": true,
+      "native_tool_result_present": true,
+      "image_present": false
+    },
+    "timed_out": false,
+    "exit": 1,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "stdout_tail": "{\"duration_api_ms\":0,\"stop_reason\":\"stop_sequence\",\"session_id\":\"a1d95ad4-10fa-440a-a331-639c69e42a99\",\"total_cost_usd\":0,\"usage\":{\"output_tokens_details\":{\"thinking_tokens\":0},\"input_tokens\":0,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"output_tokens\":0,\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":0,\"ephemeral_5m_input_tokens\":0},\"inference_geo\":\"\",\"iterations\":[],\"speed\":\"standard\",\"fallback_credit\":null},\"modelUsage\":{},\"permission_denials\":[],\"terminal_reason\":\"api_error\",\"fast_mode_state\":\"off\",\"fast_mode_disabled_reason\":\"sdk_opt_in_required\",\"subagent_stats\":{\"spawned\":0,\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"safety_stops\":0,\"is_error\":true,\"num_turns\":1,\"subtype\":\"success\",\"api_error_status\":400,\"result\":\"API Error: 400 Synthetic benchmark stops before model generation\",\"type\":\"result\",\"duration_ms\":30,\"uuid\":\"1c62e953-0c9b-43db-95f6-15f09ece249f\",\"queued_turn_count\":0,\"result_index\":0}\n",
+    "stderr_tail": "",
+    "verdict": "pass"
+  },
+  {
+    "case_id": "csl__image__codex-claude",
+    "layer": "native_load",
+    "exact_transcript_bytes": true,
+    "cwd_override": "fresh project; native transcript metadata unchanged",
+    "capture": {
+      "request_path": "/v1/messages?beta=true",
+      "item_count": 6,
+      "missing_markers": [],
+      "native_tool_call_present": false,
+      "native_tool_result_present": false,
+      "image_present": true
+    },
+    "timed_out": false,
+    "exit": 1,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "stdout_tail": "{\"duration_api_ms\":0,\"stop_reason\":\"stop_sequence\",\"session_id\":\"0b0d59af-94f1-485f-87de-6b3a104c50e0\",\"total_cost_usd\":0,\"usage\":{\"output_tokens_details\":{\"thinking_tokens\":0},\"input_tokens\":0,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"output_tokens\":0,\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":0,\"ephemeral_5m_input_tokens\":0},\"inference_geo\":\"\",\"iterations\":[],\"speed\":\"standard\",\"fallback_credit\":null},\"modelUsage\":{},\"permission_denials\":[],\"terminal_reason\":\"api_error\",\"fast_mode_state\":\"off\",\"fast_mode_disabled_reason\":\"sdk_opt_in_required\",\"subagent_stats\":{\"spawned\":0,\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"safety_stops\":0,\"is_error\":true,\"num_turns\":1,\"subtype\":\"success\",\"api_error_status\":400,\"result\":\"API Error: 400 Synthetic benchmark stops before model generation\",\"type\":\"result\",\"duration_ms\":26,\"uuid\":\"1772b35b-ff65-4486-a31b-54368bd1ee84\",\"queued_turn_count\":0,\"result_index\":0}\n",
+    "stderr_tail": "",
+    "verdict": "pass"
+  },
+  {
+    "case_id": "session-porter__short__codex-claude",
+    "layer": "native_load",
+    "exact_transcript_bytes": true,
+    "cwd_override": "fresh project; native transcript metadata unchanged",
+    "capture": {
+      "request_path": "/v1/messages?beta=true",
+      "item_count": 4,
+      "missing_markers": [],
+      "native_tool_call_present": false,
+      "native_tool_result_present": false,
+      "image_present": false
+    },
+    "timed_out": false,
+    "exit": 1,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "stdout_tail": "{\"duration_api_ms\":0,\"stop_reason\":\"stop_sequence\",\"session_id\":\"d6793700-6617-4b3b-bb24-e81c955fa5f6\",\"total_cost_usd\":0,\"usage\":{\"output_tokens_details\":{\"thinking_tokens\":0},\"input_tokens\":0,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"output_tokens\":0,\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":0,\"ephemeral_5m_input_tokens\":0},\"inference_geo\":\"\",\"iterations\":[],\"speed\":\"standard\",\"fallback_credit\":null},\"modelUsage\":{},\"permission_denials\":[],\"terminal_reason\":\"api_error\",\"fast_mode_state\":\"off\",\"fast_mode_disabled_reason\":\"sdk_opt_in_required\",\"subagent_stats\":{\"spawned\":0,\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"safety_stops\":0,\"is_error\":true,\"num_turns\":1,\"subtype\":\"success\",\"api_error_status\":400,\"result\":\"API Error: 400 Synthetic benchmark stops before model generation\",\"type\":\"result\",\"duration_ms\":27,\"uuid\":\"41642290-44f6-4078-ae22-99f297e71414\",\"queued_turn_count\":0,\"result_index\":0}\n",
+    "stderr_tail": "",
+    "verdict": "pass"
+  },
+  {
+    "case_id": "session-porter__tool-only__claude-codex",
+    "layer": "native_load",
+    "method": "Codex app-server thread/read",
+    "exact_transcript_bytes": true,
+    "network": "disabled by outer bubblewrap namespace",
+    "accepted": true,
+    "missing_visible_markers": [
+      "ARGUMENT-331",
+      "TOOL-ONLY-FACT-947"
+    ],
+    "error": null,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "verdict": "pass",
+    "scope": "CLI file acceptance and visible history; not model request reconstruction or recall"
+  },
+  {
+    "case_id": "session-porter__tool-only__codex-claude",
+    "layer": "native_load",
+    "exact_transcript_bytes": true,
+    "cwd_override": "fresh project; native transcript metadata unchanged",
+    "capture": {
+      "request_path": "/v1/messages?beta=true",
+      "item_count": 6,
+      "missing_markers": [],
+      "native_tool_call_present": true,
+      "native_tool_result_present": true,
+      "image_present": false
+    },
+    "timed_out": false,
+    "exit": 1,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "stdout_tail": "{\"duration_api_ms\":0,\"stop_reason\":\"stop_sequence\",\"session_id\":\"085a75f4-9cb3-4a4a-8cad-7921e18c2820\",\"total_cost_usd\":0,\"usage\":{\"output_tokens_details\":{\"thinking_tokens\":0},\"input_tokens\":0,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"output_tokens\":0,\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":0,\"ephemeral_5m_input_tokens\":0},\"inference_geo\":\"\",\"iterations\":[],\"speed\":\"standard\",\"fallback_credit\":null},\"modelUsage\":{},\"permission_denials\":[],\"terminal_reason\":\"api_error\",\"fast_mode_state\":\"off\",\"fast_mode_disabled_reason\":\"sdk_opt_in_required\",\"subagent_stats\":{\"spawned\":0,\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"safety_stops\":0,\"is_error\":true,\"num_turns\":1,\"subtype\":\"success\",\"api_error_status\":400,\"result\":\"API Error: 400 Synthetic benchmark stops before model generation\",\"type\":\"result\",\"duration_ms\":27,\"uuid\":\"f0a214f2-9be5-46aa-9e5d-eb2f211db6de\",\"queued_turn_count\":0,\"result_index\":0}\n",
+    "stderr_tail": "",
+    "verdict": "pass"
+  },
+  {
+    "case_id": "csl__short__claude-codex",
+    "layer": "native_load",
+    "method": "Codex app-server thread/read",
+    "exact_transcript_bytes": true,
+    "network": "disabled by outer bubblewrap namespace",
+    "accepted": true,
+    "missing_visible_markers": [],
+    "error": null,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "verdict": "pass",
+    "scope": "CLI file acceptance and visible history; not model request reconstruction or recall"
+  },
+  {
+    "case_id": "session-porter__tool-errors__codex-claude",
+    "layer": "native_load",
+    "exact_transcript_bytes": true,
+    "cwd_override": "fresh project; native transcript metadata unchanged",
+    "capture": {
+      "request_path": "/v1/messages?beta=true",
+      "item_count": 8,
+      "missing_markers": [],
+      "native_tool_call_present": true,
+      "native_tool_result_present": true,
+      "image_present": false
+    },
+    "timed_out": false,
+    "exit": 1,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "stdout_tail": "{\"duration_api_ms\":0,\"stop_reason\":\"stop_sequence\",\"session_id\":\"01369ab8-7cd5-4bbf-b65e-a348e1faa4ce\",\"total_cost_usd\":0,\"usage\":{\"output_tokens_details\":{\"thinking_tokens\":0},\"input_tokens\":0,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"output_tokens\":0,\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":0,\"ephemeral_5m_input_tokens\":0},\"inference_geo\":\"\",\"iterations\":[],\"speed\":\"standard\",\"fallback_credit\":null},\"modelUsage\":{},\"permission_denials\":[],\"terminal_reason\":\"api_error\",\"fast_mode_state\":\"off\",\"fast_mode_disabled_reason\":\"sdk_opt_in_required\",\"subagent_stats\":{\"spawned\":0,\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"safety_stops\":0,\"is_error\":true,\"num_turns\":1,\"subtype\":\"success\",\"api_error_status\":400,\"result\":\"API Error: 400 Synthetic benchmark stops before model generation\",\"type\":\"result\",\"duration_ms\":28,\"uuid\":\"04b7168f-282e-4b1c-acd3-3e956147f1fe\",\"queued_turn_count\":0,\"result_index\":0}\n",
+    "stderr_tail": "",
+    "verdict": "pass"
+  },
+  {
+    "case_id": "session-porter__image__claude-codex",
+    "layer": "native_load",
+    "method": "Codex app-server thread/read",
+    "exact_transcript_bytes": true,
+    "network": "disabled by outer bubblewrap namespace",
+    "accepted": true,
+    "missing_visible_markers": [],
+    "error": null,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "verdict": "pass",
+    "scope": "CLI file acceptance and visible history; not model request reconstruction or recall"
+  },
+  {
+    "case_id": "session-porter__image__codex-claude",
+    "layer": "native_load",
+    "exact_transcript_bytes": true,
+    "cwd_override": "fresh project; native transcript metadata unchanged",
+    "capture": {
+      "request_path": "/v1/messages?beta=true",
+      "item_count": 6,
+      "missing_markers": [],
+      "native_tool_call_present": false,
+      "native_tool_result_present": false,
+      "image_present": false
+    },
+    "timed_out": false,
+    "exit": 1,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "stdout_tail": "{\"duration_api_ms\":0,\"stop_reason\":\"stop_sequence\",\"session_id\":\"f0393c6d-90c1-4fe9-9353-bd4c23017b93\",\"total_cost_usd\":0,\"usage\":{\"output_tokens_details\":{\"thinking_tokens\":0},\"input_tokens\":0,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"output_tokens\":0,\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":0,\"ephemeral_5m_input_tokens\":0},\"inference_geo\":\"\",\"iterations\":[],\"speed\":\"standard\",\"fallback_credit\":null},\"modelUsage\":{},\"permission_denials\":[],\"terminal_reason\":\"api_error\",\"fast_mode_state\":\"off\",\"fast_mode_disabled_reason\":\"sdk_opt_in_required\",\"subagent_stats\":{\"spawned\":0,\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"safety_stops\":0,\"is_error\":true,\"num_turns\":1,\"subtype\":\"success\",\"api_error_status\":400,\"result\":\"API Error: 400 Synthetic benchmark stops before model generation\",\"type\":\"result\",\"duration_ms\":27,\"uuid\":\"e6a05d89-fd27-4d8c-ba11-a7f2d431c0a2\",\"queued_turn_count\":0,\"result_index\":0}\n",
+    "stderr_tail": "",
+    "verdict": "fail"
+  },
+  {
+    "case_id": "session-porter__short__claude-codex",
+    "layer": "native_load",
+    "method": "Codex app-server thread/read",
+    "exact_transcript_bytes": true,
+    "network": "disabled by outer bubblewrap namespace",
+    "accepted": true,
+    "missing_visible_markers": [],
+    "error": null,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "verdict": "pass",
+    "scope": "CLI file acceptance and visible history; not model request reconstruction or recall"
+  },
+  {
+    "case_id": "sessionport__short__claude-codex",
+    "layer": "native_load",
+    "method": "Codex app-server thread/read",
+    "exact_transcript_bytes": true,
+    "network": "disabled by outer bubblewrap namespace",
+    "accepted": false,
+    "missing_visible_markers": [
+      "FIRST-FACT-617"
+    ],
+    "error": {
+      "code": -32600,
+      "message": "invalid thread id: invalid character: expected an optional prefix of `urn:uuid:` followed by [0-9a-fA-F-], found `m` at 6"
+    },
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "verdict": "fail",
+    "scope": "CLI file acceptance and visible history; not model request reconstruction or recall"
+  },
+  {
+    "case_id": "sessionport__tool-only__claude-codex",
+    "layer": "native_load",
+    "method": "Codex app-server thread/read",
+    "exact_transcript_bytes": true,
+    "network": "disabled by outer bubblewrap namespace",
+    "accepted": false,
+    "missing_visible_markers": [
+      "FIRST-FACT-617",
+      "ARGUMENT-331",
+      "TOOL-ONLY-FACT-947"
+    ],
+    "error": {
+      "code": -32600,
+      "message": "invalid thread id: invalid character: expected an optional prefix of `urn:uuid:` followed by [0-9a-fA-F-], found `m` at 6"
+    },
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "verdict": "fail",
+    "scope": "CLI file acceptance and visible history; not model request reconstruction or recall"
+  },
+  {
+    "case_id": "sessionport__short__codex-claude",
+    "layer": "native_load",
+    "exact_transcript_bytes": true,
+    "cwd_override": "fresh project; native transcript metadata unchanged",
+    "capture": {
+      "request_path": "/v1/messages?beta=true",
+      "item_count": 4,
+      "missing_markers": [],
+      "native_tool_call_present": false,
+      "native_tool_result_present": false,
+      "image_present": false
+    },
+    "timed_out": false,
+    "exit": 1,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "stdout_tail": "{\"duration_api_ms\":0,\"stop_reason\":\"stop_sequence\",\"session_id\":\"9af242ef-63f7-4665-9a07-bb516a6a8750\",\"total_cost_usd\":0,\"usage\":{\"output_tokens_details\":{\"thinking_tokens\":0},\"input_tokens\":0,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"output_tokens\":0,\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":0,\"ephemeral_5m_input_tokens\":0},\"inference_geo\":\"\",\"iterations\":[],\"speed\":\"standard\",\"fallback_credit\":null},\"modelUsage\":{},\"permission_denials\":[],\"terminal_reason\":\"api_error\",\"fast_mode_state\":\"off\",\"fast_mode_disabled_reason\":\"sdk_opt_in_required\",\"subagent_stats\":{\"spawned\":0,\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"safety_stops\":0,\"is_error\":true,\"num_turns\":1,\"subtype\":\"success\",\"api_error_status\":400,\"result\":\"API Error: 400 Synthetic benchmark stops before model generation\",\"type\":\"result\",\"duration_ms\":29,\"uuid\":\"bff9fb54-ae53-4e67-ab25-135225fad734\",\"queued_turn_count\":0,\"result_index\":0}\n",
+    "stderr_tail": "",
+    "verdict": "pass"
+  },
+  {
+    "case_id": "sessionport__tool-errors__claude-codex",
+    "layer": "native_load",
+    "method": "Codex app-server thread/read",
+    "exact_transcript_bytes": true,
+    "network": "disabled by outer bubblewrap namespace",
+    "accepted": false,
+    "missing_visible_markers": [
+      "FIRST-FACT-617",
+      "ARGUMENT-331",
+      "TOOL-ONLY-FACT-947",
+      "ARGUMENT-ERROR-332",
+      "ERROR-EACCES-722"
+    ],
+    "error": {
+      "code": -32600,
+      "message": "invalid thread id: invalid character: expected an optional prefix of `urn:uuid:` followed by [0-9a-fA-F-], found `m` at 6"
+    },
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "verdict": "fail",
+    "scope": "CLI file acceptance and visible history; not model request reconstruction or recall"
+  },
+  {
+    "case_id": "sessionport__tool-only__codex-claude",
+    "layer": "native_load",
+    "exact_transcript_bytes": true,
+    "cwd_override": "fresh project; native transcript metadata unchanged",
+    "capture": {
+      "request_path": "/v1/messages?beta=true",
+      "item_count": 6,
+      "missing_markers": [
+        "ARGUMENT-331",
+        "TOOL-ONLY-FACT-947"
+      ],
+      "native_tool_call_present": false,
+      "native_tool_result_present": false,
+      "image_present": false
+    },
+    "timed_out": false,
+    "exit": 1,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "stdout_tail": "{\"duration_api_ms\":0,\"stop_reason\":\"stop_sequence\",\"session_id\":\"198c743a-a066-45ea-8252-d79a4e016f99\",\"total_cost_usd\":0,\"usage\":{\"output_tokens_details\":{\"thinking_tokens\":0},\"input_tokens\":0,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"output_tokens\":0,\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":0,\"ephemeral_5m_input_tokens\":0},\"inference_geo\":\"\",\"iterations\":[],\"speed\":\"standard\",\"fallback_credit\":null},\"modelUsage\":{},\"permission_denials\":[],\"terminal_reason\":\"api_error\",\"fast_mode_state\":\"off\",\"fast_mode_disabled_reason\":\"sdk_opt_in_required\",\"subagent_stats\":{\"spawned\":0,\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"safety_stops\":0,\"is_error\":true,\"num_turns\":1,\"subtype\":\"success\",\"api_error_status\":400,\"result\":\"API Error: 400 Synthetic benchmark stops before model generation\",\"type\":\"result\",\"duration_ms\":26,\"uuid\":\"b7011366-b3ff-4cf2-9964-51a13cc145f4\",\"queued_turn_count\":0,\"result_index\":0}\n",
+    "stderr_tail": "",
+    "verdict": "fail"
+  },
+  {
+    "case_id": "sessionport__image__claude-codex",
+    "layer": "native_load",
+    "method": "Codex app-server thread/read",
+    "exact_transcript_bytes": true,
+    "network": "disabled by outer bubblewrap namespace",
+    "accepted": false,
+    "missing_visible_markers": [
+      "FIRST-FACT-617"
+    ],
+    "error": {
+      "code": -32600,
+      "message": "invalid thread id: invalid character: expected an optional prefix of `urn:uuid:` followed by [0-9a-fA-F-], found `m` at 6"
+    },
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "verdict": "fail",
+    "scope": "CLI file acceptance and visible history; not model request reconstruction or recall"
+  },
+  {
+    "case_id": "sessionport__tool-errors__codex-claude",
+    "layer": "native_load",
+    "exact_transcript_bytes": true,
+    "cwd_override": "fresh project; native transcript metadata unchanged",
+    "capture": {
+      "request_path": "/v1/messages?beta=true",
+      "item_count": 7,
+      "missing_markers": [
+        "ARGUMENT-331",
+        "TOOL-ONLY-FACT-947",
+        "ARGUMENT-ERROR-332",
+        "ERROR-EACCES-722"
+      ],
+      "native_tool_call_present": false,
+      "native_tool_result_present": false,
+      "image_present": false
+    },
+    "timed_out": false,
+    "exit": 1,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "stdout_tail": "{\"duration_api_ms\":0,\"stop_reason\":\"stop_sequence\",\"session_id\":\"5c05a381-8194-4778-9b9c-db10524095a0\",\"total_cost_usd\":0,\"usage\":{\"output_tokens_details\":{\"thinking_tokens\":0},\"input_tokens\":0,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"output_tokens\":0,\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":0,\"ephemeral_5m_input_tokens\":0},\"inference_geo\":\"\",\"iterations\":[],\"speed\":\"standard\",\"fallback_credit\":null},\"modelUsage\":{},\"permission_denials\":[],\"terminal_reason\":\"api_error\",\"fast_mode_state\":\"off\",\"fast_mode_disabled_reason\":\"sdk_opt_in_required\",\"subagent_stats\":{\"spawned\":0,\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"safety_stops\":0,\"is_error\":true,\"num_turns\":1,\"subtype\":\"success\",\"api_error_status\":400,\"result\":\"API Error: 400 Synthetic benchmark stops before model generation\",\"type\":\"result\",\"duration_ms\":28,\"uuid\":\"b800466e-1761-4f7f-8ddf-3605690e8c6c\",\"queued_turn_count\":0,\"result_index\":0}\n",
+    "stderr_tail": "",
+    "verdict": "fail"
+  },
+  {
+    "case_id": "session-porter__tool-errors__claude-codex",
+    "layer": "native_load",
+    "method": "Codex app-server thread/read",
+    "exact_transcript_bytes": true,
+    "network": "disabled by outer bubblewrap namespace",
+    "accepted": true,
+    "missing_visible_markers": [
+      "ARGUMENT-331",
+      "TOOL-ONLY-FACT-947",
+      "ARGUMENT-ERROR-332",
+      "ERROR-EACCES-722"
+    ],
+    "error": null,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "verdict": "pass",
+    "scope": "CLI file acceptance and visible history; not model request reconstruction or recall"
+  },
+  {
+    "case_id": "claude-session-teleporter__short__claude-codex",
+    "layer": "native_load",
+    "method": "Codex app-server thread/read",
+    "exact_transcript_bytes": true,
+    "network": "disabled by outer bubblewrap namespace",
+    "accepted": true,
+    "missing_visible_markers": [],
+    "error": null,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "verdict": "pass",
+    "scope": "CLI file acceptance and visible history; not model request reconstruction or recall"
+  },
+  {
+    "case_id": "sessionport__image__codex-claude",
+    "layer": "native_load",
+    "exact_transcript_bytes": true,
+    "cwd_override": "fresh project; native transcript metadata unchanged",
+    "capture": {
+      "request_path": "/v1/messages?beta=true",
+      "item_count": 6,
+      "missing_markers": [],
+      "native_tool_call_present": false,
+      "native_tool_result_present": false,
+      "image_present": false
+    },
+    "timed_out": false,
+    "exit": 1,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "stdout_tail": "{\"duration_api_ms\":0,\"stop_reason\":\"stop_sequence\",\"session_id\":\"c91d177f-30ca-4128-bb22-898ab352f6c2\",\"total_cost_usd\":0,\"usage\":{\"output_tokens_details\":{\"thinking_tokens\":0},\"input_tokens\":0,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"output_tokens\":0,\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":0,\"ephemeral_5m_input_tokens\":0},\"inference_geo\":\"\",\"iterations\":[],\"speed\":\"standard\",\"fallback_credit\":null},\"modelUsage\":{},\"permission_denials\":[],\"terminal_reason\":\"api_error\",\"fast_mode_state\":\"off\",\"fast_mode_disabled_reason\":\"sdk_opt_in_required\",\"subagent_stats\":{\"spawned\":0,\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"safety_stops\":0,\"is_error\":true,\"num_turns\":1,\"subtype\":\"success\",\"api_error_status\":400,\"result\":\"API Error: 400 Synthetic benchmark stops before model generation\",\"type\":\"result\",\"duration_ms\":27,\"uuid\":\"0c0151a5-cc38-432a-9633-f3c0f919c277\",\"queued_turn_count\":0,\"result_index\":0}\n",
+    "stderr_tail": "",
+    "verdict": "fail"
+  },
+  {
+    "case_id": "claude-session-teleporter__tool-only__claude-codex",
+    "layer": "native_load",
+    "method": "Codex app-server thread/read",
+    "exact_transcript_bytes": true,
+    "network": "disabled by outer bubblewrap namespace",
+    "accepted": true,
+    "missing_visible_markers": [],
+    "error": null,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "verdict": "pass",
+    "scope": "CLI file acceptance and visible history; not model request reconstruction or recall"
+  },
+  {
+    "case_id": "claude-session-teleporter__short__codex-claude",
+    "layer": "native_load",
+    "exact_transcript_bytes": true,
+    "cwd_override": "fresh project; native transcript metadata unchanged",
+    "capture": {
+      "request_path": "/v1/messages?beta=true",
+      "item_count": 4,
+      "missing_markers": [],
+      "native_tool_call_present": false,
+      "native_tool_result_present": false,
+      "image_present": false
+    },
+    "timed_out": false,
+    "exit": 1,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "stdout_tail": "{\"duration_api_ms\":0,\"stop_reason\":\"stop_sequence\",\"session_id\":\"145866fe-5433-551e-9af0-95d3a9ec8fc8\",\"total_cost_usd\":0,\"usage\":{\"output_tokens_details\":{\"thinking_tokens\":0},\"input_tokens\":0,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"output_tokens\":0,\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":0,\"ephemeral_5m_input_tokens\":0},\"inference_geo\":\"\",\"iterations\":[],\"speed\":\"standard\",\"fallback_credit\":null},\"modelUsage\":{},\"permission_denials\":[],\"terminal_reason\":\"api_error\",\"fast_mode_state\":\"off\",\"fast_mode_disabled_reason\":\"sdk_opt_in_required\",\"subagent_stats\":{\"spawned\":0,\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"safety_stops\":0,\"is_error\":true,\"num_turns\":1,\"subtype\":\"success\",\"api_error_status\":400,\"result\":\"API Error: 400 Synthetic benchmark stops before model generation\",\"type\":\"result\",\"duration_ms\":28,\"uuid\":\"dbfb190a-ff09-49db-90fc-7f79ec5db9ae\",\"queued_turn_count\":0,\"result_index\":0}\n",
+    "stderr_tail": "",
+    "verdict": "pass"
+  },
+  {
+    "case_id": "claude-session-teleporter__tool-only__codex-claude",
+    "layer": "native_load",
+    "exact_transcript_bytes": true,
+    "cwd_override": "fresh project; native transcript metadata unchanged",
+    "capture": {
+      "request_path": "/v1/messages?beta=true",
+      "item_count": 6,
+      "missing_markers": [],
+      "native_tool_call_present": true,
+      "native_tool_result_present": true,
+      "image_present": false
+    },
+    "timed_out": false,
+    "exit": 1,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "stdout_tail": "{\"duration_api_ms\":0,\"stop_reason\":\"stop_sequence\",\"session_id\":\"78bd99d0-e66e-5acd-b984-4eba402511cc\",\"total_cost_usd\":0,\"usage\":{\"output_tokens_details\":{\"thinking_tokens\":0},\"input_tokens\":0,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"output_tokens\":0,\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":0,\"ephemeral_5m_input_tokens\":0},\"inference_geo\":\"\",\"iterations\":[],\"speed\":\"standard\",\"fallback_credit\":null},\"modelUsage\":{},\"permission_denials\":[],\"terminal_reason\":\"api_error\",\"fast_mode_state\":\"off\",\"fast_mode_disabled_reason\":\"sdk_opt_in_required\",\"subagent_stats\":{\"spawned\":0,\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"safety_stops\":0,\"is_error\":true,\"num_turns\":1,\"subtype\":\"success\",\"api_error_status\":400,\"result\":\"API Error: 400 Synthetic benchmark stops before model generation\",\"type\":\"result\",\"duration_ms\":28,\"uuid\":\"45ff0206-adde-46d1-8792-ffb673bee8f1\",\"queued_turn_count\":0,\"result_index\":0}\n",
+    "stderr_tail": "",
+    "verdict": "pass"
+  },
+  {
+    "case_id": "claude-session-teleporter__image__claude-codex",
+    "layer": "native_load",
+    "method": "Codex app-server thread/read",
+    "exact_transcript_bytes": true,
+    "network": "disabled by outer bubblewrap namespace",
+    "accepted": true,
+    "missing_visible_markers": [],
+    "error": null,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "verdict": "pass",
+    "scope": "CLI file acceptance and visible history; not model request reconstruction or recall"
+  },
+  {
+    "case_id": "claude-session-teleporter__tool-errors__codex-claude",
+    "layer": "native_load",
+    "exact_transcript_bytes": true,
+    "cwd_override": "fresh project; native transcript metadata unchanged",
+    "capture": {
+      "request_path": "/v1/messages?beta=true",
+      "item_count": 8,
+      "missing_markers": [],
+      "native_tool_call_present": true,
+      "native_tool_result_present": true,
+      "image_present": false
+    },
+    "timed_out": false,
+    "exit": 1,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "stdout_tail": "{\"duration_api_ms\":0,\"stop_reason\":\"stop_sequence\",\"session_id\":\"724abd59-f7e0-5a87-a777-e68282337ef1\",\"total_cost_usd\":0,\"usage\":{\"output_tokens_details\":{\"thinking_tokens\":0},\"input_tokens\":0,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"output_tokens\":0,\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":0,\"ephemeral_5m_input_tokens\":0},\"inference_geo\":\"\",\"iterations\":[],\"speed\":\"standard\",\"fallback_credit\":null},\"modelUsage\":{},\"permission_denials\":[],\"terminal_reason\":\"api_error\",\"fast_mode_state\":\"off\",\"fast_mode_disabled_reason\":\"sdk_opt_in_required\",\"subagent_stats\":{\"spawned\":0,\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"safety_stops\":0,\"is_error\":true,\"num_turns\":1,\"subtype\":\"success\",\"api_error_status\":400,\"result\":\"API Error: 400 Synthetic benchmark stops before model generation\",\"type\":\"result\",\"duration_ms\":28,\"uuid\":\"e85217c8-6423-4450-8c8c-38184a2603f6\",\"queued_turn_count\":0,\"result_index\":0}\n",
+    "stderr_tail": "",
+    "verdict": "pass"
+  },
+  {
+    "case_id": "claude-session-teleporter__image__codex-claude",
+    "layer": "native_load",
+    "exact_transcript_bytes": true,
+    "cwd_override": "fresh project; native transcript metadata unchanged",
+    "capture": {
+      "request_path": "/v1/messages?beta=true",
+      "item_count": 6,
+      "missing_markers": [],
+      "native_tool_call_present": false,
+      "native_tool_result_present": false,
+      "image_present": false
+    },
+    "timed_out": false,
+    "exit": 1,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "stdout_tail": "{\"duration_api_ms\":0,\"stop_reason\":\"stop_sequence\",\"session_id\":\"3ef5d450-e635-52cc-8c3e-c55804f3c083\",\"total_cost_usd\":0,\"usage\":{\"output_tokens_details\":{\"thinking_tokens\":0},\"input_tokens\":0,\"cache_creation_input_tokens\":0,\"cache_read_input_tokens\":0,\"output_tokens\":0,\"server_tool_use\":{\"web_search_requests\":0,\"web_fetch_requests\":0},\"service_tier\":\"standard\",\"cache_creation\":{\"ephemeral_1h_input_tokens\":0,\"ephemeral_5m_input_tokens\":0},\"inference_geo\":\"\",\"iterations\":[],\"speed\":\"standard\",\"fallback_credit\":null},\"modelUsage\":{},\"permission_denials\":[],\"terminal_reason\":\"api_error\",\"fast_mode_state\":\"off\",\"fast_mode_disabled_reason\":\"sdk_opt_in_required\",\"subagent_stats\":{\"spawned\":0,\"requested\":{\"background\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"safety_stops\":0,\"is_error\":true,\"num_turns\":1,\"subtype\":\"success\",\"api_error_status\":400,\"result\":\"API Error: 400 Synthetic benchmark stops before model generation\",\"type\":\"result\",\"duration_ms\":27,\"uuid\":\"0e698b27-bdf0-4cda-895b-ef782512429d\",\"queued_turn_count\":0,\"result_index\":0}\n",
+    "stderr_tail": "",
+    "verdict": "fail"
+  },
+  {
+    "case_id": "claude-session-teleporter__tool-errors__claude-codex",
+    "layer": "native_load",
+    "method": "Codex app-server thread/read",
+    "exact_transcript_bytes": true,
+    "network": "disabled by outer bubblewrap namespace",
+    "accepted": true,
+    "missing_visible_markers": [],
+    "error": null,
+    "generation": "not_performed",
+    "model_continuation": "not_tested",
+    "verdict": "pass",
+    "scope": "CLI file acceptance and visible history; not model request reconstruction or recall"
+  }
+]

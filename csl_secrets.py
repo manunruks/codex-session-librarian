@@ -1,5 +1,6 @@
 """Partial local review of readable export text; never scans opaque assets."""
 
+import json
 import re
 import sys
 
@@ -12,6 +13,8 @@ IDENTIFIERS = {"id", "uuid", "parentUuid", "leafUuid", "sessionId", "session_id"
                "tool_use_id", "thread_id", "turn_id", "tool_call_id", "type", "role", "sha256",
                "projection_sha256", "source_sha256"}
 OPAQUE = {"encrypted_content", "signature"}
+CONTENT_BLOCKS = {"text", "Text", "input_text", "output_text", "image", "document",
+                  "input_image", "input_file", "thinking", "redacted_thinking", "tool_use", "tool_result"}
 CREDENTIAL_KEY = re.compile(r"(?:api[_-]?key|password|passwd|access[_-]?token|auth[_-]?token|client[_-]?secret)", re.I)
 PATTERNS = [
     ("private key", re.compile(r"-----BEGIN (?:[A-Z]+ )?PRIVATE KEY-----[\s\S]+?-----END (?:[A-Z]+ )?PRIVATE KEY-----"), 0),
@@ -32,22 +35,55 @@ class SecretReview:
         self.findings = {}
         self.decisions = {}
 
-    def walk(self, value, location, key=None):
-        if key in IDENTIFIERS or key in OPAQUE:
-            return
+    @staticmethod
+    def children(value, scope):
+        """Native metadata identities are distinct from arbitrary tool/reference data."""
+        kind = value.get("type")
+        if scope == "content":
+            scope = "native" if kind in CONTENT_BLOCKS else "data"
+        native = scope == "native"
+        asset = native and kind in ("image", "document", "input_image", "input_file", "base64")
+        for index, (key, child) in enumerate(value.items(), 1):
+            if native and (key in IDENTIFIERS or key in OPAQUE):
+                continue
+            if asset and (key in ("data", "file_data") or
+                          key == "image_url" and isinstance(child, str) and child.startswith("data:")):
+                continue
+            child_scope = scope
+            if native:
+                if kind == "function_call" and key == "arguments":
+                    child_scope = "json-arguments" if isinstance(child, str) else "data"
+                elif ((kind in ("function_call_output", "custom_tool_call_output") and key == "output") or
+                      key == "content" and (kind in ("message", "tool_result") or value.get("role") in ("user", "assistant"))):
+                    child_scope = "content" if isinstance(child, list) else "data"
+                elif ((kind in ("tool_use", "custom_tool_call") and key == "input") or
+                      key in ("toolUseResult", "references", "annotations", "citations")):
+                    child_scope = "data"
+            yield index, key, child, child_scope
+
+    @staticmethod
+    def json_arguments(value):
+        from csl_canonical import strict_json
+        try:
+            return strict_json(value)
+        except (ValueError, RecursionError):
+            # Existing unsupported/malformed native text can still be reviewed;
+            # a requested mutation must not publish newly broken JSON arguments.
+            return None
+
+    def walk(self, value, location, key=None, scope="native"):
         if isinstance(value, dict):
-            # Embedded bytes and data URLs are opaque; ordinary URLs remain readable.
-            opaque_asset = value.get("type") in ("image", "document", "input_image", "input_file", "base64")
-            for index, (child_key, child) in enumerate(value.items(), 1):
-                if opaque_asset and (child_key in ("data", "file_data") or
-                                     child_key == "image_url" and isinstance(child, str) and child.startswith("data:")):
-                    continue
-                # Numeric paths never expose a user-controlled key or filename.
-                yield from self.walk(child, f"{location}.field[{index}]", child_key)
+            for index, child_key, child, child_scope in self.children(value, scope):
+                yield from self.walk(child, f"{location}.field[{index}]", child_key, child_scope)
         elif isinstance(value, list):
             for index, child in enumerate(value):
-                yield from self.walk(child, f"{location}[{index}]")
+                yield from self.walk(child, f"{location}[{index}]", scope=scope)
         elif isinstance(value, str):
+            if scope == "json-arguments":
+                parsed = self.json_arguments(value)
+                if parsed is not None:
+                    yield from self.walk(parsed, location + ".json", scope="data")
+                    return
             yield value, location, key
 
     def scan(self, value, location):
@@ -88,17 +124,23 @@ class SecretReview:
                     raise ValueError("Secret review cancelled; no ZIP was created")
             self.decisions[secret] = action
 
-    def cleaned(self, value, key=None):
-        if key in IDENTIFIERS or key in OPAQUE:
-            return value
+    def cleaned(self, value, key=None, scope="native"):
         if isinstance(value, dict):
-            opaque_asset = value.get("type") in ("image", "document", "input_image", "input_file", "base64")
-            return {name: child if opaque_asset and (name in ("data", "file_data") or
-                                             name == "image_url" and isinstance(child, str) and child.startswith("data:"))
-                    else self.cleaned(child, name) for name, child in value.items()}
+            result = dict(value)
+            for _, name, child, child_scope in self.children(value, scope):
+                result[name] = self.cleaned(child, name, child_scope)
+            return result
         if isinstance(value, list):
-            return [self.cleaned(child) for child in value]
+            return [self.cleaned(child, scope=scope) for child in value]
         if isinstance(value, str):
+            if scope == "json-arguments":
+                parsed = self.json_arguments(value)
+                if parsed is not None:
+                    cleaned = self.cleaned(parsed, scope="data")
+                    return value if cleaned == parsed else json.dumps(cleaned, ensure_ascii=False, allow_nan=False)
+                if any(action == "scrub" and secret in value for secret, action in self.decisions.items()):
+                    raise ValueError("Cannot safely scrub invalid JSON tool arguments; no export published")
+                return value
             # Longest first prevents overlapping detections from partially retaining a key.
             for secret in sorted(self.decisions, key=len, reverse=True):
                 if self.decisions[secret] == "scrub":

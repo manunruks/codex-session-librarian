@@ -118,6 +118,12 @@ def content_stats(events):
     return result
 
 
+def source_policy_message(role, blocks):
+    text = "\n".join(block["text"] for block in blocks if isinstance(block.get("text"), str))
+    return role in ("system", "developer") or (role == "user" and text.startswith(
+        ("<environment_context>", "# AGENTS.md instructions")))
+
+
 def from_codex(path, repair_interrupted=False, history_policy="active"):
     events, context, ignored = [], [], Counter()
     original = read_jsonl(path)
@@ -145,9 +151,7 @@ def from_codex(path, repair_interrupted=False, history_policy="active"):
         if ptype == "message":
             role = payload["role"]
             blocks = text_blocks(codec.restore_spans(payload.get("content", []), transport.get("message")))
-            joined = "\n".join(b["text"] for b in blocks if b["type"] == "text")
-            if role in ("system", "developer") or (role == "user" and joined.startswith(
-                    ("<environment_context>", "# AGENTS.md instructions"))):
+            if source_policy_message(role, blocks):
                 context.append({"role": role, "blocks": blocks})
                 continue
             event.update(role=role, blocks=blocks, phase=payload.get("phase"))
@@ -499,6 +503,8 @@ def restore_codex(data, path, cwd, sid=None):
         def flush():
             nonlocal turn
             if pending:
+                if source_policy_message(event["role"], pending):
+                    raise ValueError("Codex conversion cannot preserve user text with a reserved native policy prefix; no destination written")
                 payload = {"type": "message", "role": event["role"], "content": list(pending)}
                 if event.get("phase"):
                     payload["phase"] = event["phase"]

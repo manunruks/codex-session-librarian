@@ -164,7 +164,8 @@ def download(args, csl):
             print(f"[{index}/{len(entries)}] receiving {entry['share_id']}", flush=True)
             # Defer native discovery until the batch ends, including partial success.
             restored.extend(sharing.receive(SimpleNamespace(share_id=entry["share_id"], cwd=cwd,
-                open=False, new=False, provider="codex", db=args.db, refresh_native_index=False), csl))
+                open=False, new=False, provider="codex", db=args.db, refresh_native_index=False,
+                expected_source_ids=[entry["id"]]), csl))
     finally:
         if restored:
             refresh_native_picker(csl)

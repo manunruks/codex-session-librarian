@@ -1,0 +1,67 @@
+name: Isolated native validation
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: sudo apt-get update && sudo apt-get install -y bubblewrap python3-venv
+      - name: Verify required namespace support on the disposable runner
+        run: |
+          if ! bwrap --unshare-net --ro-bind / / -- /usr/bin/true; then
+            # Ubuntu's hosted-runner AppArmor policy can deny user namespaces.
+            # This changes only this disposable job, never a Vitral host.
+            sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+            bwrap --unshare-net --ro-bind / / -- /usr/bin/true
+          fi
+      - name: Install fixed native CLIs and optional test decoders
+        run: |
+          npm install --prefix "$RUNNER_TEMP/csl-native" @openai/codex@0.166.0 @anthropic-ai/claude-code@2.1.308
+          echo "$RUNNER_TEMP/csl-native/node_modules/.bin" >> "$GITHUB_PATH"
+          # Migration's isolated PATH has no hosted-toolcache Node interpreter.
+          # Expose the installed ELF directly instead of the npm JS wrapper.
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          root = Path(os.environ['RUNNER_TEMP']) / 'csl-native'
+          candidates = []
+          for path in root.rglob('codex'):
+              if path.is_file():
+                  with path.open('rb') as stream:
+                      if stream.read(4) == b'\x7fELF':
+                          candidates.append(path)
+          assert len(candidates) == 1, 'Expected one installed native Codex binary'
+          directory = root / 'native-bin'
+          directory.mkdir()
+          (directory / 'codex').symlink_to(candidates[0])
+          with open(os.environ['GITHUB_PATH'], 'a') as output:
+              output.write(str(directory) + '\n')
+          PY
+          python -m pip install -r media-test-requirements.txt
+          # Keep the optional decoder on the runner's system Python. The hosted
+          # setup-python runtime is not relocatable into the restricted mount set.
+          /usr/bin/python3 -m venv "$RUNNER_TEMP/csl-media"
+          "$RUNNER_TEMP/csl-media/bin/python" -m pip install -r media-test-requirements.txt
+          echo "CSL_MEDIA_PYTHON=$RUNNER_TEMP/csl-media/bin/python" >> "$GITHUB_ENV"
+      - name: Execute synthetic native and migration checks without model generation
+        env:
+          CSL_RUN_CODEX_NATIVE_TESTS: '1'
+          CSL_RUN_CLAUDE_NATIVE_TESTS: '1'
+          CSL_RUN_MIGRATION_E2E_TESTS: '1'
+          CSL_RUN_MEDIA_TESTS: '1'
+          CSL_MEDIA_SANDBOX: required
+        run: |
+          lab=$(mktemp -d)
+          env HOME="$lab" CODEX_HOME="$lab/codex" CLAUDE_CONFIG_DIR="$lab/claude" python -m unittest discover -s tests -v
