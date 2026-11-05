@@ -9,10 +9,10 @@ the actual JSONL history, not just a summary. See the maintained
 
 ## Install
 
-There is no published GitHub Release yet. PR #1 was merged on November 4;
-the additional consolidation fixes are in [PR #6](https://github.com/warevista/codex-session-librarian/pull/6).
-The following commands reproduce the verified development candidate from the
-contributor fork at its tested code commit. This is a snapshot, not a release tag.
+PR #6 was merged into upstream main on November 5. The consolidation fixes are
+included in the verified upstream commit below. There is no published GitHub
+Release yet: CLI version 0.1.0, a main commit and a published release are distinct.
+These commands install the pinned upstream development snapshot, not a release tag.
 
 Requirements: Linux and Python 3.11+. Opening a session also requires its native
 CLI (Codex or Claude Code) installed with your own authentication. Team
@@ -20,9 +20,9 @@ sharing also needs [GitHub CLI](https://cli.github.com/) (`gh`). Local history
 and ZIP transfers use only the Python standard library.
 
 ```bash
-git clone https://github.com/manunruks/codex-session-librarian.git
+git clone https://github.com/warevista/codex-session-librarian.git
 cd codex-session-librarian
-git checkout --detach 7f281af570ae2e1b0ac22f04c00a557e8a3c430e
+git checkout --detach 4c7dee029a4525491307030998b79baa0b25a7e0
 ./install.sh
 ```
 
@@ -42,9 +42,11 @@ cd csl-development
 git pull --ff-only
 ```
 
-The upstream main branch does not include PR #6 until it is merged. Installation
-from an official release tag will replace the candidate instructions only after
+PR #6 is included in upstream main. Installation from an official release tag
+will replace the snapshot instructions only after
 the corresponding [Release](https://github.com/warevista/codex-session-librarian/releases) exists.
+See [compatibility maintenance](docs/COMPATIBILITY_MAINTENANCE.md) for tested versions,
+evidence layers and responsibility for checking format changes.
 
 ## Try A Synthetic Handoff
 

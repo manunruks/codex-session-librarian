@@ -1,10 +1,11 @@
 # Changelog
 
-## 0.1.0 — Consolidation candidate (not published)
+## 0.1.0 — Integrated development snapshot (Release not published)
 
-Prepared 2026-11-05. The initial license/secret-review PR was merged on November 4.
-There is no published GitHub Release at preparation time. This candidate includes
-the subsequent changes below; publication must target the final verified commit.
+Prepared 2026-11-05. The initial license/secret-review PR was merged on November 4;
+consolidation PR #6 was merged on November 5 at
+`4c7dee029a4525491307030998b79baa0b25a7e0`. There is no published GitHub Release
+at verification time. Publication must target the exact selected, verified commit.
 
 - Scope secret-scan identity exclusions to native metadata instead of arbitrary
   tool arguments, and parse embedded JSON arguments before sanitizing them.
