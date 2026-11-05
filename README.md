@@ -9,14 +9,20 @@ the actual JSONL history, not just a summary. See the maintained
 
 ## Install
 
+There is no published GitHub Release yet. PR #1 was merged on November 4;
+the additional consolidation fixes are in [PR #6](https://github.com/warevista/codex-session-librarian/pull/6).
+The following commands reproduce the verified development candidate from the
+contributor fork at its tested code commit. This is a snapshot, not a release tag.
+
 Requirements: Linux and Python 3.11+. Opening a session also requires its native
 CLI (Codex or Claude Code) installed with your own authentication. Team
 sharing also needs [GitHub CLI](https://cli.github.com/) (`gh`). Local history
 and ZIP transfers use only the Python standard library.
 
 ```bash
-git clone https://github.com/warevista/codex-session-librarian.git
+git clone https://github.com/manunruks/codex-session-librarian.git
 cd codex-session-librarian
+git checkout --detach 7f281af570ae2e1b0ac22f04c00a557e8a3c430e
 ./install.sh
 ```
 
@@ -26,8 +32,19 @@ An optional prefix is supported: `./install.sh /usr/local`.
 Run `csl --version` to identify your installed checkout. Release notes and bounded
 compatibility evidence for 0.1.0 are in [CHANGELOG.md](CHANGELOG.md).
 
-Update this checkout with `git pull --ff-only`. The installed launcher follows
-the checkout, so no reinstall is needed.
+Keep the checkout: the installed launcher points to it. A pinned snapshot does
+not update with `git pull`. To follow ongoing upstream development instead:
+
+```bash
+git clone https://github.com/warevista/codex-session-librarian.git csl-development
+cd csl-development
+./install.sh
+git pull --ff-only
+```
+
+The upstream main branch does not include PR #6 until it is merged. Installation
+from an official release tag will replace the candidate instructions only after
+the corresponding [Release](https://github.com/warevista/codex-session-librarian/releases) exists.
 
 ## Try A Synthetic Handoff
 
@@ -49,7 +66,7 @@ Connect once on each computer, using that person's own GitHub account:
 
 ```bash
 gh auth login
-csl team connect warevista/codex-session-exchange
+csl team connect OWNER/PRIVATE-EXCHANGE
 ```
 
 The exchange is **private** and separate from this public code repository.

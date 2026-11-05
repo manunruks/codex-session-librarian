@@ -1,0 +1,509 @@
+{
+  "fixture_only": true,
+  "models": {
+    "codex": "gpt-6.1-sol",
+    "claude": "claude-haiku-5-5"
+  },
+  "calls": [
+    {
+      "case_id": "csl__decisions__claude-codex",
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "status": "pass",
+      "missing_fields": [],
+      "source_unchanged": true,
+      "new_historical_tool_calls": 0,
+      "answer": "{\"current_database\":\"DATABASE-CURRENT-SQLITE\",\"previous_database\":\"DATABASE-OLD-POSTGRES\"}",
+      "exit_code": 0,
+      "usage": {
+        "input_tokens": 10305,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 25,
+        "reasoning_output_tokens": 0
+      },
+      "reported_cost_usd": null,
+      "tool_calls": 0,
+      "timed_out": false,
+      "provider_failure": false,
+      "stderr_excerpt": ""
+    },
+    {
+      "case_id": "csl__tool-errors__claude-codex",
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "status": "pass",
+      "missing_fields": [],
+      "source_unchanged": true,
+      "new_historical_tool_calls": 0,
+      "answer": "{\"first_fact\":\"FIRST-FACT-617\",\"tool_fact\":\"TOOL-ONLY-FACT-947\",\"failure_marker\":\"ERROR-EACCES-722\"}",
+      "exit_code": 0,
+      "usage": {
+        "input_tokens": 8492,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 36,
+        "reasoning_output_tokens": 0
+      },
+      "reported_cost_usd": null,
+      "tool_calls": 0,
+      "timed_out": false,
+      "provider_failure": false,
+      "stderr_excerpt": ""
+    },
+    {
+      "case_id": "session-porter__decisions__claude-codex",
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "status": "pass",
+      "missing_fields": [],
+      "source_unchanged": true,
+      "new_historical_tool_calls": 0,
+      "answer": "{\"current_database\":\"DATABASE-CURRENT-SQLITE\",\"previous_database\":\"DATABASE-OLD-POSTGRES\"}",
+      "exit_code": 0,
+      "usage": {
+        "input_tokens": 10299,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 25,
+        "reasoning_output_tokens": 0
+      },
+      "reported_cost_usd": null,
+      "tool_calls": 0,
+      "timed_out": false,
+      "provider_failure": false,
+      "stderr_excerpt": ""
+    },
+    {
+      "case_id": "session-porter__tool-errors__claude-codex",
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "status": "pass",
+      "missing_fields": [],
+      "source_unchanged": true,
+      "new_historical_tool_calls": 0,
+      "answer": "{\"first_fact\":\"FIRST-FACT-617\",\"tool_fact\":\"TOOL-ONLY-FACT-947\",\"failure_marker\":\"ERROR-EACCES-722\"}",
+      "exit_code": 0,
+      "usage": {
+        "input_tokens": 8500,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 36,
+        "reasoning_output_tokens": 0
+      },
+      "reported_cost_usd": null,
+      "tool_calls": 0,
+      "timed_out": false,
+      "provider_failure": false,
+      "stderr_excerpt": ""
+    },
+    {
+      "case_id": "sessionport__decisions__claude-codex",
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "status": "fail",
+      "missing_fields": [
+        "current_database",
+        "previous_database"
+      ],
+      "source_unchanged": true,
+      "new_historical_tool_calls": 0,
+      "answer": "{\"current_database\":null,\"previous_database\":null}",
+      "exit_code": 0,
+      "usage": {
+        "input_tokens": 9878,
+        "cached_input_tokens": 8192,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 33,
+        "reasoning_output_tokens": 16
+      },
+      "reported_cost_usd": null,
+      "tool_calls": 0,
+      "timed_out": false,
+      "provider_failure": false,
+      "stderr_excerpt": ""
+    },
+    {
+      "case_id": "sessionport__tool-errors__claude-codex",
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "status": "fail",
+      "missing_fields": [
+        "first_fact",
+        "tool_fact",
+        "failure_marker"
+      ],
+      "source_unchanged": true,
+      "new_historical_tool_calls": 0,
+      "answer": "{\"first_fact\":null,\"tool_fact\":null,\"failure_marker\":null}",
+      "exit_code": 0,
+      "usage": {
+        "input_tokens": 9892,
+        "cached_input_tokens": 8192,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 39,
+        "reasoning_output_tokens": 17
+      },
+      "reported_cost_usd": null,
+      "tool_calls": 0,
+      "timed_out": false,
+      "provider_failure": false,
+      "stderr_excerpt": ""
+    },
+    {
+      "case_id": "claude-session-teleporter__decisions__claude-codex",
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "status": "pass",
+      "missing_fields": [],
+      "source_unchanged": true,
+      "new_historical_tool_calls": 0,
+      "answer": "{\"current_database\":\"DATABASE-CURRENT-SQLITE\",\"previous_database\":\"DATABASE-OLD-POSTGRES\"}",
+      "exit_code": 0,
+      "usage": {
+        "input_tokens": 10301,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 25,
+        "reasoning_output_tokens": 0
+      },
+      "reported_cost_usd": null,
+      "tool_calls": 0,
+      "timed_out": false,
+      "provider_failure": false,
+      "stderr_excerpt": ""
+    },
+    {
+      "case_id": "claude-session-teleporter__tool-errors__claude-codex",
+      "provider": "codex",
+      "model": "gpt-6.1-sol",
+      "status": "pass",
+      "missing_fields": [],
+      "source_unchanged": true,
+      "new_historical_tool_calls": 0,
+      "answer": "{\"first_fact\":\"FIRST-FACT-617\",\"tool_fact\":\"TOOL-ONLY-FACT-947\",\"failure_marker\":\"ERROR-EACCES-722\"}",
+      "exit_code": 0,
+      "usage": {
+        "input_tokens": 8496,
+        "cached_input_tokens": 0,
+        "cache_write_input_tokens": 0,
+        "output_tokens": 36,
+        "reasoning_output_tokens": 0
+      },
+      "reported_cost_usd": null,
+      "tool_calls": 0,
+      "timed_out": false,
+      "provider_failure": false,
+      "stderr_excerpt": ""
+    },
+    {
+      "case_id": "csl__decisions__codex-claude",
+      "provider": "claude",
+      "model": "claude-haiku-5-5",
+      "status": "pass",
+      "missing_fields": [],
+      "source_unchanged": true,
+      "new_historical_tool_calls": 0,
+      "answer": "```json\n{\n  \"current_database\": \"DATABASE-CURRENT-SQLITE\",\n  \"previous_database\": \"DATABASE-OLD-POSTGRES\"\n}\n```",
+      "exit_code": 0,
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 2578,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 62,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 2578
+        },
+        "inference_geo": "global",
+        "iterations": [],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "reported_cost_usd": 0.00035365,
+      "tool_calls": 0,
+      "timed_out": false,
+      "provider_failure": false,
+      "stderr_excerpt": ""
+    },
+    {
+      "case_id": "csl__tool-errors__codex-claude",
+      "provider": "claude",
+      "model": "claude-haiku-5-5",
+      "status": "pass",
+      "missing_fields": [],
+      "source_unchanged": true,
+      "new_historical_tool_calls": 0,
+      "answer": "```json\n{\n  \"first_fact\": \"FIRST-FACT-617\",\n  \"tool_fact\": \"TOOL-ONLY-FACT-947\",\n  \"failure_marker\": \"ERROR-EACCES-722\"\n}\n```",
+      "exit_code": 0,
+      "usage": {
+        "input_tokens": 415,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 78,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "reported_cost_usd": 8.05e-05,
+      "tool_calls": 0,
+      "timed_out": false,
+      "provider_failure": false,
+      "stderr_excerpt": ""
+    },
+    {
+      "case_id": "session-porter__decisions__codex-claude",
+      "provider": "claude",
+      "model": "claude-haiku-5-5",
+      "status": "pass",
+      "missing_fields": [],
+      "source_unchanged": true,
+      "new_historical_tool_calls": 0,
+      "answer": "```json\n{\n  \"current_database\": \"DATABASE-CURRENT-SQLITE\",\n  \"previous_database\": \"DATABASE-OLD-POSTGRES\"\n}\n```",
+      "exit_code": 0,
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 2579,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 62,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 2579
+        },
+        "inference_geo": "global",
+        "iterations": [],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "reported_cost_usd": 0.000353775,
+      "tool_calls": 0,
+      "timed_out": false,
+      "provider_failure": false,
+      "stderr_excerpt": ""
+    },
+    {
+      "case_id": "session-porter__tool-errors__codex-claude",
+      "provider": "claude",
+      "model": "claude-haiku-5-5",
+      "status": "pass",
+      "missing_fields": [],
+      "source_unchanged": true,
+      "new_historical_tool_calls": 0,
+      "answer": "```json\n{\n  \"first_fact\": \"FIRST-FACT-617\",\n  \"tool_fact\": \"TOOL-ONLY-FACT-947\",\n  \"failure_marker\": \"ERROR-EACCES-722\"\n}\n```",
+      "exit_code": 0,
+      "usage": {
+        "input_tokens": 412,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 218,
+        "output_tokens_details": {
+          "thinking_tokens": 140
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "reported_cost_usd": 0.00015020000000000002,
+      "tool_calls": 0,
+      "timed_out": false,
+      "provider_failure": false,
+      "stderr_excerpt": ""
+    },
+    {
+      "case_id": "sessionport__decisions__codex-claude",
+      "provider": "claude",
+      "model": "claude-haiku-5-5",
+      "status": "pass",
+      "missing_fields": [],
+      "source_unchanged": true,
+      "new_historical_tool_calls": 0,
+      "answer": "```json\n{\n  \"current_database\": \"DATABASE-CURRENT-SQLITE\",\n  \"previous_database\": \"DATABASE-OLD-POSTGRES\"\n}\n```",
+      "exit_code": 0,
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 2579,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 62,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 2579
+        },
+        "inference_geo": "global",
+        "iterations": [],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "reported_cost_usd": 0.000353775,
+      "tool_calls": 0,
+      "timed_out": false,
+      "provider_failure": false,
+      "stderr_excerpt": ""
+    },
+    {
+      "case_id": "sessionport__tool-errors__codex-claude",
+      "provider": "claude",
+      "model": "claude-haiku-5-5",
+      "status": "fail",
+      "missing_fields": [
+        "first_fact",
+        "tool_fact",
+        "failure_marker"
+      ],
+      "source_unchanged": true,
+      "new_historical_tool_calls": 0,
+      "answer": "```json\n{\n  \"first_fact\": \"FIRST-FACT-617\",\n  \"tool_fact\": null,\n  \"failure_marker\": null\n}\n```\n\nThe imported history contains the fact code FIRST-FACT-617, but it doesn't include the output of the first lookup or the error marker from the second. My earlier reply said the lookup completed and the second call failed, but neither result appears in the history, so I've set those values to null.",
+      "exit_code": 0,
+      "usage": {
+        "input_tokens": 254,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 320,
+        "output_tokens_details": {
+          "thinking_tokens": 184
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "reported_cost_usd": 0.0001854,
+      "tool_calls": 0,
+      "timed_out": false,
+      "provider_failure": false,
+      "stderr_excerpt": ""
+    },
+    {
+      "case_id": "claude-session-teleporter__decisions__codex-claude",
+      "provider": "claude",
+      "model": "claude-haiku-5-5",
+      "status": "pass",
+      "missing_fields": [],
+      "source_unchanged": true,
+      "new_historical_tool_calls": 0,
+      "answer": "```json\n{\n  \"current_database\": \"DATABASE-CURRENT-SQLITE\",\n  \"previous_database\": \"DATABASE-OLD-POSTGRES\"\n}\n```",
+      "exit_code": 0,
+      "usage": {
+        "input_tokens": 4,
+        "cache_creation_input_tokens": 2580,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 62,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 2580
+        },
+        "inference_geo": "global",
+        "iterations": [],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "reported_cost_usd": 0.0003539,
+      "tool_calls": 0,
+      "timed_out": false,
+      "provider_failure": false,
+      "stderr_excerpt": ""
+    },
+    {
+      "case_id": "claude-session-teleporter__tool-errors__codex-claude",
+      "provider": "claude",
+      "model": "claude-haiku-5-5",
+      "status": "pass",
+      "missing_fields": [],
+      "source_unchanged": true,
+      "new_historical_tool_calls": 0,
+      "answer": "```json\n{\n  \"first_fact\": \"FIRST-FACT-617\",\n  \"tool_fact\": \"TOOL-ONLY-FACT-947\",\n  \"failure_marker\": \"ERROR-EACCES-722\"\n}\n```",
+      "exit_code": 0,
+      "usage": {
+        "input_tokens": 414,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "output_tokens": 78,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "server_tool_use": {
+          "web_search_requests": 0,
+          "web_fetch_requests": 0
+        },
+        "service_tier": "standard",
+        "cache_creation": {
+          "ephemeral_1h_input_tokens": 0,
+          "ephemeral_5m_input_tokens": 0
+        },
+        "inference_geo": "global",
+        "iterations": [],
+        "speed": "standard",
+        "fallback_credit": null
+      },
+      "reported_cost_usd": 8.04e-05,
+      "tool_calls": 0,
+      "timed_out": false,
+      "provider_failure": false,
+      "stderr_excerpt": ""
+    }
+  ],
+  "limits": "Resume only unattempted cases; no automatic retries of failed cases"
+}

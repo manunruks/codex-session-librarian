@@ -1,0 +1,12 @@
+{
+  "adjudicated-results.json": "67b0d7f30aee4c85646630661bcc9320159c675dc9277f3bb1adefa1201f412d",
+  "artifacts.json.gz": "d563b644a548050c9d6c11a375927ccca2c09768aaba049f0357cf396adfd7e2",
+  "clean-validation.json": "43b928ec8b8b8cd80f43ab019ae75c43e7a39ec4b6f9e6d771e90f322b842e8e",
+  "library-baseline.json": "d7c1accb8265784853611db4972fee7d3dfa2bed3c2eff0263afd1d1756ff40c",
+  "library-final.json": "41ff4ad3fe981e94c113211ab30405c081518179569a182e14d77354410ab6dd",
+  "live-results.json": "b2330cd3b23dac91c3d5b125ded2dec7c85d1582e7033440cc95ff782bce0c5d",
+  "native-results.json": "b5f20a86ef243dac13dd44826eec5cb509bc3a28d337016933516affeae590c2",
+  "registry-installation.json": "2aaf92af1fca1ccd895dc013ce3c0acce45e1bb15c19bbd71e8d9ed382889a8a",
+  "results.json": "32437c48c09e96e058d71d39ec83230f55f24d98a4bcd233548f53397cfa6ba6",
+  "timing-summary.json": "62b5e352211f56020d4867073d35170b06593c91017573e9fe89df1071c819d3"
+}
