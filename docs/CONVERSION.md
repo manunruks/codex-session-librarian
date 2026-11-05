@@ -168,6 +168,36 @@ opened UI alone is never reported as proof that the next model turn will work.
 
 ## Verification
 
+### Historical tools in Codex's visible history
+
+Conversion through canonical v2 to Codex now includes display-only tool events,
+tested with Codex 0.166.0 on Linux. The CLI shows these under the deliberately
+named `csl_imported_history` server: **this is a historical display adapter, not
+an installed MCP server or an execution of the imported call**. CSL registers no
+server, tool, permission or credential. Names, JSON/custom-text arguments, call
+IDs, textual results and error flags come from the source history. Parallel calls
+retain their individual correlations. Canonical/model history remains in the
+native `response_item` records; display events do not become additional messages.
+
+Codex's MCP-shaped display requires a duration field; **its displayed zero is an
+unknown-duration placeholder, not a measured latency**. Each projected JSONL event
+records its historical-only provenance, and end events record the duration caveat.
+Omitting/nulling that field caused 0.166.0 to omit the tool items in isolated tests.
+Non-text result blocks get an explicit display placeholder while their native
+content remains preserved. This projection does not claim to render image/PDF
+tool results faithfully. References and phases remain in canonical/native history.
+
+Unknown canonical blocks, orphan results and unfinished calls still reject before
+destination publication; CSL invents neither results nor completion. Repeated
+same-CLI imports or canonical conversion do not accumulate display projections.
+Secret review includes duplicated display arguments, including business fields
+named `id` or `signature`; review remains partial overall.
+
+The change applies when creating Codex history **through canonical conversion**.
+It does not retrofit arbitrary existing Codex histories, modern native tool item
+types or every native clone/import path. Readable UI history is not a new proof
+of model continuation; the existing model benchmark is separate.
+
 ```bash
 python3 -m unittest discover -s tests -q
 CSL_RUN_CODEX_NATIVE_TESTS=1 CSL_RUN_CLAUDE_NATIVE_TESTS=1 python3 -m unittest discover -s tests -q

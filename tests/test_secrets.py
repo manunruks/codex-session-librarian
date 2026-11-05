@@ -242,6 +242,8 @@ class SecretExportTests(unittest.TestCase):
         for row in rows:
             if row.get('payload', {}).get('type') == 'function_call':
                 row['payload']['arguments'] = '{}'
+            if row.get('csl_display_projection', {}).get('kind') == 'historical_tool':
+                row['payload']['invocation']['arguments'] = {}
         source.write_text(''.join(json.dumps(row)+'\n' for row in rows))
         for quiet in (False, True):
             with self.subTest(quiet=quiet):

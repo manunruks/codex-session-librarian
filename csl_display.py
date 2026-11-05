@@ -5,6 +5,36 @@ import hashlib
 import json
 
 
+def historical_tool_event(block, call, turn_id, timestamp):
+    """Display-only MCP-shaped history; never a registered or executable tool.
+
+    Codex 0.166.0 drops MCP end events without a numeric duration. Zero is a
+    renderer placeholder, not measured runtime; provenance makes this explicit.
+    Native response items remain the sole canonical/model-history representation.
+    """
+    invocation = {"server": "csl_imported_history", "tool": call["name"],
+                  "arguments": call["arguments"]}
+    payload = {"type": "mcp_tool_call_begin", "call_id": call["call_id"],
+               "turn_id": turn_id or "", "invocation": invocation}
+    metadata = {"kind": "historical_tool", "history_only": True,
+                "argument_format": call["argument_format"]}
+    if block["type"] == "tool_result":
+        content = []
+        for part in block["content"]:
+            if part["type"] == "text":
+                content.append({"type": "text", "text": part["text"]})
+            else:
+                # Native content/bytes stay in response_item, not a fake text
+                # reconstruction or an attempted external fetch by the renderer.
+                content.append({"type": "text", "text":
+                    "[Historical " + part["type"] + " retained in native tool result; not rendered here]"})
+        payload.update(type="mcp_tool_call_end", duration={"secs": 0, "nanos": 0},
+                       result={"Ok": {"content": content, "isError": block["is_error"]}})
+        metadata["duration"] = "unknown; zero required by native display schema"
+    return {"type": "event_msg", "timestamp": timestamp, "payload": payload,
+            "csl_display_projection": metadata}
+
+
 def message_event(record, allowed_threads):
     payload = record.get("payload", {})
     if record.get("type") != "event_msg" or payload.get("type") != "item_completed":

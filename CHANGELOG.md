@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+- Project supported completed historical tool calls/results into Codex 0.166.0's
+  visible history during canonical conversion, with explicit
+  `csl_imported_history` labeling, preserved correlation/errors, and documented
+  unknown-duration display placeholders. Native model history remains unchanged.
+- Review/scrub duplicated historical display arguments as business data so native
+  metadata exclusions cannot leave sensitive `id`/`signature` values behind.
+- Add frozen benchmark regressions, repeated-import/roundtrip checks and isolated
+  native visibility assertions. This correction is not in the published v0.1.0 tag.
+
 ## 0.1.0 — Consolidated version
 
 Prepared 2026-11-05. The initial license/secret-review PR was merged on November 4;
