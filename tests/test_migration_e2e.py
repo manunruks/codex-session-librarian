@@ -113,7 +113,12 @@ class MigrationE2ETests(unittest.TestCase):
 
     def upload(self, **extra):
         result = self.cli("old", "migrate", "upload", extra=extra or None)
-        return re.search(r"migration: (csl-migration-[0-9a-f]+)", result.stdout).group(1)
+        tag = re.search(r"migration: (csl-migration-[0-9a-f]+)", result.stdout).group(1)
+        self.assertIn(f"Migration upload complete: {tag}", result.stdout)
+        self.assertEqual(result.stdout.count(f"csl migrate download {tag}"), 1)
+        self.assertNotIn("recipient:", result.stdout)
+        self.assertNotIn("/path/to/project", result.stdout)
+        return tag
 
     def download(self, tag, **kwargs):
         return self.cli("new", "migrate", "download", tag, "--cwd", self.machines["new"]["project"], **kwargs)

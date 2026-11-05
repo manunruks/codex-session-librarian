@@ -20,6 +20,10 @@ not inferred from this heading. Publication must target the exact selected, veri
 - Add a manual, model-free native-validation workflow with fixed CLI versions,
   explicit migration opt-in and required media sandboxing.
 
+- Clarify batch-upload completion: suppress per-session recipient instructions
+  and print one whole-migration restore command with the completed session count
+  and current-folder guidance, without a placeholder project path.
+
 - Explicit `--repair-legacy-compaction` recovery for old Codex portable copies
   with one orphaned final summary annotation. Pending migration exports can
   recover without resending completed shares; source files and readable turns

@@ -83,7 +83,7 @@ def upload(args, csl):
         try:
             entry["share_id"] = sharing.share(SimpleNamespace(sessions=[str(source)], title=None,
                 raw=args.raw, db=args.db, provider="codex", allow_secrets=args.allow_secrets,
-                scrub_secrets=args.scrub_secrets, repair_legacy_compaction=recovery), csl)
+                scrub_secrets=args.scrub_secrets, repair_legacy_compaction=recovery, migration_batch=True), csl)
             entry["sha256"] = digest
             sharing.save_json(local, state)
             if sharing.file_sha256(source) != digest:
@@ -121,7 +121,12 @@ def upload(args, csl):
                 print("Confirmed the identical migration index is already published.")
         state["complete"] = True
         sharing.save_json(local, state)
-    print(f"On the new computer: csl migrate download {tag} --cwd /path/to/project")
+    print(f"Migration upload complete: {tag}")
+    print(f"Conversations uploaded: {len(state['sessions'])}/{len(state['sessions'])}")
+    print("On the NEW computer, open a terminal in the folder where Codex should work, then run:")
+    print(f"csl team connect {repo}")
+    print(f"csl migrate download {tag}")
+    print("Restore uses the current folder; --cwd can select another existing folder.")
     return tag
 
 

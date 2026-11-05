@@ -119,6 +119,30 @@ class MigrationTests(unittest.TestCase):
         self.assertEqual(self.h.releases, {})
         self.assertFalse((self.h.home / "csl-migrations").exists())
 
+    def test_batch_completion_prints_only_whole_migration_instructions(self):
+        tag = self.command("upload")
+        output = self.h.output.getvalue()
+        self.assertIn(f"Migration upload complete: {tag}", output)
+        self.assertIn("Conversations uploaded: 2/2", output)
+        self.assertIn("NEW computer", output)
+        self.assertIn("csl team connect team/private-exchange", output)
+        self.assertEqual(output.count(f"csl migrate download {tag}"), 1)
+        self.assertNotIn("recipient:", output)
+        self.assertNotIn("csl receive ", output)
+        self.assertNotIn("/path/to/project", output)
+        self.assertNotIn("--open", output)
+        self.assertIn("shared: csl-", output)
+        self.assertIn("[1/2]", output)
+
+    def test_repeat_upload_still_prints_one_complete_restore_command(self):
+        tag = self.command("upload")
+        self.command("upload", "--resume", tag)
+        output = self.h.output.getvalue()
+        self.assertIn("Migration upload complete:", output)
+        self.assertEqual(output.count(f"csl migrate download {tag}"), 1)
+        self.assertNotIn("recipient:", output)
+        self.assertEqual(len(self.h.releases), 2)
+
     def test_failed_upload_can_resume_without_resharing_successes(self):
         original = sharing.share
         count = 0
@@ -131,6 +155,7 @@ class MigrationTests(unittest.TestCase):
         with patch.object(sharing, "share", side_effect=flaky):
             with self.assertRaises(SystemExit):
                 self.command("upload")
+        self.assertNotIn("Migration upload complete:", self.h.output.getvalue())
         state = json.loads(next((self.h.home / "csl-migrations").glob("*.json")).read_text())
         self.assertFalse(state["complete"])
         self.assertEqual(len(self.h.releases), 1)
