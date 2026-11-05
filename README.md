@@ -10,14 +10,26 @@ the actual JSONL history, not just a summary. See the maintained
 ## Install
 
 PR #6 was merged into upstream main on November 5. The consolidation fixes are
-included in the verified upstream commit below. There is no published GitHub
-Release yet: CLI version 0.1.0, a main commit and a published release are distinct.
-These commands install the pinned upstream development snapshot, not a release tag.
+included in the verified upstream snapshot below. CLI version 0.1.0, a main commit
+and a published release are distinct: [GitHub Releases](https://github.com/warevista/codex-session-librarian/releases)
+is the source of truth for published tags and dates.
 
 Requirements: Linux and Python 3.11+. Opening a session also requires its native
 CLI (Codex or Claude Code) installed with your own authentication. Team
 sharing also needs [GitHub CLI](https://cli.github.com/) (`gh`). Local history
 and ZIP transfers use only the Python standard library.
+
+For an official version, first confirm that its Release/tag exists. Only after
+`v0.1.0` appears there, install that tag with:
+
+```bash
+git clone --branch v0.1.0 https://github.com/warevista/codex-session-librarian.git
+cd codex-session-librarian
+./install.sh
+```
+
+For repeatable verification before publication, or to reproduce the integrated
+development snapshot, use this exact commit instead (not a release tag):
 
 ```bash
 git clone https://github.com/warevista/codex-session-librarian.git
@@ -42,9 +54,8 @@ cd csl-development
 git pull --ff-only
 ```
 
-PR #6 is included in upstream main. Installation from an official release tag
-will replace the snapshot instructions only after
-the corresponding [Release](https://github.com/warevista/codex-session-librarian/releases) exists.
+PR #6 is included in upstream main. A successful snapshot installation is not
+verification of an official Release; record the actual tag/SHA you installed.
 See [compatibility maintenance](docs/COMPATIBILITY_MAINTENANCE.md) for tested versions,
 evidence layers and responsibility for checking format changes.
 

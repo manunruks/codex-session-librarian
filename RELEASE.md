@@ -1,6 +1,8 @@
 # Release operation
 
-Prepared version: **0.1.0**, not yet published. PR #6 is merged at
+Prepared version: **0.1.0**. Publication status is recorded in
+[GitHub Releases](https://github.com/warevista/codex-session-librarian/releases);
+this preparation document does not establish that a tag or Release exists. PR #6 is merged at
 `4c7dee029a4525491307030998b79baa0b25a7e0`, including migration, picker discovery
 and focused audit fixes. The five runtime modules match the reviewed corrections;
 253 tests, isolated installation and offline demo passed on this upstream commit.

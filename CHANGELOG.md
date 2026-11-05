@@ -1,11 +1,12 @@
 # Changelog
 
-## 0.1.0 — Integrated development snapshot (Release not published)
+## 0.1.0 — Consolidated version
 
 Prepared 2026-11-05. The initial license/secret-review PR was merged on November 4;
 consolidation PR #6 was merged on November 5 at
-`4c7dee029a4525491307030998b79baa0b25a7e0`. There is no published GitHub Release
-at verification time. Publication must target the exact selected, verified commit.
+`4c7dee029a4525491307030998b79baa0b25a7e0`. Publication tags and dates are recorded
+in [GitHub Releases](https://github.com/warevista/codex-session-librarian/releases),
+not inferred from this heading. Publication must target the exact selected, verified commit.
 
 - Scope secret-scan identity exclusions to native metadata instead of arbitrary
   tool arguments, and parse embedded JSON arguments before sanitizing them.
