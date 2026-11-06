@@ -11,9 +11,10 @@
 - Add frozen benchmark regressions, repeated-import/roundtrip checks and isolated
   native visibility assertions. This correction is not in the published v0.1.0 tag.
 
-## 0.1.0 — Consolidated version
+## 0.1.0 — Published 2026-11-05
 
-Prepared 2026-11-05. The initial license/secret-review PR was merged on November 4;
+Published as tag `v0.1.0` at `edd05bb20eb145dea6178d548f1363b9516102af`;
+253-test runtime validation record. The initial license/secret-review PR was merged on November 4;
 consolidation PR #6 was merged on November 5 at
 `4c7dee029a4525491307030998b79baa0b25a7e0`. Publication tags and dates are recorded
 in [GitHub Releases](https://github.com/vitral-ai/codex-session-librarian/releases),

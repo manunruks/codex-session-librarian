@@ -9,18 +9,9 @@ the actual JSONL history, not just a summary. See the maintained
 
 ## Install
 
-PR #6 was merged into upstream main on November 5. The consolidation fixes are
-included in the verified upstream snapshot below. CLI version 0.1.0, a main commit
-and a published release are distinct: [GitHub Releases](https://github.com/vitral-ai/codex-session-librarian/releases)
-is the source of truth for published tags and dates.
-
-Requirements: Linux and Python 3.11+. Opening a session also requires its native
-CLI (Codex or Claude Code) installed with your own authentication. Team
-sharing also needs [GitHub CLI](https://cli.github.com/) (`gh`). Local history
-and ZIP transfers use only the Python standard library.
-
-For an official version, first confirm that its Release/tag exists. Only after
-`v0.1.0` appears there, install that tag with:
+**Published version: [v0.1.0](https://github.com/vitral-ai/codex-session-librarian/releases/tag/v0.1.0)**,
+commit `edd05bb20eb145dea6178d548f1363b9516102af`, released November 5, 2026.
+Its runtime validation record contains 253 tests. Install this fixed version with:
 
 ```bash
 git clone --branch v0.1.0 https://github.com/vitral-ai/codex-session-librarian.git
@@ -28,24 +19,27 @@ cd codex-session-librarian
 ./install.sh
 ```
 
-For repeatable verification before publication, or to reproduce the integrated
-development snapshot, use this exact commit instead (not a release tag):
+Requirements: Linux and Python 3.11+. Make sure `~/.local/bin` is on `PATH`.
+No virtualenv or pip install is needed for the core CLI. An optional prefix is
+supported: `./install.sh /usr/local`. Keep the checkout: the installed launcher
+points to it. Opening a model session also requires its native CLI and your own
+authentication. Optional team exchange needs GitHub CLI; local library/ZIP
+operations do not require an account or paid model calls.
 
-```bash
-git clone https://github.com/vitral-ai/codex-session-librarian.git
-cd codex-session-librarian
-git checkout --detach 4c7dee029a4525491307030998b79baa0b25a7e0
-./install.sh
-```
+Check `git rev-parse HEAD` and `csl --version` after installation. The version
+string alone does not identify a development checkout's commit.
 
-Make sure `~/.local/bin` is on `PATH`. No virtualenv or pip install is needed.
-An optional prefix is supported: `./install.sh /usr/local`.
+### Development versus the published release
 
-Run `csl --version` to identify your installed checkout. Release notes and bounded
-compatibility evidence for 0.1.0 are in [CHANGELOG.md](CHANGELOG.md).
+`main` includes the later issue #7 historical-tool display correction and its
+additional secret-review coverage. These changes are **Unreleased and absent
+from v0.1.0**. The expanded 260-test validation belongs to the later PR #9 head;
+it does not replace the released version's 253-test record. See
+[tool-display validation](docs/TOOL_DISPLAY_VALIDATION.md),
+[CHANGELOG](CHANGELOG.md), and [compatibility evidence](docs/COMPATIBILITY_MAINTENANCE.md).
+Human pilot comparisons use the fixed v0.1.0 tag, not main.
 
-Keep the checkout: the installed launcher points to it. A pinned snapshot does
-not update with `git pull`. To follow ongoing upstream development instead:
+To follow development in a separate checkout:
 
 ```bash
 git clone https://github.com/vitral-ai/codex-session-librarian.git csl-development
@@ -54,10 +48,8 @@ cd csl-development
 git pull --ff-only
 ```
 
-PR #6 is included in upstream main. A successful snapshot installation is not
-verification of an official Release; record the actual tag/SHA you installed.
-See [compatibility maintenance](docs/COMPATIBILITY_MAINTENANCE.md) for tested versions,
-evidence layers and responsibility for checking format changes.
+Record the exact SHA when testing development. Do not run `git pull` in the
+pinned release checkout to update it or silently replace a participant's version.
 
 ## Try A Synthetic Handoff
 
@@ -226,6 +218,12 @@ Messages and tool history are preserved; originals are never changed.
 See [portable transfers](docs/TRANSFERS.md).
 
 ## Find And Reopen A Conversation
+
+Search covers indexed messages and selected commands, files, patches and commit
+evidence. Preserving a tool result does not mean every arbitrary result is
+full-text indexed. For unindexed evidence, inspect the located source history or
+use the documented [canonical JSON export](docs/CONVERSION.md); do not interpret
+a missing search hit as proof that the history was lost.
 
 ```bash
 csl index --prune
