@@ -219,11 +219,16 @@ See [portable transfers](docs/TRANSFERS.md).
 
 ## Find And Reopen A Conversation
 
-Search covers indexed messages and selected commands, files, patches and commit
-evidence. Preserving a tool result does not mean every arbitrary result is
-full-text indexed. For unindexed evidence, inspect the located source history or
-use the documented [canonical JSON export](docs/CONVERSION.md); do not interpret
-a missing search hit as proof that the history was lost.
+Published v0.1.0 indexes messages and selected commands, files, patches and commit
+evidence. On main (**Unreleased**), readable function/custom tool results are also
+indexed and included by default in `recall`, with source lines and call IDs.
+After updating development code, run `csl index`: unchanged files from older
+indexes are refreshed once, preserving annotations. `--turns-only` keeps a
+message-only query; `--type tool_result` restricts evidence to tool results.
+Opaque/media blocks are not converted into searchable text. For unindexed
+content, inspect the located source or use [canonical JSON export](docs/CONVERSION.md).
+The private local index can contain sensitive history, including tool text; it
+is not a sanitized export. Index/SQLite sidecars are restricted to owner access.
 
 ```bash
 csl index --prune

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Index readable function/custom tool results and include them in default recall,
+  with historical call IDs/source lines and matching excerpts in long results.
+  Refresh older cached indexes once without losing annotations. Keep derived
+  SQLite data/sidecars private; do not execute historical calls or decode opaque
+  content. This correction is not included in v0.1.0.
+
 - Project supported completed historical tool calls/results into Codex 0.166.0's
   visible history during canonical conversion, with explicit
   `csl_imported_history` labeling, preserved correlation/errors, and documented
