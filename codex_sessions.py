@@ -27,6 +27,7 @@ DEFAULT_SESSIONS_DIR = DEFAULT_CODEX_HOME / "sessions"
 DEFAULT_DB = DEFAULT_CODEX_HOME / "session_librarian.sqlite"
 DEFAULT_SESSION_INDEX = DEFAULT_CODEX_HOME / "session_index.jsonl"
 DEFAULT_CUTS_DIR = DEFAULT_CODEX_HOME / "session_cuts"
+INDEX_REVISION = 1
 
 STOPWORDS = {
     "about",
@@ -164,7 +165,13 @@ def load_thread_names(index_path: Path) -> dict[str, dict[str, str]]:
 
 
 def init_db(db_path: Path) -> sqlite3.Connection:
-    db_path.parent.mkdir(parents=True, exist_ok=True)
+    db_path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+    # The derived index includes private history text, now including tool output.
+    fd = os.open(db_path, os.O_CREAT | os.O_RDWR, 0o600)
+    try:
+        os.fchmod(fd, 0o600)
+    finally:
+        os.close(fd)
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     conn.executescript(
@@ -196,6 +203,7 @@ def init_db(db_path: Path) -> sqlite3.Connection:
             json_errors INTEGER NOT NULL DEFAULT 0,
             size_bytes INTEGER NOT NULL,
             mtime_ns INTEGER NOT NULL,
+            index_revision INTEGER NOT NULL DEFAULT 0,
             indexed_at TEXT NOT NULL
         );
 
@@ -225,6 +233,11 @@ def init_db(db_path: Path) -> sqlite3.Connection:
         CREATE INDEX IF NOT EXISTS idx_hits_text ON session_hits(text);
         """
     )
+    for suffix in ("-wal", "-shm"):
+        try:
+            Path(str(db_path) + suffix).chmod(0o600)
+        except FileNotFoundError:
+            pass
     existing_columns = {
         row["name"] for row in conn.execute("PRAGMA table_info(sessions)").fetchall()
     }
@@ -233,6 +246,7 @@ def init_db(db_path: Path) -> sqlite3.Connection:
         "llm_tags": "TEXT",
         "notes": "TEXT",
         "summarized_at": "TEXT",
+        "index_revision": "INTEGER NOT NULL DEFAULT 0",
     }.items():
         if column not in existing_columns:
             try:
@@ -402,6 +416,17 @@ def make_summary(thread_name: str, first_user: str, tags: list[str], project: st
     return summary
 
 
+def readable_tool_result(value: Any) -> str:
+    """Index native readable text, never serialize opaque/media objects as text."""
+    if isinstance(value, str):
+        return value
+    if isinstance(value, list):
+        return "\n".join(block["text"] for block in value
+            if isinstance(block, dict) and block.get("type") in ("text", "input_text", "output_text")
+            and isinstance(block.get("text"), str))
+    return ""
+
+
 def parse_session(path: Path, thread_names: dict[str, dict[str, str]]) -> dict[str, Any]:
     stat = path.stat()
     session_id = ""
@@ -516,8 +541,11 @@ def parse_session(path: Path, thread_names: dict[str, dict[str, str]]) -> dict[s
                         )
                 continue
 
-            if payload_type == "function_call_output":
-                output = str(payload.get("output") or "")
+            if kind == "response_item" and payload_type in ("function_call_output", "custom_tool_call_output"):
+                output = readable_tool_result(payload.get("output"))
+                add_hit(hits, hit_type="tool_result", role="tool", line_no=line_count,
+                    text=output, detail="call_id=" + str(payload.get("call_id") or "unknown"),
+                    created_at=timestamp)
                 for created_commit in extract_created_commits(output):
                     add_hit(
                         hits,
@@ -646,6 +674,7 @@ def parse_session(path: Path, thread_names: dict[str, dict[str, str]]) -> dict[s
         "json_errors": json_errors,
         "size_bytes": stat.st_size,
         "mtime_ns": stat.st_mtime_ns,
+        "index_revision": INDEX_REVISION,
         "indexed_at": utc_now(),
         "_hits": hits,
     }
@@ -767,6 +796,7 @@ def hit_weight(hit_type: str) -> int:
         "file": 36,
         "command": 30,
         "assistant_final": 24,
+        "tool_result": 20,
         "assistant_turn": 14,
         "user_turn": 14,
         "assistant_event": 8,
@@ -834,6 +864,21 @@ def recall_terms(query: list[str]) -> tuple[str, list[str]]:
     return raw, deduped
 
 
+def tool_result_excerpt(text: str, terms: list[str], width: int) -> str:
+    """Show matching evidence beyond the prefix of a long historical output."""
+    cleaned = re.sub(r"\s+", " ", text).strip()
+    lowered = cleaned.lower()
+    matches = [(len(term), lowered.find(term.lower())) for term in terms
+               if term.lower() in lowered]
+    if not matches or len(cleaned) <= width:
+        return one_line(cleaned, width)
+    position = max(matches)[1]
+    size = max(width, 20)
+    start = max(0, position - size // 4)
+    end = min(len(cleaned), start + size - 6)
+    return ("..." if start else "") + cleaned[start:end] + ("..." if end < len(cleaned) else "")
+
+
 def recall_sessions(args: argparse.Namespace) -> None:
     conn = init_db(args.db.expanduser())
     raw_query, terms = recall_terms(args.query)
@@ -845,7 +890,7 @@ def recall_sessions(args: argparse.Namespace) -> None:
 
     types = hit_type_filter(args)
     if not types and not args.all_types:
-        types = ["user_turn", "assistant_turn", "assistant_final"]
+        types = ["user_turn", "assistant_turn", "assistant_final", "tool_result"]
 
     where = []
     params: list[Any] = []
@@ -987,7 +1032,12 @@ def recall_sessions(args: argparse.Namespace) -> None:
             if hit["line_no"] is not None:
                 location.append(f"line {hit['line_no']}")
             suffix = f" ({', '.join(location)})" if location else ""
-            print(f"    [{hit['hit_type']}]{suffix} {one_line(hit['text'], args.width)}")
+            if hit["hit_type"] == "tool_result":
+                correlation = one_line(hit["detail"] or "", 120)
+                excerpt = tool_result_excerpt(hit["text"], match_terms, args.width)
+                print(f"    [tool_result]{suffix} {correlation}: {excerpt}")
+            else:
+                print(f"    [{hit['hit_type']}]{suffix} {one_line(hit['text'], args.width)}")
         print()
         shown += 1
 
@@ -1107,10 +1157,11 @@ def index_sessions(args: argparse.Namespace) -> None:
         stat = path.stat()
         indexed_paths.add(str(path))
         current = conn.execute(
-            "SELECT size_bytes, mtime_ns FROM sessions WHERE path = ?",
+            "SELECT size_bytes, mtime_ns, index_revision FROM sessions WHERE path = ?",
             (str(path),),
         ).fetchone()
-        if current and not args.force and current["size_bytes"] == stat.st_size and current["mtime_ns"] == stat.st_mtime_ns:
+        if (current and not args.force and current["index_revision"] == INDEX_REVISION
+                and current["size_bytes"] == stat.st_size and current["mtime_ns"] == stat.st_mtime_ns):
             skipped += 1
             continue
         try:
@@ -2857,7 +2908,7 @@ def build_parser() -> argparse.ArgumentParser:
             "--type",
             dest="hit_type",
             action="append",
-            choices=["user_turn", "assistant_turn", "assistant_final", "command", "commit", "commit_created", "patch", "file"],
+            choices=["user_turn", "assistant_turn", "assistant_final", "tool_result", "command", "commit", "commit_created", "patch", "file"],
             help="Restrict evidence search to one hit type. May be repeated.",
         )
         p.add_argument("--show-hits", action="store_true", help="Print matching evidence snippets.")
@@ -2937,7 +2988,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_recall.add_argument("--scan-limit", type=int, default=20000, help="Maximum indexed evidence rows to scan.")
     p_recall.add_argument("--project")
     p_recall.add_argument("--include-inherited", action="store_true", help="Include evidence inherited from fork ancestors.")
-    p_recall.add_argument("--turns-only", action="store_true", help="Search only real user/assistant turns. This is the default when no type flags are provided.")
+    p_recall.add_argument("--turns-only", action="store_true", help="Search only user/assistant turns; exclude historical tool results included by default.")
     p_recall.add_argument("--artifacts", action="store_true", help="Search only commands, commits, patches, and files.")
     p_recall.add_argument("--all-types", action="store_true", help="Search every indexed evidence type.")
     p_recall.add_argument("--include-context-packages", action="store_true", help="Include generated clean-clone/cut bootstrap context in recall scoring.")
@@ -2945,7 +2996,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--type",
         dest="hit_type",
         action="append",
-        choices=["user_turn", "assistant_turn", "assistant_final", "command", "commit", "commit_created", "patch", "file"],
+        choices=["user_turn", "assistant_turn", "assistant_final", "tool_result", "command", "commit", "commit_created", "patch", "file"],
         help="Restrict evidence search to one hit type. May be repeated.",
     )
     p_recall.add_argument("--ask", action="store_true", help="Always print clarifying questions for the operator/user.")
@@ -2963,7 +3014,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--type",
         dest="hit_type",
         action="append",
-        choices=["user_turn", "assistant_turn", "assistant_final", "command", "commit", "commit_created", "patch", "file"],
+        choices=["user_turn", "assistant_turn", "assistant_final", "tool_result", "command", "commit", "commit_created", "patch", "file"],
         help="Restrict evidence to one hit type. May be repeated.",
     )
     p_why.set_defaults(func=why_session)
